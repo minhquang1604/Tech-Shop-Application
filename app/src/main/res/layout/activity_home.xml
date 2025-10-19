@@ -1,0 +1,815 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFFFF"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <LinearLayout
+            android:id="@+id/searchBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/scrollView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- Thanh tìm kiếm -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_search_box"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp">
+
+                <!-- Icon tìm kiếm -->
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/baseline_search"
+                    app:tint="#B0B0B0" />
+
+                <!-- Ô nhập tìm kiếm -->
+                <EditText
+                    android:id="@+id/searchBox"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:textColorHint="#B0B0B0"
+                    android:textSize="14sp" />
+
+
+                <!-- Icon máy ảnh
+                 <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="6dp"
+                    android:src="@drawable/ic_camera"
+                    app:tint="#B0B0B0" />
+                 -->
+
+            </LinearLayout>
+
+            <!-- Icon giỏ hàng -->
+            <ImageView
+                android:id="@+id/imgCart"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cart" />
+        </LinearLayout>
+
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#FFFFFF"
+            app:layout_constraintBottom_toTopOf="@id/bottomBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchBar">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="20dp"
+                    tools:context=".HomeActivity">
+
+                    <!-- Banner -->
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/bannerViewPager"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <!-- Indicator (các chấm trắng cố định) -->
+                    <LinearLayout
+                        android:id="@+id/bannerIndicators"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="@id/bannerViewPager"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <ImageView
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_margin="4dp"
+                            android:src="@drawable/banner_dot" />
+
+                        <ImageView
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_margin="4dp"
+                            android:src="@drawable/banner_dot" />
+
+                        <ImageView
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_margin="4dp"
+                            android:src="@drawable/banner_dot" />
+
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:paddingHorizontal="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="25dp"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <!-- Ô vuông chứa icon -->
+                            <LinearLayout
+                                android:id="@+id/favouriteContainer"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:background="@drawable/test1"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:id="@+id/imgPopular"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:scaleType="fitXY"
+                                    app:srcCompat="@drawable/star" />
+                            </LinearLayout>
+
+                            <!-- Chữ nằm dưới ô vuông -->
+                            <TextView
+                                android:id="@+id/txtCartLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:fontFamily="sans-serif-medium"
+                                android:gravity="center"
+                                android:text="Favourite"
+                                android:textColor="#000000"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="25dp"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <!-- Ô vuông chứa icon -->
+                            <LinearLayout
+                                android:id="@+id/laptopContainer"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:background="@drawable/test2"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:id="@+id/imgLaptop"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:scaleType="fitXY"
+                                    app:srcCompat="@drawable/laptop" />
+                            </LinearLayout>
+
+                            <!-- Chữ nằm dưới ô vuông -->
+                            <TextView
+                                android:id="@+id/txtLaptop"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:fontFamily="sans-serif-medium"
+                                android:gravity="center"
+                                android:text="Laptop"
+                                android:textColor="#000000"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="25dp"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <!-- Ô vuông chứa icon -->
+                            <LinearLayout
+                                android:id="@+id/phoneContainer"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:background="@drawable/test2"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:id="@+id/imgPhone"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:scaleType="fitXY"
+                                    app:srcCompat="@drawable/phone" />
+                            </LinearLayout>
+
+                            <!-- Chữ nằm dưới ô vuông -->
+                            <TextView
+                                android:id="@+id/txtPhone"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:fontFamily="sans-serif-medium"
+                                android:gravity="center"
+                                android:text="Phone"
+                                android:textColor="#000000"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="25dp"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <!-- Ô vuông chứa icon -->
+                            <LinearLayout
+                                android:id="@+id/tabletContainer"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:background="@drawable/test2"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:id="@+id/imgTablet"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:scaleType="fitXY"
+                                    app:srcCompat="@drawable/tablet" />
+                            </LinearLayout>
+
+                            <!-- Chữ nằm dưới ô vuông -->
+                            <TextView
+                                android:id="@+id/txtTablet"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:fontFamily="sans-serif-medium"
+                                android:gravity="center"
+                                android:text="Tablet"
+                                android:textColor="#000000"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="25dp"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <!-- Ô vuông chứa icon -->
+                            <LinearLayout
+                                android:id="@+id/cameraContainer"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:background="@drawable/test2"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:id="@+id/imgCamera"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:scaleType="fitXY"
+                                    app:srcCompat="@drawable/camera" />
+                            </LinearLayout>
+
+                            <!-- Chữ nằm dưới ô vuông -->
+                            <TextView
+                                android:id="@+id/txtCamera"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:fontFamily="sans-serif-medium"
+                                android:gravity="center"
+                                android:text="Camera"
+                                android:textColor="#000000"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="25dp"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <!-- Ô vuông chứa icon -->
+                            <LinearLayout
+                                android:id="@+id/Headphone"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:background="@drawable/test2"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:id="@+id/imgHeadphone"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:scaleType="fitXY"
+                                    app:srcCompat="@drawable/cart" />
+                            </LinearLayout>
+
+                            <!-- Chữ nằm dưới ô vuông -->
+                            <TextView
+                                android:id="@+id/txtHeadphone"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:fontFamily="sans-serif-medium"
+                                android:gravity="center"
+                                android:text="Headphone"
+                                android:textColor="#000000"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <LinearLayout
+                    android:id="@+id/rkxxy27nh5gg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="horizontal">
+
+
+                    <LinearLayout
+                        android:id="@+id/rmgcmuexd3m"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="21dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/test4"
+                        android:elevation="4dp"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="5dp"
+                        android:paddingVertical="6dp">
+
+                        <LinearLayout
+                            android:id="@+id/r9sd2ynv61yd"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/rq2h4iv0othl"
+                                android:layout_width="match_parent"
+                                android:layout_height="190dp"
+                                android:scaleType="fitXY"
+                                android:src="@mipmap/ic_launcher" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/rqn7a57415hq"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="29dp"
+                            android:layout_marginBottom="13dp"
+                            android:text="iPhone 17 Pro Max\n"
+                            android:textColor="#5F5F5F"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/txtPrice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="102dp"
+                            android:text="$ 1200"
+                            android:textColor="#303030"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/rahm9m4c4p0u"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/test4"
+                        android:elevation="4dp"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="5dp"
+                        android:paddingVertical="8dp">
+
+                        <LinearLayout
+                            android:id="@+id/rgkjgfdrvpqi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="2dp"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/r1ndaa1zqeyo"
+                                android:layout_width="match_parent"
+                                android:layout_height="190dp"
+                                android:scaleType="fitXY"
+                                android:src="@mipmap/ic_launcher" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/rgaj45qz8pbr"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="29dp"
+                            android:layout_marginBottom="13dp"
+                            android:text="iPhone Air"
+                            android:textColor="#5F5F5F"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/rb4gzmhegor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="111dp"
+                            android:text="$ 999"
+                            android:textColor="#303030"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/rx8hy8hizrjb"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="14dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/r482bi5a4099"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="21dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/test4"
+                        android:elevation="4dp"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="5dp"
+                        android:paddingTop="21dp"
+                        android:paddingBottom="10dp">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/ruq2jksaa2of"
+                            android:layout_width="match_parent"
+                            android:layout_height="152dp"
+                            android:layout_marginBottom="17dp"
+                            android:scaleType="fitXY"
+                            android:src="@mipmap/ic_launcher" />
+
+                        <TextView
+                            android:id="@+id/r7qy5adqnebd"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="1dp"
+                            android:layout_marginEnd="51dp"
+                            android:layout_marginBottom="21dp"
+                            android:text="Fujifilm X100VI\n"
+                            android:textColor="#5F5F5F"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/rs2hr3lp5j4d"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="103dp"
+                            android:text="$ 1800"
+                            android:textColor="#303030"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/rsvnjc8f708"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/test4"
+                        android:elevation="4dp"
+                        android:orientation="vertical"
+                        android:paddingTop="27dp"
+                        android:paddingBottom="10dp">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/rgbb1yn0vd6i"
+                            android:layout_width="match_parent"
+                            android:layout_height="163dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:scaleType="fitXY"
+                            android:src="@mipmap/ic_launcher" />
+
+                        <TextView
+                            android:id="@+id/rj5o5qfobz9j"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_marginBottom="2dp"
+                            android:layout_weight="1"
+                            android:text="Laptop ASUS TUF \nGaming F16\n"
+                            android:textColor="#5F5F5F"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/r835kjkjhe4a"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="116dp"
+                            android:text="$ 800"
+                            android:textColor="#303030"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/rx8hy8hizrjb"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="14dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/r482bi5a4099"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="21dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/test4"
+                        android:elevation="4dp"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="5dp"
+                        android:paddingTop="21dp"
+                        android:paddingBottom="10dp">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/ruq2jksaa2of"
+                            android:layout_width="match_parent"
+                            android:layout_height="152dp"
+                            android:layout_marginBottom="17dp"
+                            android:scaleType="fitXY"
+                            android:src="@mipmap/ic_launcher" />
+
+                        <TextView
+                            android:id="@+id/r7qy5adqnebd"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="1dp"
+                            android:layout_marginEnd="51dp"
+                            android:layout_marginBottom="21dp"
+                            android:text="Fujifilm X100VI\n"
+                            android:textColor="#5F5F5F"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/rs2hr3lp5j4d"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="103dp"
+                            android:text="$ 1800"
+                            android:textColor="#303030"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/rsvnjc8f708"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/test4"
+                        android:elevation="4dp"
+                        android:orientation="vertical"
+                        android:paddingTop="27dp"
+                        android:paddingBottom="10dp">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/rgbb1yn0vd6i"
+                            android:layout_width="match_parent"
+                            android:layout_height="163dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:scaleType="fitXY"
+                            android:src="@mipmap/ic_launcher" />
+
+                        <TextView
+                            android:id="@+id/rj5o5qfobz9j"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_marginBottom="2dp"
+                            android:layout_weight="1"
+                            android:text="Laptop ASUS TUF \nGaming F16\n"
+                            android:textColor="#5F5F5F"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/r835kjkjhe4a"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="116dp"
+                            android:text="$ 800"
+                            android:textColor="#303030"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- Thanh trạng thái cố định dưới cùng -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bottomBar"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/test3"
+            android:elevation="8dp"
+            android:paddingVertical="18dp"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <!-- Home -->
+            <FrameLayout
+                android:id="@+id/homeContainer"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/heartContainer"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"> <!-- can giua 4 phan tu -->
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/r9o6itaym1mt"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/home_outline" />
+            </FrameLayout>
+
+            <!-- Heart -->
+            <FrameLayout
+                android:id="@+id/heartContainer"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/notifyContainer"
+                app:layout_constraintStart_toEndOf="@id/homeContainer"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/r9jfdv7j60o"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/heart_outline" />
+            </FrameLayout>
+
+            <!-- Notifications -->
+            <FrameLayout
+                android:id="@+id/notifyContainer"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/profileContainer"
+                app:layout_constraintStart_toEndOf="@id/heartContainer"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/r5yyduajv9vh"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/notifications_outline" />
+            </FrameLayout>
+
+            <!-- Profile -->
+            <FrameLayout
+                android:id="@+id/profileContainer"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/notifyContainer"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/rdgr7gp7q0jv"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/person_outline" />
+            </FrameLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
