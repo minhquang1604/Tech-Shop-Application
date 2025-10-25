@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.util.Log;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
 
@@ -37,6 +39,16 @@ public class LogInActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_log_in);
 
+        // ✅ Kiểm tra trạng thái đăng nhập
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+        if (isLoggedIn) {
+            Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         tvSignup = findViewById(R.id.tvLogin);
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
@@ -53,36 +65,31 @@ public class LogInActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Mặc định: ẩn mật khẩu
+        // Mặc định: ẩn mật khẩu + icon con mắt
         edtPassword.setTransformationMethod(android.text.method.PasswordTransformationMethod.getInstance());
-        // Gán icon con mắt (ẩn)
         edtPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.eye, 0);
 
         edtPassword.setOnTouchListener((v, event) -> {
-            final int DRAWABLE_RIGHT = 2; // index 0=left,1=top,2=right,3=bottom
+            final int DRAWABLE_RIGHT = 2;
             if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
                 if (event.getRawX() >= (edtPassword.getRight()
                         - edtPassword.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
 
                     // Toggle password visibility
                     if (edtPassword.getTransformationMethod() instanceof android.text.method.PasswordTransformationMethod) {
-                        // Hiện mật khẩu
                         edtPassword.setTransformationMethod(android.text.method.HideReturnsTransformationMethod.getInstance());
                         edtPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.eye_off, 0);
                     } else {
-                        // Ẩn mật khẩu
                         edtPassword.setTransformationMethod(android.text.method.PasswordTransformationMethod.getInstance());
                         edtPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.eye, 0);
                     }
 
-                    // Giữ con trỏ ở cuối
                     edtPassword.setSelection(edtPassword.getText().length());
                     return true;
                 }
             }
             return false;
         });
-
     }
 
     private void loginUser(String username, String password) {
@@ -119,12 +126,29 @@ public class LogInActivity extends AppCompatActivity {
                     String responseData = response.body().string();
                     Log.d("API_RESPONSE", responseData);
 
-                    runOnUiThread(() ->
-                            Toast.makeText(LogInActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show());
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        String token = jsonObject.getString("token"); // ✅ Lấy token từ API
 
-                    // chuyển sang màn hình HomeActivity
-                    Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
-                    startActivity(intent);
+                        // ✅ Lưu token và trạng thái đăng nhập
+                        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("token", token);
+                        editor.putString("username", username);
+                        editor.putBoolean("isLoggedIn", true);
+                        editor.apply();
+
+                        runOnUiThread(() -> {
+                            Toast.makeText(LogInActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            finish();
+                        });
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                 } else {
                     runOnUiThread(() ->
                             Toast.makeText(LogInActivity.this, "Sai tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT).show());

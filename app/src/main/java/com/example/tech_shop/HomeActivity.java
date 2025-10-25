@@ -1,26 +1,43 @@
 package com.example.tech_shop;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.TouchDelegate;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.tech_shop.adapter.ProductAdapter;
+import com.example.tech_shop.api.ApiService;
+import com.example.tech_shop.api.RetrofitClient;
+import com.example.tech_shop.models.Product;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.Arrays;
 import java.util.List;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class HomeActivity extends AppCompatActivity {
     ShapeableImageView homeIcon;
@@ -51,7 +68,9 @@ public class HomeActivity extends AppCompatActivity {
     private Runnable runnable;
     private int currentPage = 0;
     private List<Integer> bannerImages;
+    DatabaseHelper dbHelper;
 
+    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,13 +102,32 @@ public class HomeActivity extends AppCompatActivity {
         imgTablet = findViewById(R.id.imgTablet);
         imgCamera = findViewById(R.id.imgCamera);
 
+        button = findViewById(R.id.button);
+        dbHelper = new DatabaseHelper(this);
+
+
+        button.setOnClickListener(v -> {
+            // ✅ Xóa dữ liệu SharedPreferences
+            SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();  // Xóa toàn bộ dữ liệu (token, username, isLoggedIn)
+            editor.apply();
+
+            Toast.makeText(HomeActivity.this, "Đã đăng xuất!", Toast.LENGTH_SHORT).show();
+
+            // ✅ Chuyển về màn hình đăng nhập
+            Intent intent = new Intent(HomeActivity.this, LogInActivity.class);
+            startActivity(intent);
+            finish(); // đóng HomeActivity để không quay lại bằng nút Back
+
+        });
 
         homeContainer.setOnClickListener(v -> {
             resetIcons(); // reset icon khác về outline
             homeIcon.setImageResource(R.drawable.home); // đổi icon hiện tại
             // Chuyển trang, ví dụ mở Activity HomeActivity
-            //Intent intent = new Intent(this, HomeActivity.class);
-            //startActivity(intent);
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
         });
 
         heartContainer.setOnClickListener(v -> {
@@ -110,8 +148,9 @@ public class HomeActivity extends AppCompatActivity {
         profileContainer.setOnClickListener(v -> {
             resetIcons();
             profileIcon.setImageResource(R.drawable.person);
-            //Intent intent = new Intent(this, ProfileActivity.class);
-            //startActivity(intent);
+            Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+            startActivity(intent);
+
         });
 
         favouriteContainer.setOnClickListener(v -> {
@@ -159,9 +198,9 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         bannerImages = Arrays.asList(
-                R.drawable.banner_1,
-                R.drawable.banner_2,
-                R.drawable.banner_3
+                R.drawable.banner1,
+                R.drawable.banner2,
+                R.drawable.banner3
         );
 
         BannerAdapter adapter = new BannerAdapter(this, bannerImages);
@@ -178,6 +217,36 @@ public class HomeActivity extends AppCompatActivity {
                 handler.postDelayed(this, 3000); // đổi sau 3 giây
             }
         };
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerViewProducts);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+
+        ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);
+
+        Call<List<Product>> call = apiService.getProducts(100);
+
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Product> products = response.body();
+                    RecyclerView recyclerView = findViewById(R.id.recyclerViewProducts);
+                    recyclerView.setAdapter(new ProductAdapter(HomeActivity.this, products));
+                } else {
+                    Log.e("API_ERROR", "Response code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.e("API_ERROR", "Failure: " + t.getMessage());
+            }
+        });
+
+
+
+
+
 
     }
     private void resetIcons() {
@@ -214,3 +283,4 @@ public class HomeActivity extends AppCompatActivity {
         cameraContainer.setBackgroundResource(R.drawable.test2);
     }
 }
+
