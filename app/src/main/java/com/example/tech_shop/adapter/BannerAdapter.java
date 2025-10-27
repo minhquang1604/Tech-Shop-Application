@@ -1,4 +1,4 @@
-package com.example.tech_shop;
+package com.example.tech_shop.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

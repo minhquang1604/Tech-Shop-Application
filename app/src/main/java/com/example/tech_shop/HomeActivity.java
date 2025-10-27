@@ -22,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.tech_shop.adapter.BannerAdapter;
 import com.example.tech_shop.adapter.ProductAdapter;
 import com.example.tech_shop.api.ApiService;
 import com.example.tech_shop.api.RetrofitClient;
@@ -128,6 +129,7 @@ public class HomeActivity extends AppCompatActivity {
             // Chuyển trang, ví dụ mở Activity HomeActivity
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
+            overridePendingTransition(0, 0);
         });
 
         heartContainer.setOnClickListener(v -> {
@@ -150,6 +152,7 @@ public class HomeActivity extends AppCompatActivity {
             profileIcon.setImageResource(R.drawable.person);
             Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
             startActivity(intent);
+            overridePendingTransition(0, 0);
 
         });
 
