@@ -201,9 +201,10 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         bannerImages = Arrays.asList(
-                R.drawable.banner1,
-                R.drawable.banner2,
-                R.drawable.banner3
+               // R.drawable.banner_1,
+              //  R.drawable.banner_2,
+             //   R.drawable.banner3
+
         );
 
         BannerAdapter adapter = new BannerAdapter(this, bannerImages);
