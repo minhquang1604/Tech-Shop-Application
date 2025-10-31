@@ -47,17 +47,19 @@
                     app:tint="#B0B0B0" />
 
                 <!-- Ô nhập tìm kiếm -->
-                <EditText
+                <TextView
                     android:id="@+id/searchBox"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:imeOptions="actionSearch"
-                    android:inputType="text"
-                    android:singleLine="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:paddingStart="4dp"
                     android:textColorHint="#B0B0B0"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:background="@android:color/transparent" />
+
 
 
                 <!-- Icon máy ảnh

@@ -16,20 +16,35 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("../release-key.jks")   // 🔹 File keystore bạn tạo
+            storePassword = "android"             // 🔹 Mật khẩu bạn nhập khi tạo keystore
+            keyAlias = "release_key"              // 🔹 Alias bạn nhập khi tạo keystore
+            keyPassword = "android"               // 🔹 Mật khẩu của key (có thể giống hoặc khác storePassword)
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release") // 🔹 Dùng config ở trên
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
+        debug {
+            // Tuỳ chọn: có thể dùng debug keystore mặc định
+        }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
+
 
 dependencies {
 
@@ -46,5 +61,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11")
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
 
 }

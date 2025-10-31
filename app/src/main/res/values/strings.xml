@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Tech_Shop</string>
     <string name="banner_image">Banner image</string>
-
+    <string name="default_web_client_id">13346993065-jvnpaui44om41k1mmivmej2pr0bjl0a2.apps.googleusercontent.com</string>
 </resources>

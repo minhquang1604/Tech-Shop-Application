@@ -9,9 +9,11 @@ import android.util.Log;
 import android.view.TouchDelegate;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -63,12 +65,14 @@ public class HomeActivity extends AppCompatActivity {
     ImageView imgTablet;
     ImageView imgCamera;
 
+    private TextView searchBox;
 
     private ViewPager2 bannerViewPager;
     private Handler handler = new Handler();
     private Runnable runnable;
     private int currentPage = 0;
     private List<Integer> bannerImages;
+
     DatabaseHelper dbHelper;
 
     Button button;
@@ -102,6 +106,7 @@ public class HomeActivity extends AppCompatActivity {
         imgPhone = findViewById(R.id.imgPhone);
         imgTablet = findViewById(R.id.imgTablet);
         imgCamera = findViewById(R.id.imgCamera);
+        searchBox = findViewById(R.id.searchBox);
 
         button = findViewById(R.id.button);
         dbHelper = new DatabaseHelper(this);
@@ -120,6 +125,14 @@ public class HomeActivity extends AppCompatActivity {
             Intent intent = new Intent(HomeActivity.this, LogInActivity.class);
             startActivity(intent);
             finish(); // đóng HomeActivity để không quay lại bằng nút Back
+
+        });
+
+        searchBox.setOnClickListener(v -> {
+
+            Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
 
         });
 

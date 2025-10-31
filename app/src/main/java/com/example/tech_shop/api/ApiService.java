@@ -15,4 +15,7 @@ public interface ApiService {
     // Lấy chi tiết sản phẩm theo ID
     @GET("api/Product/Details/{id}")
     Call<ProductDetail> getProductDetails(@Path("id") String id);
+
+    @GET("api/Product/Search/{keyword}")
+    Call<List<Product>> getProductsSearch(@Path("keyword") String keyword);
 }
