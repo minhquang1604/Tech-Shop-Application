@@ -31,7 +31,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     private Context context;
     private OnTotalChangeListener listener;
 
-    // ✅ Danh sách ID sản phẩm được chọn
+    // Danh sách ID sản phẩm được chọn
     private Set<String> selectedItems = new HashSet<>();
 
     public CartAdapter(List<CartItem> cartItems, Context context, OnTotalChangeListener listener) {
