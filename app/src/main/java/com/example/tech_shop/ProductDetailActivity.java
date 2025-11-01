@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -32,6 +33,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private TextView tvPrice, tvProductName, tvImageCount;
     private ImageAdapter imageAdapter;
     private TableLayout tableSpecs;
+    private ImageButton btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +45,13 @@ public class ProductDetailActivity extends AppCompatActivity {
         tvProductName = findViewById(R.id.tvProductName);
         tvImageCount = findViewById(R.id.tvImageCount);
         tableSpecs = findViewById(R.id.tableSpecs);
+        btnBack = findViewById(R.id.btnBack);
 
         // Lấy ID sản phẩm từ Intent
         String productId = getIntent().getStringExtra("productId");
         loadProductDetails(productId);
+
+        btnBack.setOnClickListener(v -> finish());
     }
 
     private void loadProductDetails(String id) {

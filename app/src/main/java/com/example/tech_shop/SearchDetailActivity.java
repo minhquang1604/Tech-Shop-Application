@@ -28,7 +28,7 @@ public class SearchDetailActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private ApiService apiService;
-    private ImageButton btnBack;
+    private ImageButton btnBack, btnCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,4 +75,6 @@ public class SearchDetailActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

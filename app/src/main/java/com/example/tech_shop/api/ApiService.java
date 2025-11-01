@@ -1,5 +1,6 @@
 package com.example.tech_shop.api;
 
+import com.example.tech_shop.models.CartItem;
 import com.example.tech_shop.models.Product;
 import com.example.tech_shop.models.ProductDetail;
 
@@ -18,4 +19,7 @@ public interface ApiService {
 
     @GET("api/Product/Search/{keyword}")
     Call<List<Product>> getProductsSearch(@Path("keyword") String keyword);
+
+    @GET("api/Cart")
+    Call<List<CartItem>> getCart();
 }

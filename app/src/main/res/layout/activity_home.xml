@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFFFF"
+        android:background="#FFFFFF"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
 
@@ -79,6 +79,8 @@
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_marginStart="10dp"
+                android:clickable="true"
+                android:focusable="true"
                 android:scaleType="fitCenter"
                 android:src="@drawable/cart" />
         </LinearLayout>
@@ -101,7 +103,8 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
                     xmlns:app="http://schemas.android.com/apk/res-auto"
                     xmlns:tools="http://schemas.android.com/tools"
                     android:layout_width="match_parent"
@@ -174,33 +177,33 @@
 
                             <!-- Ô vuông chứa icon -->
                             <LinearLayout
-                                android:id="@+id/favouriteContainer"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:background="@drawable/test1"
+                                android:id="@+id/PhonesContainer"
+                                android:layout_width="65dp"
+                                android:layout_height="65dp"
+                                android:background="@drawable/test2"
                                 android:clickable="true"
                                 android:focusable="true"
                                 android:gravity="center"
-                                android:orientation="vertical"
-                                android:padding="12dp">
+                                android:orientation="vertical">
 
                                 <ImageView
-                                    android:id="@+id/imgPopular"
-                                    android:layout_width="28dp"
-                                    android:layout_height="28dp"
+                                    android:id="@+id/imgPhones"
+                                    android:layout_width="65dp"
+                                    android:layout_height="65dp"
                                     android:scaleType="fitXY"
-                                    app:srcCompat="@drawable/star_white" />
+                                    app:srcCompat="@drawable/phones" />
                             </LinearLayout>
+
 
                             <!-- Chữ nằm dưới ô vuông -->
                             <TextView
-                                android:id="@+id/txtCartLabel"
+                                android:id="@+id/txtPhones"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="6dp"
                                 android:fontFamily="sans-serif-medium"
                                 android:gravity="center"
-                                android:text="Favourite"
+                                android:text="Phone"
                                 android:textColor="#000000"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -216,19 +219,18 @@
                             <!-- Ô vuông chứa icon -->
                             <LinearLayout
                                 android:id="@+id/laptopContainer"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
+                                android:layout_width="65dp"
+                                android:layout_height="65dp"
                                 android:background="@drawable/test2"
                                 android:clickable="true"
                                 android:focusable="true"
                                 android:gravity="center"
-                                android:orientation="vertical"
-                                android:padding="12dp">
+                                android:orientation="vertical">
 
                                 <ImageView
                                     android:id="@+id/imgLaptop"
-                                    android:layout_width="28dp"
-                                    android:layout_height="28dp"
+                                    android:layout_width="65dp"
+                                    android:layout_height="65dp"
                                     android:scaleType="fitXY"
                                     app:srcCompat="@drawable/laptop" />
                             </LinearLayout>
@@ -256,61 +258,19 @@
 
                             <!-- Ô vuông chứa icon -->
                             <LinearLayout
-                                android:id="@+id/phoneContainer"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:background="@drawable/test2"
-                                android:clickable="true"
-                                android:focusable="true"
-                                android:gravity="center"
-                                android:orientation="vertical"
-                                android:padding="12dp">
-
-                                <ImageView
-                                    android:id="@+id/imgPhone"
-                                    android:layout_width="28dp"
-                                    android:layout_height="28dp"
-                                    android:scaleType="fitXY"
-                                    app:srcCompat="@drawable/phone" />
-                            </LinearLayout>
-
-                            <!-- Chữ nằm dưới ô vuông -->
-                            <TextView
-                                android:id="@+id/txtPhone"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
-                                android:fontFamily="sans-serif-medium"
-                                android:gravity="center"
-                                android:text="Phone"
-                                android:textColor="#000000"
-                                android:textSize="12sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="25dp"
-                            android:gravity="center_horizontal"
-                            android:orientation="vertical">
-
-                            <!-- Ô vuông chứa icon -->
-                            <LinearLayout
                                 android:id="@+id/tabletContainer"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
+                                android:layout_width="65dp"
+                                android:layout_height="65dp"
                                 android:background="@drawable/test2"
                                 android:clickable="true"
                                 android:focusable="true"
                                 android:gravity="center"
-                                android:orientation="vertical"
-                                android:padding="12dp">
+                                android:orientation="vertical">
 
                                 <ImageView
                                     android:id="@+id/imgTablet"
-                                    android:layout_width="28dp"
-                                    android:layout_height="28dp"
+                                    android:layout_width="65dp"
+                                    android:layout_height="65dp"
                                     android:scaleType="fitXY"
                                     app:srcCompat="@drawable/tablet" />
                             </LinearLayout>
@@ -339,19 +299,18 @@
                             <!-- Ô vuông chứa icon -->
                             <LinearLayout
                                 android:id="@+id/cameraContainer"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
+                                android:layout_width="65dp"
+                                android:layout_height="65dp"
                                 android:background="@drawable/test2"
                                 android:clickable="true"
                                 android:focusable="true"
                                 android:gravity="center"
-                                android:orientation="vertical"
-                                android:padding="12dp">
+                                android:orientation="vertical">
 
                                 <ImageView
                                     android:id="@+id/imgCamera"
-                                    android:layout_width="28dp"
-                                    android:layout_height="28dp"
+                                    android:layout_width="65dp"
+                                    android:layout_height="65dp"
                                     android:scaleType="fitXY"
                                     app:srcCompat="@drawable/camera" />
                             </LinearLayout>
@@ -370,6 +329,7 @@
                         </LinearLayout>
 
                         <LinearLayout
+
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="25dp"
@@ -378,36 +338,37 @@
 
                             <!-- Ô vuông chứa icon -->
                             <LinearLayout
-                                android:id="@+id/Headphone"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
+                                android:id="@+id/dronesContainer"
+                                android:layout_width="65dp"
+                                android:layout_height="65dp"
                                 android:background="@drawable/test2"
                                 android:clickable="true"
                                 android:focusable="true"
                                 android:gravity="center"
-                                android:orientation="vertical"
-                                android:padding="12dp">
+                                android:orientation="vertical">
 
                                 <ImageView
-                                    android:id="@+id/imgHeadphone"
-                                    android:layout_width="28dp"
-                                    android:layout_height="28dp"
+                                    android:id="@+id/imgDrones"
+                                    android:layout_width="65dp"
+                                    android:layout_height="65dp"
                                     android:scaleType="fitXY"
-                                    app:srcCompat="@drawable/cart" />
+                                    app:srcCompat="@drawable/drones" />
                             </LinearLayout>
 
                             <!-- Chữ nằm dưới ô vuông -->
                             <TextView
-                                android:id="@+id/txtHeadphone"
+                                android:id="@+id/txtDrone"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="6dp"
                                 android:fontFamily="sans-serif-medium"
                                 android:gravity="center"
-                                android:text="Headphone"
+                                android:text="Drone"
                                 android:textColor="#000000"
                                 android:textSize="12sp" />
                         </LinearLayout>
+
+
 
                     </LinearLayout>
 
@@ -443,7 +404,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottomBar"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="70dp"
             android:background="@drawable/test3"
             android:elevation="8dp"
             android:paddingVertical="18dp"

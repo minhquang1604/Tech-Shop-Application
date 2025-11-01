@@ -2,6 +2,7 @@ package com.example.tech_shop;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 import androidx.activity.EdgeToEdge;
@@ -9,8 +10,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tech_shop.adapter.BannerAdapter;
+import com.example.tech_shop.adapter.ProductAdapter;
+import com.example.tech_shop.api.ApiService;
+import com.example.tech_shop.api.RetrofitClient;
+import com.example.tech_shop.models.Product;
 import com.google.android.material.imageview.ShapeableImageView;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileActivity extends AppCompatActivity {
     ShapeableImageView homeIcon;
@@ -72,6 +86,31 @@ public class ProfileActivity extends AppCompatActivity {
             overridePendingTransition(0, 0);
         });
 
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerViewProducts);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+
+        ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);
+
+        Call<List<Product>> call = apiService.getProducts(100);
+
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Product> products = response.body();
+                    RecyclerView recyclerView = findViewById(R.id.recyclerViewProducts);
+                    recyclerView.setAdapter(new ProductAdapter(ProfileActivity.this, products));
+                } else {
+                    Log.e("API_ERROR", "Response code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.e("API_ERROR", "Failure: " + t.getMessage());
+            }
+        });
 
     }
 

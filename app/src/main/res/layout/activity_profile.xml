@@ -8,7 +8,7 @@
     android:background="#FFFFFF">
 
     <!-- Scrollable content -->
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -72,9 +72,8 @@
                         android:id="@+id/avatar"
                         android:layout_width="72dp"
                         android:layout_height="72dp"
-                        android:src="@drawable/pic"
+                        android:src="@drawable/account"
                         android:scaleType="centerCrop"
-                        android:background="@drawable/circle_white_border"
                         android:contentDescription="avatar" />
 
                     <LinearLayout
@@ -303,14 +302,14 @@
                 android:paddingHorizontal="16dp"
                 tools:listitem="@layout/item_product" />
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
     <!-- Thanh trạng thái cố định dưới cùng -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         android:background="@drawable/test3"
         android:elevation="8dp"
         android:paddingVertical="18dp"

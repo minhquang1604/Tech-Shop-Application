@@ -1,0 +1,14 @@
+<resources>
+
+    <!-- Các style khác có sẵn -->
+    <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- ... -->
+    </style>
+
+    <!-- Thêm style bo góc ảnh -->
+    <style name="RoundedSquareImage">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
+</resources>

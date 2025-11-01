@@ -54,6 +54,7 @@ public class SearchActivity extends AppCompatActivity {
             Intent intent = new Intent(SearchActivity.this, SearchDetailActivity.class);
             intent.putExtra("keyword", keyword);
             startActivity(intent);
+            overridePendingTransition(0, 0);
         });
     }
 }

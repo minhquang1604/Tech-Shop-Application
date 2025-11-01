@@ -47,23 +47,12 @@ public class HomeActivity extends AppCompatActivity {
     ShapeableImageView heartIcon;
     ShapeableImageView notifyIcon;
     ShapeableImageView profileIcon;
+    ImageView imgCart;
 
     FrameLayout homeContainer;
     FrameLayout heartContainer;
     FrameLayout notifyContainer;
     FrameLayout profileContainer;
-
-    LinearLayout favouriteContainer;
-    LinearLayout laptopContainer;
-    LinearLayout phoneContainer;
-    LinearLayout tabletContainer;
-    LinearLayout cameraContainer;
-
-    ImageView imgPopular;
-    ImageView imgLaptop;
-    ImageView imgPhone;
-    ImageView imgTablet;
-    ImageView imgCamera;
 
     private TextView searchBox;
 
@@ -72,8 +61,6 @@ public class HomeActivity extends AppCompatActivity {
     private Runnable runnable;
     private int currentPage = 0;
     private List<Integer> bannerImages;
-
-    DatabaseHelper dbHelper;
 
     Button button;
 
@@ -93,23 +80,13 @@ public class HomeActivity extends AppCompatActivity {
         heartContainer = findViewById(R.id.heartContainer);
         notifyContainer = findViewById(R.id.notifyContainer);
         profileContainer = findViewById(R.id.profileContainer);
+
         bannerViewPager = findViewById(R.id.bannerViewPager);
-
-        favouriteContainer = findViewById(R.id.favouriteContainer);
-        laptopContainer = findViewById(R.id.laptopContainer);
-        phoneContainer = findViewById(R.id.phoneContainer);
-        tabletContainer = findViewById(R.id.tabletContainer);
-        cameraContainer = findViewById(R.id.cameraContainer);
-
-        imgPopular = findViewById(R.id.imgPopular);
-        imgLaptop = findViewById(R.id.imgLaptop);
-        imgPhone = findViewById(R.id.imgPhone);
-        imgTablet = findViewById(R.id.imgTablet);
-        imgCamera = findViewById(R.id.imgCamera);
         searchBox = findViewById(R.id.searchBox);
-
+        imgCart = findViewById(R.id.imgCart);
         button = findViewById(R.id.button);
-        dbHelper = new DatabaseHelper(this);
+
+
 
 
         button.setOnClickListener(v -> {
@@ -131,6 +108,14 @@ public class HomeActivity extends AppCompatActivity {
         searchBox.setOnClickListener(v -> {
 
             Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
+
+        });
+
+        imgCart.setOnClickListener(v -> {
+
+            Intent intent = new Intent(HomeActivity.this, CartActivity.class);
             startActivity(intent);
             overridePendingTransition(0, 0);
 
@@ -169,49 +154,6 @@ public class HomeActivity extends AppCompatActivity {
 
         });
 
-        favouriteContainer.setOnClickListener(v -> {
-            resetIconsCategory(); // reset icon khác về outline
-            imgPopular.setImageResource(R.drawable.star_white); // đổi icon hiện tại
-            favouriteContainer.setBackgroundResource(R.drawable.test1);
-            // Chuyển trang, ví dụ mở Activity HomeActivity
-            //Intent intent = new Intent(this, HomeActivity.class);
-            //startActivity(intent);
-        });
-
-        laptopContainer.setOnClickListener(v -> {
-            resetIconsCategory(); // reset icon khác về outline
-            imgLaptop.setImageResource(R.drawable.laptop_white); // đổi icon hiện tại
-            laptopContainer.setBackgroundResource(R.drawable.test1);
-            // Chuyển trang, ví dụ mở Activity HomeActivity
-            //Intent intent = new Intent(this, HomeActivity.class);
-            //startActivity(intent);
-        });
-
-        phoneContainer.setOnClickListener(v -> {
-            resetIconsCategory(); // reset icon khác về outline
-            imgPhone.setImageResource(R.drawable.phone_white); // đổi icon hiện tại
-            phoneContainer.setBackgroundResource(R.drawable.test1);
-            // Chuyển trang, ví dụ mở Activity HomeActivity
-            //Intent intent = new Intent(this, HomeActivity.class);
-            //startActivity(intent);
-        });
-        tabletContainer.setOnClickListener(v -> {
-            resetIconsCategory(); // reset icon khác về outline
-            imgTablet.setImageResource(R.drawable.tablet_white); // đổi icon hiện tại
-            tabletContainer.setBackgroundResource(R.drawable.test1);
-            // Chuyển trang, ví dụ mở Activity HomeActivity
-            //Intent intent = new Intent(this, HomeActivity.class);
-            //startActivity(intent);
-        });
-
-        cameraContainer.setOnClickListener(v -> {
-            resetIconsCategory(); // reset icon khác về outline
-            imgCamera.setImageResource(R.drawable.camera_white); // đổi icon hiện tại
-            cameraContainer.setBackgroundResource(R.drawable.test1);
-            // Chuyển trang, ví dụ mở Activity HomeActivity
-            //Intent intent = new Intent(this, HomeActivity.class);
-            //startActivity(intent);
-        });
 
         bannerImages = Arrays.asList(
                 R.drawable.banner1,
@@ -284,19 +226,5 @@ public class HomeActivity extends AppCompatActivity {
         handler.removeCallbacks(runnable);
     }
 
-
-    private void resetIconsCategory () {
-        imgPopular.setImageResource(R.drawable.star);
-        imgLaptop.setImageResource(R.drawable.laptop);
-        imgPhone.setImageResource(R.drawable.phone);
-        imgTablet.setImageResource(R.drawable.tablet);
-        imgCamera.setImageResource(R.drawable.camera);
-
-        favouriteContainer.setBackgroundResource(R.drawable.test2);
-        laptopContainer.setBackgroundResource(R.drawable.test2);
-        phoneContainer.setBackgroundResource(R.drawable.test2);
-        tabletContainer.setBackgroundResource(R.drawable.test2);
-        cameraContainer.setBackgroundResource(R.drawable.test2);
-    }
 }
 
