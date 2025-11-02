@@ -13,6 +13,7 @@
         android:layout_height="56dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:layout_marginTop="10dp"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:background="@android:color/transparent"
@@ -38,34 +39,42 @@
 
         <!-- Cart with badge -->
         <FrameLayout
-            android:layout_width="48dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_vertical">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp">
 
-            <ImageButton
-                android:id="@+id/btnTopCart"
-                android:layout_width="40dp"
+            <FrameLayout
+                android:layout_width="48dp"
                 android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:background="@drawable/bg_circle_semi"
-                android:src="@drawable/cart"
-                android:contentDescription="Cart"
-                android:padding="8dp" />
+                android:layout_gravity="center_vertical">
 
-            <!-- badge -->
-            <TextView
-                android:id="@+id/tvCartBadge"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_gravity="top|end"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="2dp"
-                android:background="@drawable/bg_badge_red"
-                android:text="2"
-                android:textColor="@android:color/white"
-                android:textSize="11sp"
-                android:gravity="center" />
+                <ImageButton
+                    android:id="@+id/btnTopCart"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_circle_semi"
+                    android:src="@drawable/cart"
+                    android:contentDescription="Cart"
+                    android:padding="8dp" />
+
+                <!-- badge -->
+                <TextView
+                    android:id="@+id/tvCartBadge"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="top|end"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="2dp"
+                    android:background="@drawable/bg_badge_red"
+                    android:text="2"
+                    android:textColor="@android:color/white"
+                    android:textSize="11sp"
+                    android:gravity="center" />
+            </FrameLayout>
         </FrameLayout>
+
+
     </LinearLayout>
 
     <ScrollView

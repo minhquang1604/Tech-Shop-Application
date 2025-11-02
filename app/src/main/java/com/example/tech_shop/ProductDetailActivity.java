@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -16,6 +17,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.tech_shop.adapter.ImageAdapter;
 import com.example.tech_shop.api.ApiService;
 import com.example.tech_shop.api.RetrofitClient;
+import com.example.tech_shop.models.AddToCartRequest;
+import com.example.tech_shop.models.CartCountResponse;
 import com.example.tech_shop.models.ProductDetail;
 
 import java.text.NumberFormat;
@@ -33,7 +36,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private TextView tvPrice, tvProductName, tvImageCount;
     private ImageAdapter imageAdapter;
     private TableLayout tableSpecs;
-    private ImageButton btnBack;
+    private ImageButton btnBack, btnCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +49,46 @@ public class ProductDetailActivity extends AppCompatActivity {
         tvImageCount = findViewById(R.id.tvImageCount);
         tableSpecs = findViewById(R.id.tableSpecs);
         btnBack = findViewById(R.id.btnBack);
-
+        btnCart = findViewById(R.id.btnCart);
+        TextView tvCartBadge = findViewById(R.id.tvCartBadge);
         // Lấy ID sản phẩm từ Intent
         String productId = getIntent().getStringExtra("productId");
         loadProductDetails(productId);
 
+        // Gọi API đếm số lượng sản phẩm
+        loadCartCount(tvCartBadge);
+
         btnBack.setOnClickListener(v -> finish());
+        btnCart.setOnClickListener(v -> {
+            if (productId == null || productId.isEmpty()) {
+                Log.e("Cart", "Product ID is null!");
+                return;
+            }
+
+            ApiService apiService = RetrofitClient.getClient(ProductDetailActivity.this).create(ApiService.class);
+            AddToCartRequest request = new AddToCartRequest(productId, 1); // Mặc định số lượng = 1
+
+            apiService.addToCart(request).enqueue(new Callback<Map<String, Object>>() {
+                @Override
+                public void onResponse(Call<Map<String, Object>> call, Response<Map<String, Object>> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        Log.d("Cart", "Added: " + response.body());
+                        String message = response.body().get("message").toString();
+                        Toast.makeText(ProductDetailActivity.this, message, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.e("Cart", "Add failed: " + response.code());
+                        Toast.makeText(ProductDetailActivity.this, "Failed to add item to cart!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Map<String, Object>> call, Throwable t) {
+                    Log.e("Cart", "Error: " + t.getMessage());
+                    Toast.makeText(ProductDetailActivity.this, "Network error!", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+
     }
 
     private void loadProductDetails(String id) {
@@ -143,6 +180,33 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         // Thêm viền bo quanh toàn bảng (nếu muốn)
         tableSpecs.setBackgroundResource(R.drawable.table_border_bg);
+    }
+
+    private void loadCartCount(TextView tvCartBadge) {
+        ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);
+
+        apiService.getCartCount().enqueue(new Callback<CartCountResponse>() {
+            @Override
+            public void onResponse(Call<CartCountResponse> call, Response<CartCountResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    int count = response.body().getCount();
+                    if (count > 0) {
+                        tvCartBadge.setText(String.valueOf(count));
+                        tvCartBadge.setVisibility(View.VISIBLE);
+                    } else {
+                        tvCartBadge.setVisibility(View.GONE);
+                    }
+                } else {
+                    tvCartBadge.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CartCountResponse> call, Throwable t) {
+                tvCartBadge.setVisibility(View.GONE);
+                Log.e("CartCount", "Error: " + t.getMessage());
+            }
+        });
     }
 
 

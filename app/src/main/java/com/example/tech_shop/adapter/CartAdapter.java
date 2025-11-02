@@ -117,4 +117,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             cbSelect = itemView.findViewById(R.id.cbSelect);
         }
     }
+
+    public CartItem getItemAt(int position) {
+        return cartItems.get(position);
+    }
+
+    public void removeItem(int position) {
+        cartItems.remove(position);
+        notifyItemRemoved(position);
+        updateTotal(); // gọi lại hàm tính tổng tiền
+    }
+
+
 }
