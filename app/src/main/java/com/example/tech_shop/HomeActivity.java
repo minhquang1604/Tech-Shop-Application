@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import com.example.tech_shop.adapter.BannerAdapter;
 import com.example.tech_shop.adapter.ProductAdapter;
 import com.example.tech_shop.api.ApiService;
 import com.example.tech_shop.api.RetrofitClient;
+import com.example.tech_shop.models.CartCountResponse;
 import com.example.tech_shop.models.Product;
 import com.google.android.material.imageview.ShapeableImageView;
 
@@ -43,16 +45,15 @@ import retrofit2.Response;
 
 
 public class HomeActivity extends AppCompatActivity {
-    ShapeableImageView homeIcon;
-    ShapeableImageView heartIcon;
-    ShapeableImageView notifyIcon;
-    ShapeableImageView profileIcon;
-    ImageView imgCart;
+    private ShapeableImageView homeIcon;
+    private ShapeableImageView heartIcon;
+    private ShapeableImageView notifyIcon;
+    private ShapeableImageView profileIcon;
 
-    FrameLayout homeContainer;
-    FrameLayout heartContainer;
-    FrameLayout notifyContainer;
-    FrameLayout profileContainer;
+    private FrameLayout homeContainer;
+    private FrameLayout heartContainer;
+    private FrameLayout notifyContainer;
+    private FrameLayout profileContainer;
 
     private TextView searchBox;
 
@@ -62,7 +63,9 @@ public class HomeActivity extends AppCompatActivity {
     private int currentPage = 0;
     private List<Integer> bannerImages;
 
-    Button button;
+    private ImageButton btnCart;
+    private TextView tvCartBadge;
+    private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +86,10 @@ public class HomeActivity extends AppCompatActivity {
 
         bannerViewPager = findViewById(R.id.bannerViewPager);
         searchBox = findViewById(R.id.searchBox);
-        imgCart = findViewById(R.id.imgCart);
+        btnCart = findViewById(R.id.btnCart);
         button = findViewById(R.id.button);
 
-
+        tvCartBadge = findViewById(R.id.tvCartBadge);
 
 
         button.setOnClickListener(v -> {
@@ -113,7 +116,7 @@ public class HomeActivity extends AppCompatActivity {
 
         });
 
-        imgCart.setOnClickListener(v -> {
+        btnCart.setOnClickListener(v -> {
 
             Intent intent = new Intent(HomeActivity.this, CartActivity.class);
             startActivity(intent);
@@ -176,6 +179,9 @@ public class HomeActivity extends AppCompatActivity {
             }
         };
 
+        // Gọi API đếm số lượng sản phẩm
+        loadCartCount(tvCartBadge);
+
         RecyclerView recyclerView = findViewById(R.id.recyclerViewProducts);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
@@ -224,6 +230,33 @@ public class HomeActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         handler.removeCallbacks(runnable);
+    }
+
+    private void loadCartCount(TextView tvCartBadge) {
+        ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);
+
+        apiService.getCartCount().enqueue(new Callback<CartCountResponse>() {
+            @Override
+            public void onResponse(Call<CartCountResponse> call, Response<CartCountResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    int count = response.body().getCount();
+                    if (count > 0) {
+                        tvCartBadge.setText(String.valueOf(count));
+                        tvCartBadge.setVisibility(View.VISIBLE);
+                    } else {
+                        tvCartBadge.setVisibility(View.GONE);
+                    }
+                } else {
+                    tvCartBadge.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CartCountResponse> call, Throwable t) {
+                tvCartBadge.setVisibility(View.GONE);
+                Log.e("CartCount", "Error: " + t.getMessage());
+            }
+        });
     }
 
 }

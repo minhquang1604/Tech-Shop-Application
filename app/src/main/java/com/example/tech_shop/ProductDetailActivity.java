@@ -1,5 +1,6 @@
 package com.example.tech_shop;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -36,7 +37,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private TextView tvPrice, tvProductName, tvImageCount;
     private ImageAdapter imageAdapter;
     private TableLayout tableSpecs;
-    private ImageButton btnBack, btnCart;
+    private ImageButton btnBack, btnCart, btnTopCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
         btnCart = findViewById(R.id.btnCart);
         TextView tvCartBadge = findViewById(R.id.tvCartBadge);
+        btnTopCart = findViewById(R.id.btnTopCart);
+
         // Lấy ID sản phẩm từ Intent
         String productId = getIntent().getStringExtra("productId");
         loadProductDetails(productId);
@@ -59,6 +62,15 @@ public class ProductDetailActivity extends AppCompatActivity {
         loadCartCount(tvCartBadge);
 
         btnBack.setOnClickListener(v -> finish());
+
+        btnTopCart.setOnClickListener(v -> {
+
+            Intent intent = new Intent(ProductDetailActivity.this, CartActivity.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
+
+        });
+
         btnCart.setOnClickListener(v -> {
             if (productId == null || productId.isEmpty()) {
                 Log.e("Cart", "Product ID is null!");
@@ -75,6 +87,9 @@ public class ProductDetailActivity extends AppCompatActivity {
                         Log.d("Cart", "Added: " + response.body());
                         String message = response.body().get("message").toString();
                         Toast.makeText(ProductDetailActivity.this, message, Toast.LENGTH_SHORT).show();
+
+                        // Cập nhật badge
+                        loadCartCount(tvCartBadge);
                     } else {
                         Log.e("Cart", "Add failed: " + response.code());
                         Toast.makeText(ProductDetailActivity.this, "Failed to add item to cart!", Toast.LENGTH_SHORT).show();
