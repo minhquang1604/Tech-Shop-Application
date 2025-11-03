@@ -1,5 +1,10 @@
 package com.example.tech_shop.models;
 
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.tech_shop.adapter.ReviewAdapter;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +54,7 @@ public class ProductDetail {
     public int getSold() {
         return sold;
     }
+
 
     public static class Rating {
         private int rate_1;

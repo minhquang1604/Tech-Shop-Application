@@ -203,7 +203,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Customer reviews (1.3K)"
+                        android:text="Customer reviews"
                         android:textStyle="bold"
                         android:textSize="15sp" />
 
@@ -216,122 +216,13 @@
                         android:textSize="13sp" />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tvOverallScore"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="4.8 /5 ⭐⭐⭐⭐⭐"
-                    android:textSize="13sp"
-                    android:textColor="#444"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp" />
-
-                <!-- review item 1 -->
-                <LinearLayout
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerReviews"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginBottom="12dp">
+                    android:padding="8dp"
+                    android:nestedScrollingEnabled="false" />
 
-                    <TextView
-                        android:id="@+id/tvReviewer1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="T*m c** C**v"
-                        android:textStyle="bold"
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:id="@+id/tvReviewer1Rating"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="★★★★★"
-                        android:textSize="12sp"
-                        android:textColor="#FFD700"
-                        android:layout_marginTop="4dp" />
-
-                    <TextView
-                        android:id="@+id/tvReviewer1Text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Áo dày dặn, đường may chắc chắn, túi trong rộng và khoá kéo mượt."
-                        android:textSize="13sp"
-                        android:textColor="#444"
-                        android:layout_marginTop="6dp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="8dp">
-
-                        <ImageView
-                            android:layout_width="64dp"
-                            android:layout_height="64dp"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/ic_launcher"
-                            android:contentDescription="review image 1"
-                            android:layout_marginEnd="6dp" />
-
-                        <ImageView
-                            android:layout_width="64dp"
-                            android:layout_height="64dp"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/ic_launcher"
-                            android:contentDescription="review image 2"
-                            android:layout_marginEnd="6dp" />
-
-                        <ImageView
-                            android:layout_width="64dp"
-                            android:layout_height="64dp"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/ic_launcher"
-                            android:contentDescription="review image 3" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <!-- review item 2 -->
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tvReviewer2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="H**"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvReviewer2Rating"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="★★★★★"
-                        android:textColor="#FFD700"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/tvReviewer2Text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:text="Sản phẩm xịn sò, vải dày và đường chỉ đẹp. Giao nhanh, đóng gói cẩn thận."
-                        android:textColor="#444"
-                        android:textSize="13sp" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tvSeeMoreReviews2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="See more ➜"
-                    android:textColor="#1E40AF"
-                    android:textSize="13sp"
-                    android:layout_marginTop="12dp" />
             </LinearLayout>
 
 

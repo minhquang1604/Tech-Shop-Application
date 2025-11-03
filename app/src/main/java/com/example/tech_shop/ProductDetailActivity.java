@@ -1,6 +1,9 @@
 package com.example.tech_shop;
 
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -13,20 +16,25 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.tech_shop.adapter.ImageAdapter;
 import com.example.tech_shop.adapter.ProductAdapter;
+import com.example.tech_shop.adapter.ReviewAdapter;
 import com.example.tech_shop.api.ApiService;
 import com.example.tech_shop.api.RetrofitClient;
 import com.example.tech_shop.models.AddToCartRequest;
 import com.example.tech_shop.models.CartCountResponse;
 import com.example.tech_shop.models.Product;
 import com.example.tech_shop.models.ProductDetail;
+import com.example.tech_shop.models.Review;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -42,6 +50,9 @@ public class ProductDetailActivity extends AppCompatActivity {
     private ImageAdapter imageAdapter;
     private TableLayout tableSpecs;
     private ImageButton btnBack, btnCart, btnTopCart;
+    RecyclerView recyclerReviews;
+    ReviewAdapter reviewAdapter;
+    List<Review> reviewList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +119,43 @@ public class ProductDetailActivity extends AppCompatActivity {
             });
         });
 
+
+        // reviews
+        recyclerReviews = findViewById(R.id.recyclerReviews);
+        recyclerReviews.setLayoutManager(new LinearLayoutManager(this));
+        reviewAdapter = new ReviewAdapter(this, reviewList);
+        recyclerReviews.setAdapter(reviewAdapter);
+        // 🟨 Thêm gạch ngang phân cách giữa các review
+        DividerItemDecoration divider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL) {
+            @Override
+            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                int childCount = parent.getChildCount();
+
+                Paint paint = new Paint();
+                paint.setColor(Color.parseColor("#DDDDDD")); // Màu xám nhạt
+                paint.setStrokeWidth(2f); // Độ dày đường kẻ
+
+                for (int i = 0; i < childCount - 1; i++) { // Không vẽ dòng cuối
+                    View child = parent.getChildAt(i);
+                    RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
+
+                    float left = child.getLeft();   // Bắt đầu đúng tại phần đánh giá
+                    float right = child.getRight(); // Kết thúc đúng tại phần đánh giá
+                    float y = child.getBottom() + params.bottomMargin;
+
+                    c.drawLine(left, y, right, y, paint);
+                }
+            }
+        };
+
+
+        recyclerReviews.addItemDecoration(divider);
+
+
+        loadReviews(productId);
+
+
+
         RecyclerView recyclerView = findViewById(R.id.recyclerViewProducts);
         recyclerView.setLayoutManager(
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
@@ -136,6 +184,37 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
     }
+
+    private void loadReviews(String productId) {
+        ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);
+
+        apiService.getReviewsByProductId(productId).enqueue(new Callback<List<Review>>() {
+            @Override
+            public void onResponse(Call<List<Review>> call, Response<List<Review>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    reviewList.clear();
+
+                    // ✅ Chỉ hiển thị tối đa 2 review
+                    List<Review> allReviews = response.body();
+                    if (allReviews.size() > 2) {
+                        reviewList.addAll(allReviews.subList(0, 2));
+                    } else {
+                        reviewList.addAll(allReviews);
+                    }
+
+                    reviewAdapter.notifyDataSetChanged();
+                } else {
+                    Log.e("API", "Response not successful: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Review>> call, Throwable t) {
+                Log.e("API_ERROR", "Failed: " + t.getMessage());
+            }
+        });
+    }
+
 
     private void loadProductDetails(String id) {
         ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);

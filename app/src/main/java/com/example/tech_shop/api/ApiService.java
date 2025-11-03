@@ -5,6 +5,7 @@ import com.example.tech_shop.models.CartCountResponse;
 import com.example.tech_shop.models.CartItem;
 import com.example.tech_shop.models.Product;
 import com.example.tech_shop.models.ProductDetail;
+import com.example.tech_shop.models.Review;
 
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,10 @@ public interface ApiService {
 
     @GET("api/Cart/count")
     Call<CartCountResponse> getCartCount();
+
+    @GET("api/Review/product/{productId}")
+    Call<List<Review>> getReviewsByProductId(@Path("productId") String productId);
+
 
 
 }
