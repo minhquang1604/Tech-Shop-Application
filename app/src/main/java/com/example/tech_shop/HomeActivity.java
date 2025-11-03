@@ -23,6 +23,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.tech_shop.adapter.BannerAdapter;
@@ -183,7 +184,10 @@ public class HomeActivity extends AppCompatActivity {
         loadCartCount(tvCartBadge);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerViewProducts);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setLayoutManager(
+                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        );
+
 
         ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);
 

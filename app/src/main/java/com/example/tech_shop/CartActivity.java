@@ -73,7 +73,7 @@ public class CartActivity extends AppCompatActivity {
                     });
 
                     recyclerCart.setAdapter(cartAdapter);
-                    attachSwipeToDelete(); // 🔽 Thêm tính năng vuốt xóa
+                    attachSwipeToDelete(); // Thêm tính năng vuốt xóa
                 } else {
                     Toast.makeText(CartActivity.this, "Failed to load cart!", Toast.LENGTH_SHORT).show();
                 }
@@ -87,7 +87,7 @@ public class CartActivity extends AppCompatActivity {
         });
     }
 
-    // 🔽 Vuốt trái/phải để xóa sản phẩm
+    // Vuốt trái/phải để xóa sản phẩm
     private void attachSwipeToDelete() {
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {

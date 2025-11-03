@@ -13,13 +13,17 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.tech_shop.adapter.ImageAdapter;
+import com.example.tech_shop.adapter.ProductAdapter;
 import com.example.tech_shop.api.ApiService;
 import com.example.tech_shop.api.RetrofitClient;
 import com.example.tech_shop.models.AddToCartRequest;
 import com.example.tech_shop.models.CartCountResponse;
+import com.example.tech_shop.models.Product;
 import com.example.tech_shop.models.ProductDetail;
 
 import java.text.NumberFormat;
@@ -102,6 +106,33 @@ public class ProductDetailActivity extends AppCompatActivity {
                     Toast.makeText(ProductDetailActivity.this, "Network error!", Toast.LENGTH_SHORT).show();
                 }
             });
+        });
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerViewProducts);
+        recyclerView.setLayoutManager(
+                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        );
+
+        ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);
+
+        Call<List<Product>> call = apiService.getProducts(100);
+
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Product> products = response.body();
+                    RecyclerView recyclerView = findViewById(R.id.recyclerViewProducts);
+                    recyclerView.setAdapter(new ProductAdapter(ProductDetailActivity.this, products));
+                } else {
+                    Log.e("API_ERROR", "Response code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.e("API_ERROR", "Failure: " + t.getMessage());
+            }
         });
 
     }

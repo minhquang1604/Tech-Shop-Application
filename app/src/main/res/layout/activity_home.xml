@@ -197,8 +197,8 @@
                             <!-- Ô vuông chứa icon -->
                             <LinearLayout
                                 android:id="@+id/PhonesContainer"
-                                android:layout_width="65dp"
-                                android:layout_height="65dp"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
                                 android:background="@drawable/test2"
                                 android:clickable="true"
                                 android:focusable="true"
@@ -207,8 +207,8 @@
 
                                 <ImageView
                                     android:id="@+id/imgPhones"
-                                    android:layout_width="65dp"
-                                    android:layout_height="65dp"
+                                    android:layout_width="60dp"
+                                    android:layout_height="60dp"
                                     android:scaleType="fitXY"
                                     app:srcCompat="@drawable/phones" />
                             </LinearLayout>
@@ -237,49 +237,9 @@
 
                             <!-- Ô vuông chứa icon -->
                             <LinearLayout
-                                android:id="@+id/laptopContainer"
-                                android:layout_width="65dp"
-                                android:layout_height="65dp"
-                                android:background="@drawable/test2"
-                                android:clickable="true"
-                                android:focusable="true"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <ImageView
-                                    android:id="@+id/imgLaptop"
-                                    android:layout_width="65dp"
-                                    android:layout_height="65dp"
-                                    android:scaleType="fitXY"
-                                    app:srcCompat="@drawable/laptop" />
-                            </LinearLayout>
-
-                            <!-- Chữ nằm dưới ô vuông -->
-                            <TextView
-                                android:id="@+id/txtLaptop"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
-                                android:fontFamily="sans-serif-medium"
-                                android:gravity="center"
-                                android:text="Laptop"
-                                android:textColor="#000000"
-                                android:textSize="12sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="25dp"
-                            android:gravity="center_horizontal"
-                            android:orientation="vertical">
-
-                            <!-- Ô vuông chứa icon -->
-                            <LinearLayout
                                 android:id="@+id/tabletContainer"
-                                android:layout_width="65dp"
-                                android:layout_height="65dp"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
                                 android:background="@drawable/test2"
                                 android:clickable="true"
                                 android:focusable="true"
@@ -288,8 +248,8 @@
 
                                 <ImageView
                                     android:id="@+id/imgTablet"
-                                    android:layout_width="65dp"
-                                    android:layout_height="65dp"
+                                    android:layout_width="60dp"
+                                    android:layout_height="60dp"
                                     android:scaleType="fitXY"
                                     app:srcCompat="@drawable/tablet" />
                             </LinearLayout>
@@ -317,9 +277,49 @@
 
                             <!-- Ô vuông chứa icon -->
                             <LinearLayout
+                                android:id="@+id/laptopContainer"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:background="@drawable/test2"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/imgLaptop"
+                                    android:layout_width="60dp"
+                                    android:layout_height="60dp"
+                                    android:scaleType="fitXY"
+                                    app:srcCompat="@drawable/laptop" />
+                            </LinearLayout>
+
+                            <!-- Chữ nằm dưới ô vuông -->
+                            <TextView
+                                android:id="@+id/txtLaptop"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:fontFamily="sans-serif-medium"
+                                android:gravity="center"
+                                android:text="Laptop"
+                                android:textColor="#000000"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="25dp"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <!-- Ô vuông chứa icon -->
+                            <LinearLayout
                                 android:id="@+id/cameraContainer"
-                                android:layout_width="65dp"
-                                android:layout_height="65dp"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
                                 android:background="@drawable/test2"
                                 android:clickable="true"
                                 android:focusable="true"
@@ -328,8 +328,8 @@
 
                                 <ImageView
                                     android:id="@+id/imgCamera"
-                                    android:layout_width="65dp"
-                                    android:layout_height="65dp"
+                                    android:layout_width="60dp"
+                                    android:layout_height="60dp"
                                     android:scaleType="fitXY"
                                     app:srcCompat="@drawable/camera" />
                             </LinearLayout>
@@ -358,8 +358,8 @@
                             <!-- Ô vuông chứa icon -->
                             <LinearLayout
                                 android:id="@+id/dronesContainer"
-                                android:layout_width="65dp"
-                                android:layout_height="65dp"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
                                 android:background="@drawable/test2"
                                 android:clickable="true"
                                 android:focusable="true"
@@ -368,8 +368,8 @@
 
                                 <ImageView
                                     android:id="@+id/imgDrones"
-                                    android:layout_width="65dp"
-                                    android:layout_height="65dp"
+                                    android:layout_width="60dp"
+                                    android:layout_height="60dp"
                                     android:scaleType="fitXY"
                                     app:srcCompat="@drawable/drones" />
                             </LinearLayout>

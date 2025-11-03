@@ -38,11 +38,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Product product = productList.get(position);
+
         holder.textName.setText(product.getName());
         NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
         String formattedPrice = formatter.format(product.getPrice());
         holder.textPrice.setText(formattedPrice + "₫");
 
+        // 🟢 Hiển thị số lượng đã bán
+        int sold = product.getQuantitySold();
+        if (sold >= 1000) {
+            holder.textSold.setText((sold / 1000) + "k+ sold");
+        } else {
+            holder.textSold.setText(sold + " sold");
+        }
 
         // Load image (nếu có link)
         if (product.getImage() != null && !product.getImage().isEmpty()) {
@@ -51,11 +59,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, ProductDetailActivity.class);
-            intent.putExtra("productId", product.getProduct_zipId()); // ✅ dùng đúng getter có sẵn
+            intent.putExtra("productId", product.getProduct_zipId());
             context.startActivity(intent);
         });
-
     }
+
 
     @Override
     public int getItemCount() {
@@ -64,13 +72,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageProduct;
-        TextView textName, textPrice;
+        TextView textName, textPrice, textSold;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageProduct = itemView.findViewById(R.id.imageProduct);
             textName = itemView.findViewById(R.id.textName);
             textPrice = itemView.findViewById(R.id.textPrice);
+            textSold = itemView.findViewById(R.id.textSold);
         }
     }
 }
+
+

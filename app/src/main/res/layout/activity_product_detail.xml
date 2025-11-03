@@ -76,7 +76,7 @@
 
     </LinearLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollViewProduct"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -291,6 +291,7 @@
                 </LinearLayout>
 
                 <!-- review item 2 -->
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -301,26 +302,26 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="H**"
-                        android:textStyle="bold"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvReviewer2Rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:text="★★★★★"
-                        android:textSize="12sp"
                         android:textColor="#FFD700"
-                        android:layout_marginTop="4dp" />
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/tvReviewer2Text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
                         android:text="Sản phẩm xịn sò, vải dày và đường chỉ đẹp. Giao nhanh, đóng gói cẩn thận."
-                        android:textSize="13sp"
                         android:textColor="#444"
-                        android:layout_marginTop="6dp" />
+                        android:textSize="13sp" />
                 </LinearLayout>
 
                 <TextView
@@ -363,9 +364,31 @@
 
 
             <!-- Customer reviews -->
+            <TextView
+                android:id="@+id/tvRecommend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="You may also like"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal" />
+
+            <!-- RecyclerView products -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewProducts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clipToPadding="false"
+                android:paddingHorizontal="16dp"
+                tools:listitem="@layout/item_product" />
+
 
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <!-- Bottom action -->
     <LinearLayout

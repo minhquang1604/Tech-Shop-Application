@@ -55,7 +55,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.tvQuantity.setText(String.valueOf(item.getQuantity()));
         Glide.with(context).load(item.getImage()).into(holder.imgProduct);
 
-        // ✅ Set trạng thái checkbox dựa vào danh sách selectedItems
+        // Set trạng thái checkbox dựa vào danh sách selectedItems
         holder.cbSelect.setOnCheckedChangeListener(null);
         holder.cbSelect.setChecked(selectedItems.contains(item.getProductId()));
 
@@ -68,7 +68,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             updateTotal();
         });
 
-        // ✅ Xử lý nút cộng/trừ số lượng
+        // Xử lý nút cộng/trừ số lượng
         holder.btnPlus.setOnClickListener(v -> {
             item.setQuantity(item.getQuantity() + 1);
             notifyItemChanged(position);
@@ -89,7 +89,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         return cartItems.size();
     }
 
-    // ✅ Chỉ tính tổng cho sản phẩm được tick
+    // chỉ tính tổng cho sản phẩm được tick
     private void updateTotal() {
         long total = 0;
         for (CartItem item : cartItems) {
