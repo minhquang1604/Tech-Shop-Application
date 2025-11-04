@@ -38,6 +38,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,6 +56,10 @@ public class ProductDetailActivity extends AppCompatActivity {
     RecyclerView recyclerReviews;
     ReviewAdapter reviewAdapter;
     List<Review> reviewList = new ArrayList<>();
+    private TextView tvAverageRating;
+    TextView tvSold;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +75,30 @@ public class ProductDetailActivity extends AppCompatActivity {
         btnCart = findViewById(R.id.btnCart);
         TextView tvCartBadge = findViewById(R.id.tvCartBadge);
         btnTopCart = findViewById(R.id.btnTopCart);
+        tvAverageRating = findViewById(R.id.tvAverageRating);
+        tvSold = findViewById(R.id.tvSold);
+        TextView tvDate = findViewById(R.id.tvDate);
+
+        // Lấy ngày hiện tại
+        Calendar calendar = Calendar.getInstance();
+
+        // Ngày bắt đầu: +3 ngày
+        calendar.add(Calendar.DAY_OF_MONTH, 3);
+        String startDay = new SimpleDateFormat("d", Locale.getDefault()).format(calendar.getTime());
+        String month = new SimpleDateFormat("M", Locale.getDefault()).format(calendar.getTime());
+
+        // Ngày kết thúc: +3 ngày nữa (tổng cộng +6 ngày từ hiện tại)
+        calendar.add(Calendar.DAY_OF_MONTH, 3);
+        String endDay = new SimpleDateFormat("d", Locale.getDefault()).format(calendar.getTime());
+
+        // Định dạng kiểu Shopee: "Guaranteed to get by 7 Th11 - 12 Th11"
+        String monthLabel = "Th" + month;
+        String shippingDate = "Guaranteed to get by " + startDay + " " + monthLabel + " - " + endDay + " " + monthLabel;
+
+        tvDate.setText(shippingDate);
+
+
+
 
         // Lấy ID sản phẩm từ Intent
         String productId = getIntent().getStringExtra("productId");
@@ -193,9 +224,27 @@ public class ProductDetailActivity extends AppCompatActivity {
             public void onResponse(Call<List<Review>> call, Response<List<Review>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     reviewList.clear();
-
-                    // ✅ Chỉ hiển thị tối đa 2 review
                     List<Review> allReviews = response.body();
+
+                    // ✅ Tính trung bình số sao (stars)
+                    float totalStars = 0f;
+                    for (Review r : allReviews) {
+                        totalStars += r.getStars();
+                    }
+
+                    float avgStars = 0f;
+                    if (!allReviews.isEmpty()) {
+                        avgStars = totalStars / allReviews.size();
+                    }
+
+                    // Làm tròn 1 chữ số thập phân
+                    avgStars = Math.round(avgStars * 10f) / 10f;
+
+
+                    // ✅ Hiển thị kiểu: 4.9 ★ Product Ratings (29)
+                    tvAverageRating.setText(avgStars + " ⭐ Product Ratings (" + allReviews.size() + ")");
+
+                    // ✅ Giới hạn chỉ hiển thị tối đa 2 review
                     if (allReviews.size() > 2) {
                         reviewList.addAll(allReviews.subList(0, 2));
                     } else {
@@ -214,6 +263,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
     }
+
 
 
     private void loadProductDetails(String id) {
@@ -243,6 +293,11 @@ public class ProductDetailActivity extends AppCompatActivity {
                     String formattedPrice = formatter.format(product.getPrice());
                     tvPrice.setText(formattedPrice + " ₫");
                     tvProductName.setText(product.getName());
+
+                    // ✅ Hiển thị số lượng sản phẩm đã bán
+                    int soldCount = product.getSold();
+                    tvSold.setText(soldCount + " sold");
+
 
                     // ✅ Hiển thị bảng thông số kỹ thuật
                     populateSpecsTable(product.getDetail());

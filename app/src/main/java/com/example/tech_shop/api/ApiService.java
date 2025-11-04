@@ -43,6 +43,13 @@ public interface ApiService {
     @GET("api/Review/product/{productId}")
     Call<List<Review>> getReviewsByProductId(@Path("productId") String productId);
 
+    @GET("api/Product/Fetch/{category}/{number}")
+    Call<List<Product>> getProductsByCategory(
+            @Path("category") String category,
+            @Path("number") int number
+    );
+
+
 
 
 }

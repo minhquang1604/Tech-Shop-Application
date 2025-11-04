@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tech_Shop">
         <activity
+            android:name=".CategoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".SearchDetailActivity"
             android:exported="true" />
         <activity

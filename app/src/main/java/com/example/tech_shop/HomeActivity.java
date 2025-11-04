@@ -125,6 +125,21 @@ public class HomeActivity extends AppCompatActivity {
 
         });
 
+        // --- Danh mục sản phẩm ---
+        LinearLayout phonesContainer = findViewById(R.id.PhonesContainer);
+        LinearLayout tabletContainer = findViewById(R.id.tabletContainer);
+        LinearLayout laptopContainer = findViewById(R.id.laptopContainer);
+        LinearLayout cameraContainer = findViewById(R.id.cameraContainer);
+        LinearLayout dronesContainer = findViewById(R.id.dronesContainer);
+
+        // Gán sự kiện click từng danh mục
+        phonesContainer.setOnClickListener(v -> openCategory("phones"));
+        tabletContainer.setOnClickListener(v -> openCategory("Tablet"));
+        laptopContainer.setOnClickListener(v -> openCategory("Laptop"));
+        cameraContainer.setOnClickListener(v -> openCategory("cameras"));
+        dronesContainer.setOnClickListener(v -> openCategory("Drones"));
+
+
         homeContainer.setOnClickListener(v -> {
             resetIcons(); // reset icon khác về outline
             homeIcon.setImageResource(R.drawable.home); // đổi icon hiện tại
@@ -213,10 +228,16 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-
-
-
     }
+
+
+
+    private void openCategory(String category) {
+        Intent intent = new Intent(HomeActivity.this, CategoryActivity.class);
+        intent.putExtra("category", category);
+        startActivity(intent);
+    }
+
     private void resetIcons() {
         homeIcon.setImageResource(R.drawable.home_outline);
         heartIcon.setImageResource(R.drawable.heart_outline);
