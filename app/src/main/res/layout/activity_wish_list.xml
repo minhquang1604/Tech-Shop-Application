@@ -21,65 +21,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/searchBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="10dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:paddingHorizontal="8dp">
 
             <!-- 🔙 Nút Back -->
             <ImageButton
                 android:id="@+id/btnBack"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
                 android:background="@drawable/bg_circle_semi"
                 android:src="@drawable/back"
                 android:contentDescription="Back"
                 android:padding="8dp"
-                android:layout_marginEnd="8dp" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
-            <!-- 🔍 Thanh tìm kiếm -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_search_box"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingHorizontal="10dp">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginEnd="8dp"
-                    android:src="@drawable/baseline_search"
-                    app:tint="#B0B0B0" />
-
-                <TextView
-                    android:id="@+id/searchBox"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:paddingStart="4dp"
-                    android:textColorHint="#B0B0B0"
-                    android:textSize="14sp"
-                    android:background="@android:color/transparent"
-                    android:text="Search any Product..." />
-            </LinearLayout>
-
-            <!-- 🛒 Icon giỏ hàng -->
+            <!-- 🛒 Nút giỏ hàng + badge -->
             <FrameLayout
+                android:id="@+id/cartContainer"
                 android:layout_width="48dp"
                 android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="8dp">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
 
                 <ImageButton
                     android:id="@+id/btnCart"
@@ -103,7 +73,24 @@
                     android:textSize="11sp"
                     android:gravity="center" />
             </FrameLayout>
-        </LinearLayout>
+
+            <!-- 🏷️ Tiêu đề Cart (ở giữa) -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wishlist"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btnBack"
+                app:layout_constraintEnd_toStartOf="@id/cartContainer"
+                app:layout_constraintHorizontal_bias="0.5" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <!-- 📜 Phần nội dung có thể cuộn -->
         <androidx.core.widget.NestedScrollView
@@ -118,47 +105,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!-- 📱 Category -->
-                <LinearLayout
-                    android:id="@+id/categoryHeader"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:paddingVertical="10dp"
-                    android:layout_marginTop="6dp"
-                    android:paddingHorizontal="10dp">
 
-                    <ImageView
-                        android:id="@+id/imgCategory"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:scaleType="centerCrop"
-                        android:layout_marginRight="10dp" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvCategoryTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Category"
-                            android:textStyle="bold"
-                            android:textSize="18sp"
-                            android:textColor="#000000" />
-
-                        <TextView
-                            android:id="@+id/tvCategoryDesc"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Mô tả các sản phẩm trong danh mục"
-                            android:textSize="13sp"
-                            android:textColor="#666666" />
-                    </LinearLayout>
-                </LinearLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -217,8 +164,6 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp" />
 
-
-
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </LinearLayout>
@@ -238,20 +183,21 @@
             android:id="@+id/homeContainer"
             android:layout_width="70dp"
             android:layout_height="70dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/heartContainer"
+            app:layout_constraintHorizontal_chainStyle="spread"
             android:clickable="true"
             android:focusable="true"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/heartContainer"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_chainStyle="spread">
+            app:layout_constraintTop_toTopOf="parent"> <!-- can giua 4 phan tu -->
 
             <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/r9o6itaym1mt"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
-                android:src="@drawable/home" />
+                android:src="@drawable/home_outline" />
         </FrameLayout>
 
         <!-- Heart -->
@@ -261,17 +207,18 @@
             android:layout_height="70dp"
             android:clickable="true"
             android:focusable="true"
-            app:layout_constraintStart_toEndOf="@id/homeContainer"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/notifyContainer"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintStart_toEndOf="@id/homeContainer"
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/r9jfdv7j60o"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
-                android:src="@drawable/heart_outline" />
+                android:src="@drawable/heart" />
         </FrameLayout>
 
         <!-- Notifications -->
@@ -281,12 +228,13 @@
             android:layout_height="70dp"
             android:clickable="true"
             android:focusable="true"
-            app:layout_constraintStart_toEndOf="@id/heartContainer"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/profileContainer"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintStart_toEndOf="@id/heartContainer"
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/r5yyduajv9vh"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
@@ -301,18 +249,20 @@
             android:layout_height="70dp"
             android:clickable="true"
             android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/notifyContainer"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/rdgr7gp7q0jv"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
                 android:src="@drawable/person_outline" />
         </FrameLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

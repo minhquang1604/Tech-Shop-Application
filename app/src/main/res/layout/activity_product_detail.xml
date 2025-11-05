@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context=".ProductDetailActivity">
 
     <LinearLayout
@@ -13,7 +14,7 @@
         android:layout_height="56dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="45dp"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:background="@android:color/transparent"
@@ -21,56 +22,78 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Back button -->
+        <!-- 🔙 Nút Back -->
         <ImageButton
             android:id="@+id/btnBack"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
             android:background="@drawable/bg_circle_semi"
             android:src="@drawable/back"
             android:contentDescription="Back"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:layout_marginEnd="8dp" />
 
-        <!-- spacer -->
-        <View
+        <!-- 🔍 Thanh tìm kiếm -->
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_search_box"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="10dp">
 
-        <!-- Cart with badge -->
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/baseline_search"
+                app:tint="#B0B0B0" />
+
+            <TextView
+                android:id="@+id/searchBox"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:paddingStart="4dp"
+                android:textColorHint="#B0B0B0"
+                android:textSize="14sp"
+                android:background="@android:color/transparent"
+                android:text="Search any Product..." />
+        </LinearLayout>
+
+        <!-- 🛒 Icon giỏ hàng -->
         <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp">
+            android:layout_width="48dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp">
 
-            <FrameLayout
-                android:layout_width="48dp"
+            <ImageButton
+                android:id="@+id/btnTopCart"
+                android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_gravity="center_vertical">
+                android:layout_gravity="center"
+                android:background="@drawable/bg_circle_semi"
+                android:src="@drawable/cart"
+                android:contentDescription="Cart"
+                android:padding="8dp" />
 
-                <ImageButton
-                    android:id="@+id/btnTopCart"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/bg_circle_semi"
-                    android:src="@drawable/cart"
-                    android:contentDescription="Cart"
-                    android:padding="8dp" />
-
-                <!-- badge -->
-                <TextView
-                    android:id="@+id/tvCartBadge"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_gravity="top|end"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="2dp"
-                    android:background="@drawable/bg_badge_red"
-                    android:textColor="@android:color/white"
-                    android:textSize="11sp"
-                    android:gravity="center" />
-            </FrameLayout>
+            <TextView
+                android:id="@+id/tvCartBadge"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="2dp"
+                android:background="@drawable/bg_badge_red"
+                android:textColor="@android:color/white"
+                android:textSize="11sp"
+                android:gravity="center" />
         </FrameLayout>
 
 
@@ -129,41 +152,71 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:orientation="vertical"
+                    android:background="@android:color/white">
 
-                    <TextView
-                        android:id="@+id/tvPrice"
-                        android:layout_width="wrap_content"
+                    <!-- Hàng chứa giá, giá cũ, giảm giá và icon trái tim -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="34.191.000 ₫"
-                        android:textColor="#E53935"
-                        android:textSize="22sp"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:weightSum="1">
 
-                    <TextView
-                        android:id="@+id/tvOldPrice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="37.990.000 ₫"
-                        android:layout_marginStart="8dp"
-                        android:textColor="#9E9E9E"
-                        android:textSize="14sp" />
+                        <!-- Cụm giá và giảm giá bên trái -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.9"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
 
-                    <TextView
-                        android:id="@+id/tvDiscount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="-10%"
-                        android:layout_marginStart="8dp"
-                        android:background="@drawable/bg_discount"
-                        android:textColor="@android:color/white"
-                        android:textSize="12sp"
-                        android:paddingLeft="6dp"
-                        android:paddingRight="6dp"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp" />
+                            <TextView
+                                android:id="@+id/tvPrice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="34.191.000 ₫"
+                                android:textColor="#E53935"
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvOldPrice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="37.990.000 ₫"
+                                android:layout_marginStart="8dp"
+                                android:textColor="#9E9E9E"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/tvDiscount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="-10%"
+                                android:layout_marginStart="8dp"
+                                android:background="@drawable/bg_discount"
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:paddingLeft="6dp"
+                                android:paddingRight="6dp"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp" />
+                        </LinearLayout>
+
+                        <!-- Icon trái tim bên phải -->
+                        <!-- icon trái tim -->
+                        <ImageButton
+                            android:id="@+id/btnWishlist"
+                            android:layout_width="10dp"
+                            android:layout_height="45dp"
+                            android:layout_weight="0.1"
+                            android:background="@android:color/transparent"
+                            android:src="@drawable/favourite_ol"
+                            android:scaleType="centerInside" />
+                    </LinearLayout>
                 </LinearLayout>
+
 
                 <TextView
                     android:id="@+id/tvProductName"

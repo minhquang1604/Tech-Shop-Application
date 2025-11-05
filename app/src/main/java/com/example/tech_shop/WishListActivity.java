@@ -4,22 +4,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.example.tech_shop.adapter.BannerAdapter;
 import com.example.tech_shop.adapter.ProductAdapter;
+import com.example.tech_shop.adapter.ProductWishlistAdapter;
 import com.example.tech_shop.api.ApiService;
 import com.example.tech_shop.api.RetrofitClient;
 import com.example.tech_shop.models.Product;
+import com.example.tech_shop.models.ProductWishlist;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.List;
@@ -28,24 +27,22 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProfileActivity extends AppCompatActivity {
-    ShapeableImageView homeIcon;
-    ShapeableImageView heartIcon;
-    ShapeableImageView notifyIcon;
-    ShapeableImageView profileIcon;
+public class WishListActivity extends AppCompatActivity {
+    private ShapeableImageView homeIcon;
+    private ShapeableImageView heartIcon;
+    private ShapeableImageView notifyIcon;
+    private ShapeableImageView profileIcon;
 
-    FrameLayout homeContainer;
-    FrameLayout heartContainer;
-    FrameLayout notifyContainer;
-    FrameLayout profileContainer;
-
-    ImageButton btnSettings;
+    private FrameLayout homeContainer;
+    private FrameLayout heartContainer;
+    private FrameLayout notifyContainer;
+    private FrameLayout profileContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_wish_list);
 
         homeIcon = findViewById(R.id.r9o6itaym1mt);
         heartIcon = findViewById(R.id.r9jfdv7j60o);
@@ -57,8 +54,33 @@ public class ProfileActivity extends AppCompatActivity {
         notifyContainer = findViewById(R.id.notifyContainer);
         profileContainer = findViewById(R.id.profileContainer);
 
-        btnSettings = findViewById(R.id.btnSettings);
+        RecyclerView recyclerView = findViewById(R.id.rvProducts);
+        recyclerView.setLayoutManager(
+                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        );
 
+
+        ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);
+
+        Call<List<ProductWishlist>> call = apiService.getProductsWishlist();
+
+        call.enqueue(new Callback<List<ProductWishlist>>() {
+            @Override
+            public void onResponse(Call<List<ProductWishlist>> call, Response<List<ProductWishlist>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<ProductWishlist> products = response.body();
+                    RecyclerView recyclerView = findViewById(R.id.rvProducts);
+                    recyclerView.setAdapter(new ProductWishlistAdapter(WishListActivity.this, products));
+                } else {
+                    Log.e("API_ERROR", "Response code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ProductWishlist>> call, Throwable t) {
+                Log.e("API_ERROR", "Failure: " + t.getMessage());
+            }
+        });
 
         homeContainer.setOnClickListener(v -> {
             resetIcons(); // reset icon khác về outline
@@ -92,42 +114,6 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(intent);
             overridePendingTransition(0, 0);
         });
-
-        btnSettings.setOnClickListener(v -> {
-            Log.d("DEBUG", "Settings button clicked");
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-            overridePendingTransition(0, 0);
-        });
-
-
-        RecyclerView recyclerView = findViewById(R.id.recyclerViewProducts);
-        recyclerView.setLayoutManager(
-                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        );
-
-        ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);
-
-        Call<List<Product>> call = apiService.getProducts(100);
-
-        call.enqueue(new Callback<List<Product>>() {
-            @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<Product> products = response.body();
-                    RecyclerView recyclerView = findViewById(R.id.recyclerViewProducts);
-                    recyclerView.setAdapter(new ProductAdapter(ProfileActivity.this, products));
-                } else {
-                    Log.e("API_ERROR", "Response code: " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.e("API_ERROR", "Failure: " + t.getMessage());
-            }
-        });
-
     }
 
     private void resetIcons() {
@@ -136,5 +122,4 @@ public class ProfileActivity extends AppCompatActivity {
         notifyIcon.setImageResource(R.drawable.notifications_outline);
         profileIcon.setImageResource(R.drawable.person_outline);
     }
-
 }

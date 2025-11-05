@@ -66,7 +66,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private ImageButton btnCart;
     private TextView tvCartBadge;
-    private Button button;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,26 +88,9 @@ public class HomeActivity extends AppCompatActivity {
         bannerViewPager = findViewById(R.id.bannerViewPager);
         searchBox = findViewById(R.id.searchBox);
         btnCart = findViewById(R.id.btnCart);
-        button = findViewById(R.id.button);
 
         tvCartBadge = findViewById(R.id.tvCartBadge);
 
-
-        button.setOnClickListener(v -> {
-            // ✅ Xóa dữ liệu SharedPreferences
-            SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();  // Xóa toàn bộ dữ liệu (token, username, isLoggedIn)
-            editor.apply();
-
-            Toast.makeText(HomeActivity.this, "Đã đăng xuất!", Toast.LENGTH_SHORT).show();
-
-            // ✅ Chuyển về màn hình đăng nhập
-            Intent intent = new Intent(HomeActivity.this, LogInActivity.class);
-            startActivity(intent);
-            finish(); // đóng HomeActivity để không quay lại bằng nút Back
-
-        });
 
         searchBox.setOnClickListener(v -> {
 
@@ -152,8 +135,9 @@ public class HomeActivity extends AppCompatActivity {
         heartContainer.setOnClickListener(v -> {
             resetIcons();
             heartIcon.setImageResource(R.drawable.heart);
-            //Intent intent = new Intent(this, FavoritesActivity.class);
-            //startActivity(intent);
+            Intent intent = new Intent(this, WishListActivity.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
         });
 
         notifyContainer.setOnClickListener(v -> {

@@ -5,6 +5,7 @@ import com.example.tech_shop.models.CartCountResponse;
 import com.example.tech_shop.models.CartItem;
 import com.example.tech_shop.models.Product;
 import com.example.tech_shop.models.ProductDetail;
+import com.example.tech_shop.models.ProductWishlist;
 import com.example.tech_shop.models.Review;
 
 import java.util.List;
@@ -49,6 +50,8 @@ public interface ApiService {
             @Path("number") int number
     );
 
+    @GET("/api/Wishlist")
+    Call<List<ProductWishlist>> getProductsWishlist();
 
 
 

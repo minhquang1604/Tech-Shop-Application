@@ -408,11 +408,6 @@
                     android:paddingHorizontal="16dp"
                     tools:listitem="@layout/item_product" />
 
-                <Button
-                    android:id="@+id/button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Button" />
 
 
             </LinearLayout>

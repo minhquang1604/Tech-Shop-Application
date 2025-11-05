@@ -81,20 +81,16 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         // Lấy ngày hiện tại
         Calendar calendar = Calendar.getInstance();
-
         // Ngày bắt đầu: +3 ngày
         calendar.add(Calendar.DAY_OF_MONTH, 3);
         String startDay = new SimpleDateFormat("d", Locale.getDefault()).format(calendar.getTime());
         String month = new SimpleDateFormat("M", Locale.getDefault()).format(calendar.getTime());
-
         // Ngày kết thúc: +3 ngày nữa (tổng cộng +6 ngày từ hiện tại)
         calendar.add(Calendar.DAY_OF_MONTH, 3);
         String endDay = new SimpleDateFormat("d", Locale.getDefault()).format(calendar.getTime());
 
-        // Định dạng kiểu Shopee: "Guaranteed to get by 7 Th11 - 12 Th11"
         String monthLabel = "Th" + month;
         String shippingDate = "Guaranteed to get by " + startDay + " " + monthLabel + " - " + endDay + " " + monthLabel;
-
         tvDate.setText(shippingDate);
 
 
@@ -156,7 +152,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         recyclerReviews.setLayoutManager(new LinearLayoutManager(this));
         reviewAdapter = new ReviewAdapter(this, reviewList);
         recyclerReviews.setAdapter(reviewAdapter);
-        // 🟨 Thêm gạch ngang phân cách giữa các review
+        //Thêm gạch ngang phân cách giữa các review
         DividerItemDecoration divider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL) {
             @Override
             public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
@@ -170,8 +166,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                     View child = parent.getChildAt(i);
                     RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
 
-                    float left = child.getLeft();   // Bắt đầu đúng tại phần đánh giá
-                    float right = child.getRight(); // Kết thúc đúng tại phần đánh giá
+                    float left = child.getLeft();
+                    float right = child.getRight();
                     float y = child.getBottom() + params.bottomMargin;
 
                     c.drawLine(left, y, right, y, paint);
