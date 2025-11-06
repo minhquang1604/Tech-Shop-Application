@@ -1,6 +1,7 @@
 package com.example.tech_shop.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.tech_shop.ProductDetailActivity;
 import com.example.tech_shop.R;
 import com.example.tech_shop.api.ApiService;
 import com.example.tech_shop.api.RetrofitClient;
@@ -64,6 +66,13 @@ public class ProductWishlistAdapter extends RecyclerView.Adapter<ProductWishlist
         String formattedPrice = "₫" + formatter.format(product.getUnitPrice());
         holder.textPrice.setText(formattedPrice);
 
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ProductDetailActivity.class);
+            intent.putExtra("productId", product.getProductId());
+            context.startActivity(intent);
+        });
+
         // Nút thêm vào giỏ hàng (chưa xử lý logic)
         holder.btnCart.setOnClickListener(v -> {
             String productId = product.getProductId(); // hoặc product.getProductId() tùy model
@@ -99,7 +108,10 @@ public class ProductWishlistAdapter extends RecyclerView.Adapter<ProductWishlist
                     Toast.makeText(context, "Network error!", Toast.LENGTH_SHORT).show();
                 }
             });
+
         });
+
+
 
     }
 

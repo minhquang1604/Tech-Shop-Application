@@ -1,6 +1,7 @@
 package com.example.tech_shop.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,10 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.tech_shop.ProductDetailActivity;
 import com.example.tech_shop.R;
 import com.example.tech_shop.models.CartItem;
+import com.example.tech_shop.models.Product;
 
 import java.util.HashSet;
 import java.util.List;
@@ -81,6 +84,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 notifyItemChanged(position);
                 updateTotal();
             }
+        });
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ProductDetailActivity.class);
+            intent.putExtra("productId", item.getProductId()); // gửi đúng ID sản phẩm
+            context.startActivity(intent);
         });
     }
 

@@ -41,6 +41,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         return imageUrls.size();
     }
 
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         public ViewHolder(@NonNull View itemView) {
@@ -48,4 +49,9 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             imageView = itemView.findViewById(R.id.imageView);
         }
     }
+
+    public List<String> getImages() {
+        return imageUrls;
+    }
+
 }

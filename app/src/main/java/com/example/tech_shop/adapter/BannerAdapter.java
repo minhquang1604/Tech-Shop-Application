@@ -33,6 +33,8 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerView
     @Override
     public void onBindViewHolder(@NonNull BannerViewHolder holder, int position) {
         holder.bannerImage.setImageResource(bannerList.get(position));
+
+
     }
 
     @Override

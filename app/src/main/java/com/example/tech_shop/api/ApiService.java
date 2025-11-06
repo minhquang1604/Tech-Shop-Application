@@ -1,6 +1,7 @@
 package com.example.tech_shop.api;
 
 import com.example.tech_shop.models.AddToCartRequest;
+import com.example.tech_shop.models.AddToWishlistRequest;
 import com.example.tech_shop.models.CartCountResponse;
 import com.example.tech_shop.models.CartItem;
 import com.example.tech_shop.models.Product;
@@ -52,6 +53,10 @@ public interface ApiService {
 
     @GET("/api/Wishlist")
     Call<List<ProductWishlist>> getProductsWishlist();
+
+    @POST("api/Wishlist/add")
+    Call<String> addToWishlist(@Body AddToWishlistRequest request);
+
 
 
 

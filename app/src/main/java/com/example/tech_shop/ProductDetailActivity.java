@@ -28,6 +28,7 @@ import com.example.tech_shop.adapter.ReviewAdapter;
 import com.example.tech_shop.api.ApiService;
 import com.example.tech_shop.api.RetrofitClient;
 import com.example.tech_shop.models.AddToCartRequest;
+import com.example.tech_shop.models.AddToWishlistRequest;
 import com.example.tech_shop.models.CartCountResponse;
 import com.example.tech_shop.models.Product;
 import com.example.tech_shop.models.ProductDetail;
@@ -210,6 +211,68 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
 
+
+        ImageButton btnWishlist = findViewById(R.id.btnWishlist);
+
+        btnWishlist.setOnClickListener(v -> {
+            if (imageAdapter == null || imageAdapter.getImages().isEmpty()) {
+                Toast.makeText(ProductDetailActivity.this, "Không có ảnh sản phẩm!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Lấy dữ liệu từ giao diện
+            String productName = tvProductName.getText().toString();
+            String image = imageAdapter.getImages().get(0); // lấy ảnh đầu tiên
+            String priceText = tvPrice.getText().toString()
+                    .replace("₫", "")
+                    .replace(".", "")
+                    .replace(",", "")
+                    .trim();
+
+            long price = 0;
+            try {
+                price = Long.parseLong(priceText); // 👈 Dùng Long.parseLong thay vì Double
+            } catch (NumberFormatException e) {
+                Log.e("Wishlist", "Price parse error: " + e.getMessage());
+            }
+
+
+            // Tạo request
+            AddToWishlistRequest request = new AddToWishlistRequest(
+                    getIntent().getStringExtra("productId"),
+                    productName,
+                    image,
+                    price
+            );
+            Log.d("WishlistDebug", "Request gửi đi:");
+            Log.d("WishlistDebug", "ProductId: " + getIntent().getStringExtra("productId"));
+            Log.d("WishlistDebug", "ProductName: " + productName);
+            Log.d("WishlistDebug", "Image: " + image);
+            Log.d("WishlistDebug", "Price: " + price);
+
+
+            apiService.addToWishlist(request).enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(ProductDetailActivity.this, "Đã thêm vào danh sách yêu thích ❤️", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ProductDetailActivity.this, "Thêm vào wishlist thất bại!", Toast.LENGTH_SHORT).show();
+                        Log.e("Wishlist", "Error code: " + response.code());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toast.makeText(ProductDetailActivity.this, "Lỗi mạng!", Toast.LENGTH_SHORT).show();
+                    Log.e("Wishlist", "Error: " + t.getMessage());
+                }
+            });
+        });
+
+
+
+
     }
 
     private void loadReviews(String productId) {
@@ -384,6 +447,8 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
 
 
