@@ -16,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class SettingsActivity extends AppCompatActivity {
 
     Button btnLogOut;
+    ImageButton btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,9 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         btnLogOut = findViewById(R.id.btnLogOut);
+        btnBack = findViewById(R.id.btnBack);
+
+        btnBack.setOnClickListener(v -> finish());
 
         btnLogOut.setOnClickListener(v -> {
             // ✅ Xóa dữ liệu SharedPreferences

@@ -3,7 +3,10 @@ package com.example.tech_shop;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +20,7 @@ import com.example.tech_shop.adapter.ProductAdapter;
 import com.example.tech_shop.adapter.ProductWishlistAdapter;
 import com.example.tech_shop.api.ApiService;
 import com.example.tech_shop.api.RetrofitClient;
+import com.example.tech_shop.models.CartCountResponse;
 import com.example.tech_shop.models.Product;
 import com.example.tech_shop.models.ProductWishlist;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -37,6 +41,9 @@ public class WishListActivity extends AppCompatActivity {
     private FrameLayout heartContainer;
     private FrameLayout notifyContainer;
     private FrameLayout profileContainer;
+    private TextView tvCartBadge;
+
+    private ImageButton btnCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +60,17 @@ public class WishListActivity extends AppCompatActivity {
         heartContainer = findViewById(R.id.heartContainer);
         notifyContainer = findViewById(R.id.notifyContainer);
         profileContainer = findViewById(R.id.profileContainer);
+        btnCart = findViewById(R.id.btnCart);
+
+        btnCart.setOnClickListener(v -> {
+
+            Intent intent = new Intent(WishListActivity.this, CartActivity.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
+
+        });
+
+        tvCartBadge = findViewById(R.id.tvCartBadge);
 
         RecyclerView recyclerView = findViewById(R.id.rvProducts);
         recyclerView.setLayoutManager(
@@ -81,6 +99,9 @@ public class WishListActivity extends AppCompatActivity {
                 Log.e("API_ERROR", "Failure: " + t.getMessage());
             }
         });
+
+        // Gọi API đếm số lượng sản phẩm
+        loadCartCount(tvCartBadge);
 
         homeContainer.setOnClickListener(v -> {
             resetIcons(); // reset icon khác về outline
@@ -121,5 +142,32 @@ public class WishListActivity extends AppCompatActivity {
         heartIcon.setImageResource(R.drawable.heart_outline);
         notifyIcon.setImageResource(R.drawable.notifications_outline);
         profileIcon.setImageResource(R.drawable.person_outline);
+    }
+
+    private void loadCartCount(TextView tvCartBadge) {
+        ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);
+
+        apiService.getCartCount().enqueue(new Callback<CartCountResponse>() {
+            @Override
+            public void onResponse(Call<CartCountResponse> call, Response<CartCountResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    int count = response.body().getCount();
+                    if (count > 0) {
+                        tvCartBadge.setText(String.valueOf(count));
+                        tvCartBadge.setVisibility(View.VISIBLE);
+                    } else {
+                        tvCartBadge.setVisibility(View.GONE);
+                    }
+                } else {
+                    tvCartBadge.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CartCountResponse> call, Throwable t) {
+                tvCartBadge.setVisibility(View.GONE);
+                Log.e("CartCount", "Error: " + t.getMessage());
+            }
+        });
     }
 }

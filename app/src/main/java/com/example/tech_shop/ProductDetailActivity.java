@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -33,6 +35,7 @@ import com.example.tech_shop.models.CartCountResponse;
 import com.example.tech_shop.models.Product;
 import com.example.tech_shop.models.ProductDetail;
 import com.example.tech_shop.models.Review;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -271,6 +274,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
 
+        Button btnBuyNow = findViewById(R.id.btnBuyNow);
+        btnBuyNow.setOnClickListener(v -> showBuyNowPopup());
 
 
     }
@@ -448,7 +453,30 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
     }
 
+    private void showBuyNowPopup() {
+        BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
+        View view = getLayoutInflater().inflate(R.layout.item_buy, null);
+        dialog.setContentView(view);
 
+        // Lấy các view bên trong popup
+        TextView tvPrice = view.findViewById(R.id.tvPrice);
+        TextView tvStock = view.findViewById(R.id.tvStock);
+        ImageView imgProduct = view.findViewById(R.id.imgProduct);
+        Button btnConfirm = view.findViewById(R.id.btnBuyNow);
+
+        // Gán dữ liệu sản phẩm (có thể lấy từ biến ProductDetail)
+        tvPrice.setText("119.000đ");
+        tvStock.setText("Stock: 99349");
+        imgProduct.setImageResource(R.drawable.ic_launcher_foreground);
+
+        // Xử lý khi người dùng nhấn Buy Now trong popup
+        btnConfirm.setOnClickListener(v -> {
+            Toast.makeText(this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
+            dialog.dismiss(); // Ẩn popup
+        });
+
+        dialog.show();
+    }
 
 
 

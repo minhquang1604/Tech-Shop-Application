@@ -22,21 +22,25 @@
             android:orientation="vertical">
 
             <!-- Toolbar -->
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="30dp"
-                android:padding="16dp"
-                android:gravity="center_vertical">
+                android:padding="16dp">
 
-                <ImageView
+                <!-- Nút Back -->
+                <ImageButton
                     android:id="@+id/btnBack"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
+                    android:background="@android:color/transparent"
                     android:src="@drawable/back"
-                    android:contentDescription="Back" />
+                    android:contentDescription="Back"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
+                <!-- Tiêu đề "Cart" căn giữa -->
                 <TextView
                     android:id="@+id/tvTitle"
                     android:layout_width="wrap_content"
@@ -44,8 +48,16 @@
                     android:text="Settings"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    android:layout_marginStart="16dp" />
-            </LinearLayout>
+                    android:textColor="@android:color/black"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
             <!-- Divider -->
             <View
