@@ -30,9 +30,12 @@ import com.example.tech_shop.adapter.BannerAdapter;
 import com.example.tech_shop.adapter.ProductAdapter;
 import com.example.tech_shop.api.ApiService;
 import com.example.tech_shop.api.RetrofitClient;
+import com.example.tech_shop.localStorage.WishlistStorage;
 import com.example.tech_shop.models.CartCountResponse;
 import com.example.tech_shop.models.Product;
+import com.example.tech_shop.models.WishlistItem;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.gson.Gson;
 
 import java.util.Arrays;
 import java.util.List;
@@ -213,7 +216,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-
+        loadWishlistFromApi();
 
 
     }
@@ -262,6 +265,66 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
+    private void loadWishlistFromApi() {
+        ApiService api = RetrofitClient.getClient(this).create(ApiService.class);
+
+        Log.d("WishlistDebug", "Starting API call to fetch wishlist...");
+
+        api.getWishlist().enqueue(new Callback<List<WishlistItem>>() {
+            @Override
+            public void onResponse(Call<List<WishlistItem>> call, Response<List<WishlistItem>> response) {
+                Log.d("WishlistDebug", "API response received.");
+
+                if (response.isSuccessful() && response.body() != null) {
+                    List<WishlistItem> wishlist = response.body();
+
+                    // Convert list to JSON string for debug
+                    Gson gson = new Gson();
+                    String json = gson.toJson(wishlist);
+                    Log.d("WishlistDebug", "Full JSON response from API:\n" + json);
+
+                    // Save locally
+                    WishlistStorage.saveWishlist(HomeActivity.this, wishlist);
+                    Log.d("WishlistDebug", "Wishlist saved locally. Size: " + wishlist.size());
+
+                    // 🔍 Read back to confirm correct serialization/deserialization
+                    List<WishlistItem> restoredWishlist = WishlistStorage.getWishlist(HomeActivity.this);
+                    Log.d("WishlistDebug", "Wishlist restored from local storage. Size: " + restoredWishlist.size());
+
+                    // Pretty-print restored items for validation
+                    for (WishlistItem item : restoredWishlist) {
+                        Log.d("WishlistDebug", "Restored item: "
+                                + "ID=" + item.getProductId()
+                                + ", Name=" + item.getProductName()
+                                + ", Price=" + item.getUnitPrice()
+                                + ", Image=" + item.getImage());
+                    }
+
+                    Toast.makeText(HomeActivity.this, "Wishlist loaded", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.e("WishlistDebug", "Failed response. Code: " + response.code());
+                    try {
+                        Log.e("WishlistDebug", "Error body: " + response.errorBody().string());
+                    } catch (Exception e) {
+                        Log.e("WishlistDebug", "Error reading error body", e);
+                    }
+                    Toast.makeText(HomeActivity.this, "Failed to load wishlist", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<WishlistItem>> call, Throwable t) {
+                Log.e("WishlistDebug", "API call failed: " + t.getMessage(), t);
+                Toast.makeText(HomeActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
 
 }
 

@@ -6,6 +6,7 @@ import com.example.tech_shop.models.CartItem;
 import com.example.tech_shop.models.Product;
 import com.example.tech_shop.models.ProductDetail;
 import com.example.tech_shop.models.Review;
+import com.example.tech_shop.models.WishlistItem;
 
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,8 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
+
+    // PRODUCT
     @GET("api/Product/Fetch")
     Call<List<Product>> getProducts(@Query("number") int number);
     // Lấy chi tiết sản phẩm theo ID
@@ -28,6 +31,10 @@ public interface ApiService {
     @GET("api/Product/Search/{keyword}")
     Call<List<Product>> getProductsSearch(@Path("keyword") String keyword);
 
+
+
+
+    // CART
     @GET("api/Cart")
     Call<List<CartItem>> getCart();
 
@@ -40,8 +47,17 @@ public interface ApiService {
     @GET("api/Cart/count")
     Call<CartCountResponse> getCartCount();
 
+
+
+    //Review
     @GET("api/Review/product/{productId}")
     Call<List<Review>> getReviewsByProductId(@Path("productId") String productId);
+
+
+    //WISHLIST
+    @GET("api/Wishlist")
+    Call<List<WishlistItem>> getWishlist();
+
 
 
 

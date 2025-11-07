@@ -8,8 +8,19 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.Toast;
+import com.example.tech_shop.api.RetrofitClient;
+import com.example.tech_shop.api.ApiService;
+import com.example.tech_shop.localStorage.WishlistStorage;
+import com.example.tech_shop.models.WishlistItem;
 
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -27,5 +38,11 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, LogInActivity.class);
             startActivity(intent);
         });
+
     }
+
+
+
+
+
 }
