@@ -14,7 +14,7 @@
         android:layout_height="56dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="30dp"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:background="@android:color/transparent"

@@ -28,12 +28,14 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.tech_shop.adapter.BannerAdapter;
 import com.example.tech_shop.adapter.ProductAdapter;
+import com.example.tech_shop.adapter.ProductFlashSaleAdapter;
 import com.example.tech_shop.api.ApiService;
 import com.example.tech_shop.api.RetrofitClient;
 import com.example.tech_shop.models.CartCountResponse;
 import com.example.tech_shop.models.Product;
 import com.google.android.material.imageview.ShapeableImageView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -196,13 +198,46 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Product> products = response.body();
-                    RecyclerView recyclerView = findViewById(R.id.recyclerViewProducts);
-                    recyclerView.setAdapter(new ProductAdapter(HomeActivity.this, products));
+                    List<Product> allProducts = response.body();
+
+                    List<Product> flashSaleList = new ArrayList<>();
+                    List<Product> normalList = new ArrayList<>();
+
+                    // Phân loại Flash Sale và sản phẩm thường
+                    for (Product p : allProducts) {
+                        if (p.getSale() != null && p.getSale().isActive()) {
+                            flashSaleList.add(p);
+                        } else {
+                            normalList.add(p);
+                        }
+                    }
+
+                    // ✅ Giới hạn Flash Sale chỉ 4 sản phẩm
+                    if (flashSaleList.size() > 4) {
+                        flashSaleList = new ArrayList<>(flashSaleList.subList(0, 4));
+                    }
+
+                    // ⚡ Flash Sale RecyclerView (4 cột, dùng ProductFlashSaleAdapter)
+                    RecyclerView flashSaleRecycler = findViewById(R.id.recyclerFlashSale);
+                    flashSaleRecycler.setHasFixedSize(true);
+                    flashSaleRecycler.setLayoutManager(
+                            new GridLayoutManager(HomeActivity.this, 4, GridLayoutManager.VERTICAL, false)
+                    );
+                    flashSaleRecycler.setAdapter(new ProductFlashSaleAdapter(HomeActivity.this, flashSaleList));
+
+                    // 🛍 Sản phẩm thường RecyclerView (2 cột, dùng ProductAdapter)
+                    RecyclerView productRecycler = findViewById(R.id.recyclerViewProducts);
+                    productRecycler.setHasFixedSize(true);
+                    productRecycler.setLayoutManager(
+                            new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                    );
+                    productRecycler.setAdapter(new ProductAdapter(HomeActivity.this, normalList));
+
                 } else {
-                    Log.e("API_ERROR", "Response code: " + response.code());
+                    Toast.makeText(HomeActivity.this, "Không thể tải dữ liệu sản phẩm", Toast.LENGTH_SHORT).show();
                 }
             }
+
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {

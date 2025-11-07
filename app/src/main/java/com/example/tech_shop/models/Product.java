@@ -7,6 +7,7 @@ public class Product {
     private String image;
     private int price;
     private double rating;
+    private Sale sale;
 
     // Constructor rỗng cho Retrofit
     public Product() {}
@@ -35,4 +36,5 @@ public class Product {
     public double getRating() {
         return rating;
     }
+    public Sale getSale() { return sale; }
 }
