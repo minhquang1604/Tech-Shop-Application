@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -62,6 +63,21 @@ public class ProfileActivity extends AppCompatActivity {
         heartContainer = findViewById(R.id.heartContainer);
         notifyContainer = findViewById(R.id.notifyContainer);
         profileContainer = findViewById(R.id.profileContainer);
+
+
+
+// Khi ấn vào từng mục — mở MyPurchasesActivity và chuyển đúng tab
+        LinearLayout payContainer = findViewById(R.id.payContainer);
+        LinearLayout shipContainer = findViewById(R.id.shipContainer);
+        LinearLayout receiveContainer = findViewById(R.id.receiveContainer);
+        LinearLayout rateContainer = findViewById(R.id.rateContainer);
+
+        // Khi ấn vào từng mục — mở MyPurchasesActivity và chuyển đúng tab
+        payContainer.setOnClickListener(v -> openPurchaseTab(0));      // To Pay
+        shipContainer.setOnClickListener(v -> openPurchaseTab(1));     // To Ship
+        receiveContainer.setOnClickListener(v -> openPurchaseTab(2));  // To Receive
+        rateContainer.setOnClickListener(v -> openPurchaseTab(3));     // To Rate
+
 
         btnSettings = findViewById(R.id.btnSettings);
         tvCartBadge = findViewById(R.id.tvCartBadge);
@@ -148,6 +164,14 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
     }
+
+    private void openPurchaseTab(int tabIndex) {
+        Intent intent = new Intent(ProfileActivity.this, PurchaseActivity.class);
+        intent.putExtra("tab_index", tabIndex); // Gửi tab cần mở
+        startActivity(intent);
+        overridePendingTransition(0, 0);
+    }
+
 
     private void resetIcons() {
         homeIcon.setImageResource(R.drawable.home_outline);
