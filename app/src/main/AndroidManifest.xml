@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tech_Shop">
         <activity
+            android:name=".CheckoutActivity"
+            android:exported="false" />
+        <activity
             android:name=".PurchaseActivity"
             android:exported="false" />
         <activity

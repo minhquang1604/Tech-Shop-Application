@@ -46,7 +46,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
 public class HomeActivity extends AppCompatActivity {
     private ShapeableImageView homeIcon;
     private ShapeableImageView heartIcon;
@@ -92,7 +91,6 @@ public class HomeActivity extends AppCompatActivity {
         btnCart = findViewById(R.id.btnCart);
 
         tvCartBadge = findViewById(R.id.tvCartBadge);
-
 
         searchBox.setOnClickListener(v -> {
 
