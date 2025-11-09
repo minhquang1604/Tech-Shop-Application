@@ -1,24 +1,121 @@
 package com.example.tech_shop;
 
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.tech_shop.adapter.CheckoutAdapter;
+import com.example.tech_shop.api.ApiService;
+import com.example.tech_shop.api.RetrofitClient;
+import com.example.tech_shop.models.CartItem;
+import com.example.tech_shop.models.Order;
+import com.example.tech_shop.models.ConfirmPurchaseRequest;
+import com.example.tech_shop.models.OrderItem;
+import com.example.tech_shop.models.ReceiveInfo;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CheckoutActivity extends AppCompatActivity {
+
+    private RecyclerView rvProducts;
+    private TextView tvTotalPayment, tvMerchSubtotal, tvTotal;
+    private RadioButton rbCOD, rbBank;
+    private Button btnPlaceOrder;
+    private CheckoutAdapter adapter;
+
+    private String orderId;
+    private Order order;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_checkout);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        rvProducts = findViewById(R.id.rvProducts);
+        tvTotalPayment = findViewById(R.id.tvTotalPayment);
+        rbCOD = findViewById(R.id.rbCOD);
+        rbBank = findViewById(R.id.rbBank);
+        btnPlaceOrder = findViewById(R.id.btnPlaceOrder);
+        tvMerchSubtotal = findViewById(R.id.tvMerchSubtotal);
+        tvTotal = findViewById(R.id.tvTotal);
+
+        rvProducts.setLayoutManager(new LinearLayoutManager(this));
+
+        // Nhận orderId từ Intent
+        orderId = getIntent().getStringExtra("ORDER_ID");
+        if (orderId != null) {
+            fetchOrder(orderId);
+        }
+
+        btnPlaceOrder.setOnClickListener(v -> confirmPurchase());
+    }
+
+    private void fetchOrder(String orderId) {
+        ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);
+        apiService.getOrderById(orderId).enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Order order = response.body();
+
+                    // Load sản phẩm vào RecyclerView
+                    List<OrderItem> products = order.getItems();
+                    adapter = new CheckoutAdapter(products);
+                    rvProducts.setAdapter(adapter);
+
+                    // Hiển thị tổng tiền
+                    tvTotalPayment.setText(String.format("%,.0f₫", order.getTotalAmount()));
+                    tvMerchSubtotal.setText(String.format("%,.0f₫", order.getTotalAmount()));
+                    tvTotal.setText(String.format("%,.0f₫", order.getTotalAmount()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
+                Toast.makeText(CheckoutActivity.this, "Lỗi tải đơn hàng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void confirmPurchase() {
+        if (orderId == null) return;
+
+        String paymentMethod = rbCOD.isChecked() ? "COD" : "BankTransfer";
+
+        // Tạo body xác nhận đơn
+        ConfirmPurchaseRequest body = new ConfirmPurchaseRequest(
+                new ReceiveInfo("Cao Minh Quang", "0776292440", "Chung Cư Phúc Đạt, Dĩ An, Bình Dương"),
+                paymentMethod
+        );
+
+        ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);
+        apiService.confirmPurchase(orderId, body).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(CheckoutActivity.this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(CheckoutActivity.this, "Xác nhận thất bại", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(CheckoutActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }

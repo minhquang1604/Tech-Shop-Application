@@ -1,5 +1,6 @@
 package com.example.tech_shop;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -22,8 +23,12 @@ import com.example.tech_shop.adapter.CartAdapter;
 import com.example.tech_shop.api.ApiService;
 import com.example.tech_shop.api.RetrofitClient;
 import com.example.tech_shop.models.CartItem;
+import com.example.tech_shop.models.PrepareItem;
+import com.example.tech_shop.models.PrepareRequest;
+import com.example.tech_shop.models.PrepareResponse;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -55,8 +60,48 @@ public class CartActivity extends AppCompatActivity {
         loadCartItems();
 
         btnBack.setOnClickListener(v -> finish());
-        btnBuyNow.setOnClickListener(v ->
-                Toast.makeText(this, "Buying feature coming soon!", Toast.LENGTH_SHORT).show());
+        btnBuyNow.setOnClickListener(v -> {
+            List<CartItem> selectedItems = cartAdapter.getSelectedItems();
+
+            if (selectedItems.isEmpty()) {
+                Toast.makeText(this, "Vui lòng chọn ít nhất một sản phẩm!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Chuẩn bị danh sách gửi đi
+            List<PrepareItem> prepareItems = new ArrayList<>();
+            for (CartItem item : selectedItems) {
+                prepareItems.add(new PrepareItem(item.getProductId(), item.getQuantity()));
+            }
+
+            PrepareRequest request = new PrepareRequest(prepareItems);
+
+            ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);
+            apiService.prepareOrder(request).enqueue(new Callback<PrepareResponse>() {
+                @Override
+                public void onResponse(Call<PrepareResponse> call, Response<PrepareResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        PrepareResponse prepareResponse = response.body();
+                        String orderId = prepareResponse.getOrder().getOrderID(); // Lấy orderId từ server
+
+                        Toast.makeText(CartActivity.this, "Chuẩn bị đơn hàng thành công!", Toast.LENGTH_SHORT).show();
+
+                        // Chuyển sang CheckoutActivity kèm orderId
+                        Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
+                        intent.putExtra("ORDER_ID", orderId);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(CartActivity.this, "Không thể tạo đơn hàng!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<PrepareResponse> call, Throwable t) {
+                    Toast.makeText(CartActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+
     }
 
     private void loadCartItems() {

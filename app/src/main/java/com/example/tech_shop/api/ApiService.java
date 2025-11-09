@@ -4,6 +4,10 @@ import com.example.tech_shop.models.AddToCartRequest;
 import com.example.tech_shop.models.AddToWishlistRequest;
 import com.example.tech_shop.models.CartCountResponse;
 import com.example.tech_shop.models.CartItem;
+import com.example.tech_shop.models.ConfirmPurchaseRequest;
+import com.example.tech_shop.models.Order;
+import com.example.tech_shop.models.PrepareRequest;
+import com.example.tech_shop.models.PrepareResponse;
 import com.example.tech_shop.models.Product;
 import com.example.tech_shop.models.ProductDetail;
 import com.example.tech_shop.models.ProductWishlist;
@@ -58,6 +62,14 @@ public interface ApiService {
     Call<String> addToWishlist(@Body AddToWishlistRequest request);
 
 
+    @POST("/api/Order/prepare")
+    Call<PrepareResponse> prepareOrder(@Body PrepareRequest request);
+
+    @POST("/api/Purchase/confirm/{orderId}")
+    Call<Void> confirmPurchase(@Path("orderId") String orderId, @Body ConfirmPurchaseRequest body);
+
+    @GET("/api/Order/{id}")
+    Call<Order> getOrderById(@Path("id") String id);
 
 
 }

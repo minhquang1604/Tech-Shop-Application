@@ -20,6 +20,7 @@ import com.example.tech_shop.R;
 import com.example.tech_shop.models.CartItem;
 import com.example.tech_shop.models.Product;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -135,6 +136,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         cartItems.remove(position);
         notifyItemRemoved(position);
         updateTotal(); // gọi lại hàm tính tổng tiền
+    }
+
+    public List<CartItem> getSelectedItems() {
+        List<CartItem> selected = new ArrayList<>();
+        for (CartItem item : cartItems) {
+            if (selectedItems.contains(item.getProductId())) {
+                selected.add(item);
+            }
+        }
+        return selected;
     }
 
 

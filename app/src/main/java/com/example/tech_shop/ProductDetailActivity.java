@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
 import com.example.tech_shop.adapter.ImageAdapter;
 import com.example.tech_shop.adapter.ProductAdapter;
 import com.example.tech_shop.adapter.ReviewAdapter;
@@ -249,11 +250,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                     image,
                     price
             );
-            Log.d("WishlistDebug", "Request gửi đi:");
-            Log.d("WishlistDebug", "ProductId: " + getIntent().getStringExtra("productId"));
-            Log.d("WishlistDebug", "ProductName: " + productName);
-            Log.d("WishlistDebug", "Image: " + image);
-            Log.d("WishlistDebug", "Price: " + price);
 
 
             apiService.addToWishlist(request).enqueue(new Callback<String>() {
@@ -456,29 +452,37 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void showBuyNowPopup() {
+        if (imageAdapter == null || imageAdapter.getImages().isEmpty()) return;
+
         BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
         View view = getLayoutInflater().inflate(R.layout.item_buy, null);
         dialog.setContentView(view);
 
-        // Lấy các view bên trong popup
+        // Lấy view trong popup
         TextView tvPrice = view.findViewById(R.id.tvPrice);
         TextView tvStock = view.findViewById(R.id.tvStock);
         ImageView imgProduct = view.findViewById(R.id.imgProduct);
         Button btnConfirm = view.findViewById(R.id.btnBuyNow);
 
-        // Gán dữ liệu sản phẩm (có thể lấy từ biến ProductDetail)
-        tvPrice.setText("119.000đ");
-        tvStock.setText("Stock: 99349");
-        imgProduct.setImageResource(R.drawable.ic_launcher_foreground);
+        // Hiển thị dữ liệu từ ProductDetailActivity
+        tvPrice.setText(tvPrice.getText().toString()); // Giá từ Activity
+        tvStock.setText(tvSold.getText().toString());  // Số lượng đã bán từ Activity
 
-        // Xử lý khi người dùng nhấn Buy Now trong popup
+        // Load ảnh sản phẩm đầu tiên
+        String firstImageUrl = imageAdapter.getImages().get(0);
+        Glide.with(this)
+                .load(firstImageUrl)
+                .placeholder(R.drawable.ic_launcher_foreground)
+                .into(imgProduct);
+
         btnConfirm.setOnClickListener(v -> {
             Toast.makeText(this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
-            dialog.dismiss(); // Ẩn popup
+            dialog.dismiss();
         });
 
         dialog.show();
     }
+
 
 
 

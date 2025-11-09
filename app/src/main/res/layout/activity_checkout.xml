@@ -5,43 +5,59 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F8F8F8"
     tools:context=".CheckoutActivity">
 
-    <?xml version="1.0" encoding="utf-8"?>
-    <ScrollView
+    <!-- Thanh tiêu đề cố định -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutHeader"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#F8F8F8">
+        android:layout_height="56dp"
+        android:background="#FFFFFF"
+        android:layout_marginTop="30dp"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Nút Back -->
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/back"
+            android:contentDescription="Back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Tiêu đề "Checkout" căn giữa -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Checkout"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:id="@+id/scrollViewContent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/layoutHeader"
+        app:layout_constraintBottom_toTopOf="@id/layoutFooter">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Thanh tiêu đề -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:gravity="center_vertical"
-                android:background="#FFFFFF"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
 
-                <ImageView
-                    android:id="@+id/btnBack"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/back"
-                    android:contentDescription="Back" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Checkout"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginStart="12dp"/>
-            </LinearLayout>
 
             <!-- Thông tin người nhận -->
             <LinearLayout
@@ -50,7 +66,8 @@
                 android:orientation="vertical"
                 android:background="#FFFFFF"
                 android:padding="16dp"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
 
                 <TextView
                     android:id="@+id/tvName"
@@ -69,23 +86,12 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
 
-            <!-- Sản phẩm -->
-            <LinearLayout
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvProducts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#FFFFFF"
-                android:orientation="horizontal"
-                android:padding="16dp"
-                android:layout_marginTop="8dp">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvProducts"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:scrollbars="vertical" />
-            </LinearLayout>
-
+                android:scrollbars="vertical" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -96,20 +102,50 @@
                 android:layout_marginTop="8dp">
 
                 <TextView
-                    android:text="Shipping Option"
+                    android:text="Shipping"
                     android:textStyle="bold"
                     android:textSize="15sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
+                <!-- Hàng ngang chứa Standard Shipping và Free Ship -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="6dp"> <!-- hoặc dùng weight để canh đều -->
+
+                    <TextView
+                        android:id="@+id/tvShipping"
+                        android:text="Standard shipping"
+                        android:textSize="14sp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Free Ship"
+                        android:textColor="#00997F"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+                        android:gravity="end" />
+
+                </LinearLayout>
+
                 <TextView
-                    android:id="@+id/tvShipping"
-                    android:text="Nhanh - Shopee Xử Lý (Free)"
-                    android:textSize="14sp"
-                    android:layout_marginTop="6dp"
+                    android:id="@+id/tvDate"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="Guaranteed to get by 7 Th11 - 12 Th11"
+                    android:textColor="#222222"
+                    android:textSize="14sp"
+                    android:layout_marginTop="6dp" />
+
             </LinearLayout>
+
 
             <!-- Other Payment Methods -->
             <LinearLayout
@@ -328,7 +364,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="By clicking 'Place Order', you are agreeing to Shopee's General Transaction Terms"
+                android:text="By clicking 'Place Order', you are agreeing to TechShop's General Transaction Terms"
                 android:textSize="13sp"
                 android:padding="16dp"
                 android:textColor="#666666"
@@ -336,51 +372,56 @@
                 android:layout_marginTop="4dp"/>
 
 
-            <!-- Tổng tiền + nút -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:background="#FFFFFF"
-                android:padding="16dp"
-                android:layout_marginTop="8dp">
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:text="Total"
-                        android:textSize="13sp"
-                        android:textColor="#777777"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:id="@+id/tvTotal"
-                        android:text="46.490.000₫"
-                        android:textColor="#E53935"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/btnPlaceOrder"
-                    android:text="Place Order"
-                    android:layout_width="140dp"
-                    android:layout_height="45dp"
-                    android:backgroundTint="#FF5722"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    android:textSize="15sp" />
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
+    <!-- Thanh tổng tiền cố định -->
+    <LinearLayout
+        android:id="@+id/layoutFooter"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="#FFFFFF"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="Total"
+                android:textSize="13sp"
+                android:textColor="#777777"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tvTotal"
+                android:text="46.490.000₫"
+                android:textColor="#E53935"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btnPlaceOrder"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Place Order"
+            android:backgroundTint="#1E40AF"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp" />
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
