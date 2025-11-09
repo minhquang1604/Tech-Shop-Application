@@ -65,11 +65,19 @@ public interface ApiService {
     @POST("/api/Order/prepare")
     Call<PrepareResponse> prepareOrder(@Body PrepareRequest request);
 
+    // Lấy tất cả đơn hàng của user
+    @GET("/api/Order/my")
+    Call<List<Order>> getMyOrders();
+
     @POST("/api/Purchase/confirm/{orderId}")
     Call<Void> confirmPurchase(@Path("orderId") String orderId, @Body ConfirmPurchaseRequest body);
 
     @GET("/api/Order/{id}")
     Call<Order> getOrderById(@Path("id") String id);
+
+    @DELETE("/api/Order/{orderId}")
+    Call<Void> cancelOrder(@Path("orderId") String orderId);
+
 
 
 }

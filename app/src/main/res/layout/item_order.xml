@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_flash_sale"
+    android:padding="8dp"
+    android:layout_marginBottom="12dp">
+
+    <!-- Order ID và status -->
+    <TextView
+        android:id="@+id/tvOrderHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OrderID - Status"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:paddingBottom="4dp"/>
+
+    <!-- RecyclerView hiển thị các sản phẩm -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvOrderItems"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="false"/>
+
+    <!-- Layout ngang ở cuối: tổng tiền bên trái, nút Cancel bên phải -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/tvTotalAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Total: 0₫"
+            android:textColor="#E53935"
+            android:textStyle="bold"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btnCancelOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel Order"
+            android:backgroundTint="@color/blue"
+            android:textColor="#FFFFFF"
+            android:minHeight="36dp"/>
+    </LinearLayout>
+
+</LinearLayout>

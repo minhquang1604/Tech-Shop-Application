@@ -34,6 +34,9 @@ import com.example.tech_shop.api.RetrofitClient;
 import com.example.tech_shop.models.AddToCartRequest;
 import com.example.tech_shop.models.AddToWishlistRequest;
 import com.example.tech_shop.models.CartCountResponse;
+import com.example.tech_shop.models.PrepareItem;
+import com.example.tech_shop.models.PrepareRequest;
+import com.example.tech_shop.models.PrepareResponse;
 import com.example.tech_shop.models.Product;
 import com.example.tech_shop.models.ProductDetail;
 import com.example.tech_shop.models.Review;
@@ -41,6 +44,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -271,11 +275,8 @@ public class ProductDetailActivity extends AppCompatActivity {
             });
         });
 
-
         Button btnBuyNow = findViewById(R.id.btnBuyNow);
         btnBuyNow.setOnClickListener(v -> showBuyNowPopup());
-
-
     }
 
     private void loadReviews(String productId) {
@@ -325,7 +326,6 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
     private void loadProductDetails(String id) {
@@ -476,14 +476,38 @@ public class ProductDetailActivity extends AppCompatActivity {
                 .into(imgProduct);
 
         btnConfirm.setOnClickListener(v -> {
-            Toast.makeText(this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
-            dialog.dismiss();
-        });
+            ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);
 
+            String productId = getIntent().getStringExtra("productId");
+
+            // ✅ Tạo request đúng kiểu dữ liệu
+            List<PrepareItem> items = new ArrayList<>();
+            items.add(new PrepareItem(productId, 1));
+
+            PrepareRequest request = new PrepareRequest(items);
+
+            apiService.prepareOrder(request).enqueue(new Callback<PrepareResponse>() {
+                @Override
+                public void onResponse(Call<PrepareResponse> call, Response<PrepareResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        String orderId = response.body().getOrder().getOrderID();
+
+                        Intent intent = new Intent(ProductDetailActivity.this, CheckoutActivity.class);
+                        intent.putExtra("ORDER_ID", orderId);
+                        startActivity(intent);
+                        dialog.dismiss();
+                    } else {
+                        Toast.makeText(ProductDetailActivity.this, "Lỗi khi chuẩn bị đơn hàng!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<PrepareResponse> call, Throwable t) {
+                    Toast.makeText(ProductDetailActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        });
         dialog.show();
     }
-
-
-
-
 }

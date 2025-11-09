@@ -66,7 +66,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
 
-// Khi ấn vào từng mục — mở MyPurchasesActivity và chuyển đúng tab
+        // Khi ấn vào từng mục — mở MyPurchasesActivity và chuyển đúng tab
         LinearLayout payContainer = findViewById(R.id.payContainer);
         LinearLayout shipContainer = findViewById(R.id.shipContainer);
         LinearLayout receiveContainer = findViewById(R.id.receiveContainer);

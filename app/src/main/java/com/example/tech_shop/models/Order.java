@@ -10,7 +10,7 @@ public class Order {
     private String paymentMethod;
     private String status;
     private String createdAt;
-    private String receiveInfo;
+    private ReceiveInfo receiveInfo;
 
     // getters & setters
     public String getOrderID() { return orderID; }
@@ -34,6 +34,6 @@ public class Order {
     public String getCreatedAt() { return createdAt; }
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
 
-    public String getReceiveInfo() { return receiveInfo; }
-    public void setReceiveInfo(String receiveInfo) { this.receiveInfo = receiveInfo; }
+    public ReceiveInfo getReceiveInfo() { return receiveInfo; }
+    public void setReceiveInfo(ReceiveInfo receiveInfo) { this.receiveInfo = receiveInfo; }
 }
