@@ -66,6 +66,10 @@ public class ProductWishlistAdapter extends RecyclerView.Adapter<ProductWishlist
         String formattedPrice = "₫" + formatter.format(product.getUnitPrice());
         holder.textPrice.setText(formattedPrice);
 
+        holder.btnDelete.setOnClickListener(v -> {
+            removeFromWishlist(product.getProductId(), position, holder.itemView);
+        });
+
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, ProductDetailActivity.class);
@@ -113,6 +117,7 @@ public class ProductWishlistAdapter extends RecyclerView.Adapter<ProductWishlist
 
 
 
+
     }
 
 
@@ -125,7 +130,7 @@ public class ProductWishlistAdapter extends RecyclerView.Adapter<ProductWishlist
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageProduct;
         TextView textName, textPrice;
-        ImageButton btnCart;
+        ImageButton btnCart, btnDelete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -133,8 +138,37 @@ public class ProductWishlistAdapter extends RecyclerView.Adapter<ProductWishlist
             textName = itemView.findViewById(R.id.textName);
             textPrice = itemView.findViewById(R.id.textPrice);
             btnCart = itemView.findViewById(R.id.btnCart);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
         }
     }
+
+    private void removeFromWishlist(String productId, int position, View itemView) {
+        ApiService apiService = RetrofitClient.getClient(itemView.getContext()).create(ApiService.class);
+        Call<Void> call = apiService.removeProductFromWishlist(productId);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    // Xóa item khỏi list và cập nhật RecyclerView
+                    productList.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, productList.size());
+                    Toast.makeText(context, "Đã xóa sản phẩm khỏi Wishlist", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.e("WishlistAdapter", "Failed to remove product: " + response.code());
+                    Toast.makeText(context, "Không thể xóa sản phẩm!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("WishlistAdapter", "Error removing product", t);
+                Toast.makeText(context, "Lỗi mạng!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }
 
 

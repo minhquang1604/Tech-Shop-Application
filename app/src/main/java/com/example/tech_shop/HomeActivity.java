@@ -41,6 +41,7 @@ import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import java.util.Calendar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,6 +69,9 @@ public class HomeActivity extends AppCompatActivity {
     private ImageButton btnCart;
     private TextView tvCartBadge;
 
+    private TextView tvCountdown;
+    private Handler countdownHandler = new Handler();
+    private Runnable countdownRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +118,9 @@ public class HomeActivity extends AppCompatActivity {
         LinearLayout laptopContainer = findViewById(R.id.laptopContainer);
         LinearLayout cameraContainer = findViewById(R.id.cameraContainer);
         LinearLayout dronesContainer = findViewById(R.id.dronesContainer);
+        tvCountdown = findViewById(R.id.tvCountdown);
+
+
 
         // Gán sự kiện click từng danh mục
         phonesContainer.setOnClickListener(v -> openCategory("phones"));
@@ -122,6 +129,7 @@ public class HomeActivity extends AppCompatActivity {
         cameraContainer.setOnClickListener(v -> openCategory("cameras"));
         dronesContainer.setOnClickListener(v -> openCategory("Drones"));
 
+        startCountdownToMidnight();
 
         homeContainer.setOnClickListener(v -> {
             resetIcons(); // reset icon khác về outline
@@ -273,6 +281,40 @@ public class HomeActivity extends AppCompatActivity {
         super.onPause();
         handler.removeCallbacks(runnable);
     }
+
+    private void startCountdownToMidnight() {
+        countdownRunnable = new Runnable() {
+            @Override
+            public void run() {
+                long now = System.currentTimeMillis();
+
+                // Tạo Calendar cho 24h hôm nay
+                Calendar midnight = Calendar.getInstance();
+                midnight.set(Calendar.HOUR_OF_DAY, 24); // hoặc 23:59:59 nếu muốn chính xác
+                midnight.set(Calendar.MINUTE, 0);
+                midnight.set(Calendar.SECOND, 0);
+                midnight.set(Calendar.MILLISECOND, 0);
+
+                long diff = midnight.getTimeInMillis() - now;
+
+                if (diff > 0) {
+                    long hours = diff / (1000 * 60 * 60);
+                    long minutes = (diff / (1000 * 60)) % 60;
+                    long seconds = (diff / 1000) % 60;
+
+                    String timeLeft = String.format("%02d : %02d : %02d", hours, minutes, seconds);
+                    tvCountdown.setText(timeLeft);
+
+                    countdownHandler.postDelayed(this, 1000); // update mỗi giây
+                } else {
+                    tvCountdown.setText("00 : 00 : 00");
+                }
+            }
+        };
+
+        countdownHandler.post(countdownRunnable);
+    }
+
 
     private void loadCartCount(TextView tvCartBadge) {
         ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);

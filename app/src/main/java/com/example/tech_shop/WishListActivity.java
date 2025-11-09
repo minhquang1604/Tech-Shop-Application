@@ -100,6 +100,8 @@ public class WishListActivity extends AppCompatActivity {
             }
         });
 
+
+
         // Gọi API đếm số lượng sản phẩm
         loadCartCount(tvCartBadge);
 

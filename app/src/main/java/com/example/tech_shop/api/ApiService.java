@@ -78,6 +78,9 @@ public interface ApiService {
     @DELETE("/api/Order/{orderId}")
     Call<Void> cancelOrder(@Path("orderId") String orderId);
 
+    @DELETE("/api/Wishlist/remove/{productId}")
+    Call<Void> removeProductFromWishlist(@Path("productId") String productId);
+
 
 
 }
