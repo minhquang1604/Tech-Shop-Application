@@ -165,7 +165,6 @@ public class LogInActivity extends AppCompatActivity {
                         editor.apply();
 
                         runOnUiThread(() -> {
-                            Toast.makeText(LogInActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
                             startActivity(intent);
                             finish();

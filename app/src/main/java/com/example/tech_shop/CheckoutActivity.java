@@ -1,7 +1,12 @@
 package com.example.tech_shop;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +48,8 @@ public class CheckoutActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_checkout);
 
+
+
         rvProducts = findViewById(R.id.rvProducts);
         tvTotalPayment = findViewById(R.id.tvTotalPayment);
         rbCOD = findViewById(R.id.rbCOD);
@@ -52,6 +59,10 @@ public class CheckoutActivity extends AppCompatActivity {
         tvTotal = findViewById(R.id.tvTotal);
 
         rvProducts.setLayoutManager(new LinearLayoutManager(this));
+
+        LinearLayout layoutReceiver = findViewById(R.id.layoutReceiver);
+
+
 
         // Nhận orderId từ Intent
         orderId = getIntent().getStringExtra("ORDER_ID");
@@ -84,7 +95,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Order> call, Throwable t) {
-                Toast.makeText(CheckoutActivity.this, "Lỗi tải đơn hàng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                showCustomToast("Lỗi tải đơn hàng", t.getMessage(), R.drawable.error);
             }
         });
     }
@@ -105,17 +116,56 @@ public class CheckoutActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(CheckoutActivity.this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
+                    showCustomToast("Order placed successfully!");
                     finish();
                 } else {
-                    Toast.makeText(CheckoutActivity.this, "Xác nhận thất bại", Toast.LENGTH_SHORT).show();
+                    showCustomToast("Order failed", null, R.drawable.error);
+
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(CheckoutActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                showCustomToast("Lỗi mạng", t.getMessage(), R.drawable.error);
             }
         });
+    }
+
+    private void showCustomToast(String message, String subMessage, int iconResId) {
+        View customToastView = getLayoutInflater().inflate(R.layout.custom_toast, null);
+
+        // Cập nhật main message
+        TextView textView = customToastView.findViewById(R.id.text_message);
+        textView.setText(message);
+
+        // Cập nhật sub-message nếu có
+        TextView subTextView = customToastView.findViewById(R.id.text_sub_message);
+        if (subMessage != null && !subMessage.isEmpty()) {
+            subTextView.setText(subMessage);
+            subTextView.setVisibility(View.VISIBLE);
+        } else {
+            subTextView.setVisibility(View.GONE);
+        }
+
+        // Cập nhật icon
+        ImageView iconView = customToastView.findViewById(R.id.icon_toast);
+        iconView.setImageResource(iconResId);
+
+        // Tạo và show Toast
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 1000);  // Vị trí giống hình
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(customToastView);
+        toast.show();
+    }
+
+    // Overload không cần subMessage, mặc định icon success
+    private void showCustomToast(String message) {
+        showCustomToast(message, null, R.drawable.check);
+    }
+
+    // Overload không cần subMessage, có thể thay icon
+    private void showCustomToast(String message, int iconResId) {
+        showCustomToast(message, null, iconResId);
     }
 }

@@ -138,14 +138,12 @@ public class ProductDetailActivity extends AppCompatActivity {
                 public void onResponse(Call<Map<String, Object>> call, Response<Map<String, Object>> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         Log.d("Cart", "Added: " + response.body());
-                        String message = response.body().get("message").toString();
-                        Toast.makeText(ProductDetailActivity.this, message, Toast.LENGTH_SHORT).show();
-
+                        showCustomToast("Added item to cart", null, R.drawable.check);
                         // Cập nhật badge
                         loadCartCount(tvCartBadge);
                     } else {
                         Log.e("Cart", "Add failed: " + response.code());
-                        Toast.makeText(ProductDetailActivity.this, "Failed to add item to cart!", Toast.LENGTH_SHORT).show();
+                        showCustomToast("Failed to add item to cart!", null, R.drawable.error);
                     }
                 }
 
@@ -260,9 +258,10 @@ public class ProductDetailActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     if (response.isSuccessful()) {
-                        Toast.makeText(ProductDetailActivity.this, "Đã thêm vào danh sách yêu thích ❤️", Toast.LENGTH_SHORT).show();
+                        showCustomToast("Added item to wishlist", null, R.drawable.check);
+
                     } else {
-                        Toast.makeText(ProductDetailActivity.this, "Thêm vào wishlist thất bại!", Toast.LENGTH_SHORT).show();
+                        showCustomToast("Fail to add item to wishlist!", null, R.drawable.error);
                         Log.e("Wishlist", "Error code: " + response.code());
                     }
                 }
@@ -510,4 +509,42 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
         dialog.show();
     }
+    private void showCustomToast(String message, String subMessage, int iconResId) {
+        View customToastView = getLayoutInflater().inflate(R.layout.custom_toast, null);
+
+        // Cập nhật main message
+        TextView textView = customToastView.findViewById(R.id.text_message);
+        textView.setText(message);
+
+        // Cập nhật sub-message nếu có
+        TextView subTextView = customToastView.findViewById(R.id.text_sub_message);
+        if (subMessage != null && !subMessage.isEmpty()) {
+            subTextView.setText(subMessage);
+            subTextView.setVisibility(View.VISIBLE);
+        } else {
+            subTextView.setVisibility(View.GONE);
+        }
+
+        // Cập nhật icon
+        ImageView iconView = customToastView.findViewById(R.id.icon_toast);
+        iconView.setImageResource(iconResId);
+
+        // Tạo và show Toast
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 1000);  // Vị trí giống hình
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(customToastView);
+        toast.show();
+    }
+
+    // Overload không cần subMessage, mặc định icon success
+    private void showCustomToast(String message) {
+        showCustomToast(message, null, R.drawable.check);
+    }
+
+    // Overload không cần subMessage, có thể thay icon
+    private void showCustomToast(String message, int iconResId) {
+        showCustomToast(message, null, iconResId);
+    }
+
 }

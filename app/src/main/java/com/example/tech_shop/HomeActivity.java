@@ -120,8 +120,6 @@ public class HomeActivity extends AppCompatActivity {
         LinearLayout dronesContainer = findViewById(R.id.dronesContainer);
         tvCountdown = findViewById(R.id.tvCountdown);
 
-
-
         // Gán sự kiện click từng danh mục
         phonesContainer.setOnClickListener(v -> openCategory("phones"));
         tabletContainer.setOnClickListener(v -> openCategory("Tablet"));

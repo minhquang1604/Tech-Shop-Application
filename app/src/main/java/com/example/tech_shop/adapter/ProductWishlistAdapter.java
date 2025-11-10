@@ -77,9 +77,8 @@ public class ProductWishlistAdapter extends RecyclerView.Adapter<ProductWishlist
             context.startActivity(intent);
         });
 
-        // Nút thêm vào giỏ hàng (chưa xử lý logic)
         holder.btnCart.setOnClickListener(v -> {
-            String productId = product.getProductId(); // hoặc product.getProductId() tùy model
+            String productId = product.getProductId();
 
             if (productId == null || productId.isEmpty()) {
                 Log.e("Cart", "Product ID is null!");
@@ -88,7 +87,7 @@ public class ProductWishlistAdapter extends RecyclerView.Adapter<ProductWishlist
             }
 
             ApiService apiService = RetrofitClient.getClient(context).create(ApiService.class);
-            AddToCartRequest request = new AddToCartRequest(productId, 1); // Mặc định số lượng = 1
+            AddToCartRequest request = new AddToCartRequest(productId, 1);
 
             apiService.addToCart(request).enqueue(new Callback<Map<String, Object>>() {
                 @Override
@@ -98,29 +97,25 @@ public class ProductWishlistAdapter extends RecyclerView.Adapter<ProductWishlist
                         String message = response.body().get("message").toString();
                         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
 
-                        // 👉 Nếu bạn có badge hiển thị số lượng giỏ hàng:
-                        // ((WishListActivity) context).loadCartCount(tvCartBadge);
+                        // Dùng vị trí hiện tại an toàn
+                        int currentPosition = holder.getBindingAdapterPosition();
+                        if (currentPosition != RecyclerView.NO_POSITION) {
+                            removeFromWishlist(productId, currentPosition, holder.itemView);
+                        }
                     } else {
                         Log.e("Cart", "Add failed: " + response.code());
-                        Toast.makeText(context, "Failed to add item to cart!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Không thể thêm sản phẩm vào giỏ hàng!", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Map<String, Object>> call, Throwable t) {
                     Log.e("Cart", "Error: " + t.getMessage());
-                    Toast.makeText(context, "Network error!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Lỗi mạng khi thêm vào giỏ hàng!", Toast.LENGTH_SHORT).show();
                 }
             });
-
         });
-
-
-
-
     }
-
-
 
     @Override
     public int getItemCount() {
@@ -167,7 +162,10 @@ public class ProductWishlistAdapter extends RecyclerView.Adapter<ProductWishlist
                 Toast.makeText(context, "Lỗi mạng!", Toast.LENGTH_SHORT).show();
             }
         });
+
+
     }
+
 
 }
 

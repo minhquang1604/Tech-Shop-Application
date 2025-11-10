@@ -148,5 +148,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         return selected;
     }
 
+    public List<CartItem> getCartItems() {
+        return cartItems;
+    }
+
+
 
 }

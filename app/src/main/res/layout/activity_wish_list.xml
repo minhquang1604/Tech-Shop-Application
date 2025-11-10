@@ -107,8 +107,8 @@
                         android:id="@+id/tvAllFeatured"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="All Featured"
-                        android:textSize="18sp"
+                        android:text="Recently Added"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         android:textColor="#000000"
                         app:layout_constraintStart_toStartOf="parent"
@@ -134,16 +134,16 @@
                             android:drawableStart="@drawable/sort"
                             android:background="@drawable/btn_outline" />
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btnFilter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="35dp"
-                            android:text="Filter"
-                            android:textSize="13sp"
-                            android:textColor="#000000"
-                            android:drawableStart="@drawable/filter"
-                            android:background="@drawable/btn_outline"
-                            android:layout_marginStart="6dp" />
+<!--                        <androidx.appcompat.widget.AppCompatButton-->
+<!--                            android:id="@+id/btnFilter"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="35dp"-->
+<!--                            android:text="Filter"-->
+<!--                            android:textSize="13sp"-->
+<!--                            android:textColor="#000000"-->
+<!--                            android:drawableStart="@drawable/filter"-->
+<!--                            android:background="@drawable/btn_outline"-->
+<!--                            android:layout_marginStart="6dp" />-->
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

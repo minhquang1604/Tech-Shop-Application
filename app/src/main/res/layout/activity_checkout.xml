@@ -62,15 +62,20 @@
 
             <!-- Thông tin người nhận -->
             <LinearLayout
+                android:id="@+id/layoutReceiver"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="#FFFFFF"
                 android:padding="16dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp">
+                android:layout_marginBottom="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
 
-                <TextView
+
+            <TextView
                     android:id="@+id/tvName"
                     android:text="Cao Minh Quang (+84) 776 292 440"
                     android:textStyle="bold"

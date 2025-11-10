@@ -30,15 +30,13 @@ public class SettingsActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
 
         btnLogOut.setOnClickListener(v -> {
-            // ✅ Xóa dữ liệu SharedPreferences
+            //Xóa dữ liệu SharedPreferences
             SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();  // Xóa toàn bộ dữ liệu (token, username, isLoggedIn)
             editor.apply();
 
-            Toast.makeText(SettingsActivity.this, "Đã đăng xuất!", Toast.LENGTH_SHORT).show();
-
-            // ✅ Chuyển về màn hình đăng nhập
+            //Chuyển về màn hình đăng nhập
             Intent intent = new Intent(SettingsActivity.this, LogInActivity.class);
             startActivity(intent);
             finish(); // đóng HomeActivity để không quay lại bằng nút Back
