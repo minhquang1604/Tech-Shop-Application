@@ -138,6 +138,4 @@ public class SearchDetailActivity extends AppCompatActivity {
         notifyIcon.setImageResource(R.drawable.notifications_outline);
         profileIcon.setImageResource(R.drawable.person_outline);
     }
-
-
 }

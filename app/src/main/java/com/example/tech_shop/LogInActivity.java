@@ -36,7 +36,7 @@ import okhttp3.Response;
 
 public class LogInActivity extends AppCompatActivity {
 
-    TextView tvSignup;
+    TextView tvSignup, tvForgotPassword;
     EditText edtEmail, edtPassword;
     Button btnLogin;
     OkHttpClient client = new OkHttpClient();
@@ -65,11 +65,17 @@ public class LogInActivity extends AppCompatActivity {
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
         btnLogin = findViewById(R.id.btnSignup);
+        tvForgotPassword = findViewById(R.id.textView6);
 
         btnLogin.setOnClickListener(v -> {
             String username = edtEmail.getText().toString();
             String password = edtPassword.getText().toString();
             loginUser(username, password);
+        });
+
+        tvForgotPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(LogInActivity.this, ForgotPasswordActivity.class);
+            startActivity(intent);
         });
 
         tvSignup.setOnClickListener(v -> {

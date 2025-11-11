@@ -16,11 +16,13 @@ import com.example.tech_shop.models.Review;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -80,6 +82,15 @@ public interface ApiService {
 
     @DELETE("/api/Wishlist/remove/{productId}")
     Call<Void> removeProductFromWishlist(@Path("productId") String productId);
+
+    @POST("/api/Authenticate/Email/Opt/Sent/ForgotPassword")
+    Call<Void> sendEmailVerify(@Body RequestBody email);
+
+    @POST("/api/Authenticate/Email/Opt/Verify/PassWord")
+    Call<Void> verifyOtpPassword(@Body Map<String, String> body);
+
+    @PUT("/api/Authenticate/ResetPassword")
+    Call<Void> resetPassword(@Body Map<String, String> body);
 
 
 
