@@ -92,6 +92,4 @@ public interface ApiService {
     @PUT("/api/Authenticate/ResetPassword")
     Call<Void> resetPassword(@Body Map<String, String> body);
 
-
-
 }

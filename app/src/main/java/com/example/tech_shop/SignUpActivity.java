@@ -132,6 +132,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         String url = "http://apibackend.runasp.net/api/Authenticate/register";
+//        String url = "http://techshop.runasp.net/";
 
         JSONObject json = new JSONObject();
         try {

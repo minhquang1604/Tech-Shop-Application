@@ -160,9 +160,9 @@ public class LogInActivity extends AppCompatActivity {
 
                     try {
                         JSONObject jsonObject = new JSONObject(responseData);
-                        String token = jsonObject.getString("token"); // ✅ Lấy token từ API
+                        String token = jsonObject.getString("token"); // Lấy token từ API
 
-                        // ✅ Lưu token và trạng thái đăng nhập
+                        //  Lưu token và trạng thái đăng nhập
                         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString("token", token);
@@ -226,6 +226,7 @@ public class LogInActivity extends AppCompatActivity {
     private void sendIdTokenToServer(String idToken) {
         // Replace with your backend endpoint
         String url = "http://apibackend.runasp.net/api/Authenticate/google"; // your backend URL
+//        String url = "http://techshop.runasp.net/"; // your backend URL
 
         // Create a JSON object with the idToken as a key-value pair
         JSONObject json = new JSONObject();
@@ -259,21 +260,43 @@ public class LogInActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseData = response.body().string();
-                if (response.isSuccessful()) {
-                    // Log and handle successful response
-                    Log.d("SERVER_RESPONSE", responseData);
-                    runOnUiThread(() -> {
-                        Toast.makeText(LogInActivity.this, "Google Sign-In success!", Toast.LENGTH_SHORT).show();
 
-                        // Navigate to your main screen
-                        Intent intent = new Intent(LogInActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    });
+                if (response.isSuccessful()) {
+                    Log.d("SERVER_RESPONSE", responseData);
+
+                    try {
+                        // Parse JSON response
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        String token = jsonObject.getString("token");
+                        String username = jsonObject.optString("username", "GoogleUser");
+
+                        // Save token and user info to SharedPreferences
+                        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("token", token);
+                        editor.putString("username", username);
+                        editor.putBoolean("isLoggedIn", true);
+                        editor.apply();
+
+                        // Navigate to main/home screen
+                        runOnUiThread(() -> {
+                            Toast.makeText(LogInActivity.this, "Google Sign-In success!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            finish();
+                        });
+
+                    } catch (JSONException e) {
+                        Log.e("SERVER_RESPONSE", "JSON parsing error: " + e.getMessage());
+                        runOnUiThread(() ->
+                                Toast.makeText(LogInActivity.this, "Error parsing server response", Toast.LENGTH_SHORT).show());
+                    }
+
                 } else {
-                    // Log and handle failed response
+                    String errorBody = response.body() != null ? responseData : "No response body";
+                    Log.e("SERVER_ERROR", "Code: " + response.code() + ", Message: " + response.message() + ", Body: " + errorBody);
                     runOnUiThread(() ->
-                            Toast.makeText(LogInActivity.this, "Login failed: " + response.code() + " " + response.message() + " " + responseData, Toast.LENGTH_SHORT).show());
+                            Toast.makeText(LogInActivity.this, "Login failed: " + response.code() + " " + response.message(), Toast.LENGTH_SHORT).show());
                 }
             }
         });
