@@ -10,7 +10,6 @@
     android:layout_marginEnd="16dp"
     tools:context=".MainActivity">
 
-    <!-- Nút Back -->
     <ImageButton
         android:id="@+id/btnBack"
         android:layout_width="40dp"
@@ -22,7 +21,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Thanh tìm kiếm bo tròn -->
     <LinearLayout
         android:id="@+id/searchContainer"
         android:layout_width="0dp"
