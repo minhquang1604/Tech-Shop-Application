@@ -2,41 +2,68 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChooseAddress">
+    android:background="#FFFFFF"
+    tools:context=".ChooseAddressActivity">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
-        android:padding="16dp"
+    <!-- HEADER -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/back"
+            android:padding="4dp" />
 
         <TextView
-            android:text="Choose address"
-            android:textSize="24sp"
-            android:textStyle="bold"
+            android:id="@+id/txtTitle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <TextView
-            android:id="@+id/btnAdd"
-            android:text="Thêm địa chỉ mới"
-            android:textColor="#0056FF"
-            android:textSize="16sp"
-            android:padding="12dp"
-            android:layout_width="match_parent"
-            android:gravity="center"
-            android:layout_height="wrap_content"/>
-
+            android:layout_height="wrap_content"
+            android:text="Choose address"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:layout_marginStart="16dp"
+            android:textColor="#000000"/>
     </LinearLayout>
 
+
+    <!-- RECYCLER VIEW LIST -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout"
+        app:layout_constraintBottom_toTopOf="@id/btnAddAdress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <!-- COMPLETE BUTTON -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnAddAdress"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_margin="20dp"
+        android:text="Add new address"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/button_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

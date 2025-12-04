@@ -12,7 +12,9 @@ import com.example.tech_shop.models.PrepareResponse;
 import com.example.tech_shop.models.Product;
 import com.example.tech_shop.models.ProductDetail;
 import com.example.tech_shop.models.ProductWishlist;
+import com.example.tech_shop.models.ReceiveInfo;
 import com.example.tech_shop.models.Review;
+import com.example.tech_shop.models.UserProfileResponse;
 
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -110,5 +113,13 @@ public interface ApiService {
             @Part("Comment") RequestBody comment,
             @Part List<MultipartBody.Part> mediaFiles
     );
+
+    @GET("/api/User/Info/Profile")
+    Call<UserProfileResponse> getProfile(
+            @Header("Authorization") String token
+    );
+
+    @POST("/api/User/Info/Profile/Add-receive-info")
+    Call<Void> addReceiveInfo(@Body ReceiveInfo body);
 
 }

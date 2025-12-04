@@ -18,10 +18,10 @@
             android:name=".PaymentQRActivity"
             android:exported="false" />
         <activity
-            android:name=".NewAddress"
+            android:name=".NewAddressActivity"
             android:exported="false" />
         <activity
-            android:name=".ChooseAddress"
+            android:name=".ChooseAddressActivity"
             android:exported="false" />
         <activity
             android:name=".RateProductActivity"

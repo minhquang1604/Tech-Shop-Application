@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -17,6 +18,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     Button btnLogOut;
     ImageButton btnBack;
+    LinearLayout rowAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         btnLogOut = findViewById(R.id.btnLogOut);
         btnBack = findViewById(R.id.btnBack);
+        rowAddress = findViewById(R.id.rowAddress);
 
         btnBack.setOnClickListener(v -> finish());
 
@@ -40,6 +43,11 @@ public class SettingsActivity extends AppCompatActivity {
             Intent intent = new Intent(SettingsActivity.this, LogInActivity.class);
             startActivity(intent);
             finish(); // đóng HomeActivity để không quay lại bằng nút Back
+        });
+
+        rowAddress.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, ChooseAddressActivity.class);
+            startActivity(intent);
         });
     }
 }
