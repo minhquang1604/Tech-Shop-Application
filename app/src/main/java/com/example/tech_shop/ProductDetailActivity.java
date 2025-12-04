@@ -68,6 +68,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     List<Review> reviewList = new ArrayList<>();
     private TextView tvAverageRating;
     TextView tvSold;
+    String productId;
 
 
 
@@ -108,7 +109,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
 
         // Lấy ID sản phẩm từ Intent
-        String productId = getIntent().getStringExtra("productId");
+        productId = getIntent().getStringExtra("productId");
         loadProductDetails(productId);
 
         // Gọi API đếm số lượng sản phẩm
@@ -451,35 +452,85 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void showBuyNowPopup() {
-        if (imageAdapter == null || imageAdapter.getImages().isEmpty()) return;
-
         BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
         View view = getLayoutInflater().inflate(R.layout.item_buy, null);
         dialog.setContentView(view);
 
-        // Lấy view trong popup
+        // View từ layout
+        ImageView imgProduct = view.findViewById(R.id.imgProduct);
         TextView tvPricePopup = view.findViewById(R.id.tvPrice);
         TextView tvStockPopup = view.findViewById(R.id.tvStock);
-        ImageView imgProduct = view.findViewById(R.id.imgProduct);
-        Button btnConfirm = view.findViewById(R.id.btnBuyNow);
+        TextView tvQuantity = view.findViewById(R.id.tvQuantity);
+        Button btnMinus = view.findViewById(R.id.btnMinus);
+        Button btnPlus = view.findViewById(R.id.btnPlus);
+        Button btnBuyNow = view.findViewById(R.id.btnBuyNow);
 
-        // Hiển thị dữ liệu từ Activity
-        tvPricePopup.setText(tvPrice.getText().toString()); // Giá từ Activity
-        tvStockPopup.setText(tvSold.getText().toString());  // Số lượng đã bán từ Activity
+        // Hiển thị dữ liệu
+        tvPricePopup.setText(tvPrice.getText().toString());
+        tvStockPopup.setText(tvSold.getText().toString());
 
-        // Load ảnh sản phẩm đầu tiên
-        String firstImageUrl = imageAdapter.getImages().get(0);
         Glide.with(this)
-                .load(firstImageUrl)
-                .placeholder(R.drawable.ic_launcher_foreground)
+                .load(imageAdapter.getImages().get(0))
                 .into(imgProduct);
 
-        btnConfirm.setOnClickListener(v -> {
-            // ... phần gọi API như hiện tại
+        // Quantity mặc định
+        tvQuantity.setText("1");
+        int maxStock = 99999; // Nếu bạn có stock thật thì truyền vào
+
+        // --- NÚT + ---
+        btnPlus.setOnClickListener(v -> {
+            int q = Integer.parseInt(tvQuantity.getText().toString());
+            if (q < maxStock) {
+                tvQuantity.setText(String.valueOf(q + 1));
+            }
+        });
+
+        // --- NÚT - ---
+        btnMinus.setOnClickListener(v -> {
+            int q = Integer.parseInt(tvQuantity.getText().toString());
+            if (q > 1) {
+                tvQuantity.setText(String.valueOf(q - 1));
+            }
+        });
+
+        // --- BUY NOW ---
+        btnBuyNow.setOnClickListener(v -> {
+            int quantity = Integer.parseInt(tvQuantity.getText().toString());
+
+            // CHỈ BUY 1 SẢN PHẨM
+            List<PrepareItem> items = new ArrayList<>();
+            items.add(new PrepareItem(productId, quantity));  // productId phải có trong ProductDetailActivity
+
+            PrepareRequest request = new PrepareRequest(items);
+            ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);
+
+            apiService.prepareOrder(request).enqueue(new Callback<PrepareResponse>() {
+                @Override
+                public void onResponse(Call<PrepareResponse> call, Response<PrepareResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        String orderId = response.body().getOrder().getOrderID();
+
+                        // Chuyển sang checkout
+                        Intent intent = new Intent(ProductDetailActivity.this, CheckoutActivity.class);
+                        intent.putExtra("ORDER_ID", orderId);
+                        startActivity(intent);
+
+                        dialog.dismiss();
+                    } else {
+                        Toast.makeText(ProductDetailActivity.this, "Không thể tạo đơn hàng!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<PrepareResponse> call, Throwable t) {
+                    Toast.makeText(ProductDetailActivity.this, "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
 
         dialog.show();
     }
+
 
     private void showCustomToast(String message, String subMessage, int iconResId) {
         View customToastView = getLayoutInflater().inflate(R.layout.custom_toast, null);
@@ -495,7 +546,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             subTextView.setVisibility(View.VISIBLE);
         } else {
             subTextView.setVisibility(View.GONE);
-        }
+        }// ... phần gọi API như hiện tại
 
         // Cập nhật icon
         ImageView iconView = customToastView.findViewById(R.id.icon_toast);

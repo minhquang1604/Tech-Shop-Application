@@ -23,6 +23,7 @@ import com.example.tech_shop.models.CartItem;
 import com.example.tech_shop.models.Order;
 import com.example.tech_shop.models.ConfirmPurchaseRequest;
 import com.example.tech_shop.models.OrderItem;
+import com.example.tech_shop.models.PaymentQRResponse;
 import com.example.tech_shop.models.ReceiveInfo;
 
 import java.util.List;
@@ -57,6 +58,8 @@ public class CheckoutActivity extends AppCompatActivity {
         btnPlaceOrder = findViewById(R.id.btnPlaceOrder);
         tvMerchSubtotal = findViewById(R.id.tvMerchSubtotal);
         tvTotal = findViewById(R.id.tvTotal);
+        rbCOD.setOnClickListener(v -> rbBank.setChecked(false));
+        rbBank.setOnClickListener(v -> rbCOD.setChecked(false));
 
         rvProducts.setLayoutManager(new LinearLayoutManager(this));
 
@@ -103,11 +106,24 @@ public class CheckoutActivity extends AppCompatActivity {
     private void confirmPurchase() {
         if (orderId == null) return;
 
-        String paymentMethod = rbCOD.isChecked() ? "COD" : "BankTransfer";
+        // COD
+        if (rbCOD.isChecked()) {
+            confirmCOD();
+        }
 
-        // Tạo body xác nhận đơn
+        // BANK
+        else if (rbBank.isChecked()) {
+            getPaymentQR(); // 🔥 GỌI API QR
+        }
+    }
+
+
+    private void confirmCOD() {
+        String paymentMethod = "COD";
+
         ConfirmPurchaseRequest body = new ConfirmPurchaseRequest(
-                new ReceiveInfo("Cao Minh Quang", "0776292440", "Chung Cư Phúc Đạt, Dĩ An, Bình Dương"),
+                new ReceiveInfo("Cao Minh Quang", "0776292440",
+                        "Chung Cư Phúc Đạt, Dĩ An, Bình Dương"),
                 paymentMethod
         );
 
@@ -119,8 +135,7 @@ public class CheckoutActivity extends AppCompatActivity {
                     showCustomToast("Order placed successfully!");
                     finish();
                 } else {
-                    showCustomToast("Order failed", null, R.drawable.error);
-
+                    showCustomToast("Order failed", R.drawable.error);
                 }
             }
 
@@ -130,6 +145,37 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void getPaymentQR() {
+
+        ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);
+        apiService.getPaymentQR(orderId).enqueue(new Callback<PaymentQRResponse>() {
+            @Override
+            public void onResponse(Call<PaymentQRResponse> call, Response<PaymentQRResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    PaymentQRResponse qr = response.body();
+
+                    // 🔥 Chuyển sang màn hình hiển thị QR
+                    Intent intent = new Intent(CheckoutActivity.this, PaymentQRActivity.class);
+                    intent.putExtra("QR_URL", qr.getQr());
+                    intent.putExtra("AMOUNT", qr.getAmount());
+                    intent.putExtra("BANK_ID", qr.getBankId());
+                    intent.putExtra("ACCOUNT", qr.getAccount());
+                    intent.putExtra("ORDER_ID", orderId);
+
+                    startActivity(intent);
+                } else {
+                    showCustomToast("Không load được QR", R.drawable.error);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PaymentQRResponse> call, Throwable t) {
+                showCustomToast("Lỗi mạng", t.getMessage(), R.drawable.error);
+            }
+        });
+    }
+
 
     private void showCustomToast(String message, String subMessage, int iconResId) {
         View customToastView = getLayoutInflater().inflate(R.layout.custom_toast, null);

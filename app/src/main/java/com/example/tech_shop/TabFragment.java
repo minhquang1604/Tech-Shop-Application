@@ -38,10 +38,11 @@ public class TabFragment extends Fragment {
         orders = (ArrayList<Order>) (getArguments() != null ?
                 getArguments().getSerializable(ARG_ORDERS) : new ArrayList<>());
 
-        RecyclerView recyclerView = new RecyclerView(getContext());
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new OrderAdapter(getContext(), orders));
+        RecyclerView recyclerView = new RecyclerView(requireContext());
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
+        // Sử dụng requireActivity() để OrderAdapter chắc chắn có Activity context
+        recyclerView.setAdapter(new OrderAdapter(requireActivity(), orders));
 
         // Set margin 16dp
         int marginInPx = (int) (16 * getResources().getDisplayMetrics().density);
@@ -54,5 +55,4 @@ public class TabFragment extends Fragment {
 
         return recyclerView;
     }
-
 }

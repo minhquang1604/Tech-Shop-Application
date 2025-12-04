@@ -6,6 +6,7 @@ import com.example.tech_shop.models.CartCountResponse;
 import com.example.tech_shop.models.CartItem;
 import com.example.tech_shop.models.ConfirmPurchaseRequest;
 import com.example.tech_shop.models.Order;
+import com.example.tech_shop.models.PaymentQRResponse;
 import com.example.tech_shop.models.PrepareRequest;
 import com.example.tech_shop.models.PrepareResponse;
 import com.example.tech_shop.models.Product;
@@ -16,13 +17,16 @@ import com.example.tech_shop.models.Review;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -80,6 +84,12 @@ public interface ApiService {
     @DELETE("/api/Order/{orderId}")
     Call<Void> cancelOrder(@Path("orderId") String orderId);
 
+    @GET("/api/Purchase/payment-qr/{orderId}")
+    Call<PaymentQRResponse> getPaymentQR(
+            @Path("orderId") String orderId
+    );
+
+
     @DELETE("/api/Wishlist/remove/{productId}")
     Call<Void> removeProductFromWishlist(@Path("productId") String productId);
 
@@ -91,5 +101,14 @@ public interface ApiService {
 
     @PUT("/api/Authenticate/ResetPassword")
     Call<Void> resetPassword(@Body Map<String, String> body);
+
+    @Multipart
+    @POST("/api/Review/Create")
+    Call<Void> createReview(
+            @Part("ProductId") RequestBody productId,
+            @Part("Stars") RequestBody stars,
+            @Part("Comment") RequestBody comment,
+            @Part List<MultipartBody.Part> mediaFiles
+    );
 
 }

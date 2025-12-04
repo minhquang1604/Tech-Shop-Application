@@ -169,84 +169,92 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
-                <!-- Cash on Delivery -->
-                <LinearLayout
-                    android:id="@+id/layoutCOD"
+                <RadioGroup
+                    android:id="@+id/rgPayment"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/cash"
-                        android:layout_marginEnd="12dp" />
+                    <!-- Cash on Delivery -->
+                    <LinearLayout
+                        android:id="@+id/layoutCOD"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true">
 
-                    <TextView
-                        android:id="@+id/tvCOD"
-                        android:text="Cash on Delivery"
-                        android:textSize="14sp"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content" />
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/cash"
+                            android:layout_marginEnd="12dp" />
 
-                    <RadioButton
-                        android:id="@+id/rbCOD"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false" />
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/tvCOD"
+                            android:text="Cash on Delivery"
+                            android:textSize="14sp"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#EEEEEE" />
+                        <RadioButton
+                            android:id="@+id/rbCOD"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false" />
+                    </LinearLayout>
 
-                <!-- Bank Transfer -->
-                <LinearLayout
-                    android:id="@+id/layoutBank"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true">
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#EEEEEE" />
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/bank"
-                        android:layout_marginEnd="12dp" />
+                    <!-- Bank Transfer -->
+                    <LinearLayout
+                        android:id="@+id/layoutBank"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true">
 
-                    <TextView
-                        android:id="@+id/tvBank"
-                        android:text="Bank Transfer"
-                        android:textSize="14sp"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content" />
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/bank"
+                            android:layout_marginEnd="12dp" />
 
-                    <RadioButton
-                        android:id="@+id/rbBank"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false" />
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/tvBank"
+                            android:text="Bank Transfer"
+                            android:textSize="14sp"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#EEEEEE" />
+                        <RadioButton
+                            android:id="@+id/rbBank"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false" />
+                    </LinearLayout>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#EEEEEE" />
+
+                </RadioGroup>
 
             </LinearLayout>
+
 
 
             <!-- Payment Details -->

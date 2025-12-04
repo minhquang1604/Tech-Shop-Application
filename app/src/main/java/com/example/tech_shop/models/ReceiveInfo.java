@@ -1,6 +1,8 @@
 package com.example.tech_shop.models;
 
-public class ReceiveInfo {
+import java.io.Serializable;
+
+public class ReceiveInfo implements Serializable {
     private String name;
     private String phone;
     private String address;

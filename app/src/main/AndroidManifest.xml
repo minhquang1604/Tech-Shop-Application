@@ -15,32 +15,38 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tech_Shop">
         <activity
-            android:name=".RateProductActivity"
+            android:name=".PaymentQRActivity"
             android:exported="false" />
+        <activity
+            android:name=".NewAddress"
+            android:exported="false" />
+        <activity
+            android:name=".ChooseAddress"
+            android:exported="false" />
+        <activity
+            android:name=".RateProductActivity"
+            android:exported="true" />
         <activity
             android:name=".NotificationActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".NewPasswordActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".OTPActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".ForgotPasswordActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AddressActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".CheckoutActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".PurchaseActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".WishListActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".SplashActivity"
             android:exported="true">

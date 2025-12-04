@@ -1,19 +1,21 @@
 package com.example.tech_shop.adapter;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tech_shop.R;
+import com.example.tech_shop.RateProductActivity;
 import com.example.tech_shop.api.ApiService;
 import com.example.tech_shop.api.RetrofitClient;
 import com.example.tech_shop.models.Order;
@@ -27,13 +29,12 @@ import retrofit2.Response;
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
 
     private final List<Order> orders;
-    private final Context context;
+    private final Activity activity; // Truyền Activity thay vì Context
 
-    public OrderAdapter(Context context, List<Order> orders) {
-        this.context = context;
+    public OrderAdapter(Activity activity, List<Order> orders) {
+        this.activity = activity;
         this.orders = orders;
     }
-
 
     @NonNull
     @Override
@@ -46,7 +47,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Order order = orders.get(position);
-        holder.tvOrderHeader.setText("TechShop" + " - " + order.getStatus());
+        holder.tvOrderHeader.setText("TechShop - " + order.getStatus());
 
         // Set adapter cho RecyclerView con
         List<OrderItem> items = order.getItems();
@@ -57,9 +58,26 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         // Hiển thị tổng tiền
         holder.tvTotalAmount.setText("Total: " + String.format("%,.0f₫", order.getTotalAmount()));
 
-        holder.btnCancelOrder.setOnClickListener(v -> {
-            cancelOrder(order.getOrderID(), position, holder.itemView);
+        // Cancel order
+        holder.btnCancelOrder.setOnClickListener(v -> cancelOrder(order.getOrderID(), position));
+
+        // Open review
+        holder.btnReview.setOnClickListener(v -> {
+            if (order.getItems() != null && !order.getItems().isEmpty()) {
+                String productId = order.getItems().get(0).getProductID();
+                Log.d("OrderAdapter", "Opening review for productId: " + productId);
+                if (productId != null && !productId.isEmpty()) {
+                    Intent intent = new Intent(activity, RateProductActivity.class);
+                    intent.putExtra("productId", productId);
+                    activity.startActivity(intent);
+                } else {
+                    Toast.makeText(activity, "Product ID is missing!", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(activity, "No product to review", Toast.LENGTH_SHORT).show();
+            }
         });
+
     }
 
     @Override
@@ -70,7 +88,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvOrderHeader, tvTotalAmount;
         RecyclerView rvOrderItems;
-        Button btnCancelOrder;
+        Button btnCancelOrder, btnReview;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -78,19 +96,17 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             tvTotalAmount = itemView.findViewById(R.id.tvTotalAmount);
             rvOrderItems = itemView.findViewById(R.id.rvOrderItems);
             btnCancelOrder = itemView.findViewById(R.id.btnCancelOrder);
+            btnReview = itemView.findViewById(R.id.btnReview);
         }
     }
 
-    // Phương thức gọi API hủy đơn
-    // Trong OrderAdapter
-    private void cancelOrder(String orderId, int position, View itemView) {
-        ApiService apiService = RetrofitClient.getClient(itemView.getContext()).create(ApiService.class);
+    private void cancelOrder(String orderId, int position) {
+        ApiService apiService = RetrofitClient.getClient(activity).create(ApiService.class);
         Call<Void> call = apiService.cancelOrder(orderId);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    // Xóa đơn khỏi danh sách và cập nhật RecyclerView
                     orders.remove(position);
                     notifyItemRemoved(position);
                     notifyItemRangeChanged(position, orders.size());
@@ -106,8 +122,4 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             }
         });
     }
-
-
-
-
 }
