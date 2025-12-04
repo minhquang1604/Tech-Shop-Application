@@ -128,7 +128,7 @@
 
             <!-- Payment -->
             <LinearLayout
-                android:id="@+id/rowPayment"
+                android:id="@+id/rowPassword"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:orientation="horizontal"
@@ -139,7 +139,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="My Payment Options"
+                    android:text="Change Password"
                     android:textColor="#000000"
                     android:textSize="16sp" />
 
@@ -155,34 +155,9 @@
                 android:layout_height="1dp"
                 android:background="#E0E0E0" />
 
-            <!-- Manage Account -->
-            <LinearLayout
-                android:id="@+id/rowAccount"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="16dp">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Manage My Account"
-                    android:textColor="#000000"
-                    android:textSize="16sp" />
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/arrow_forward"
-                    app:tint="#C0C0C0" />
-            </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#E0E0E0" />
 
             <!-- Language -->
             <LinearLayout

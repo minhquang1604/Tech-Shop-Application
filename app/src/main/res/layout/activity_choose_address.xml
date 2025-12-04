@@ -50,13 +50,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- COMPLETE BUTTON: chọn địa chỉ -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSelectAddress"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="Select Address"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/button_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnAddAdress"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <!-- COMPLETE BUTTON -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnAddAdress"
         android:layout_width="0dp"
         android:layout_height="52dp"
-        android:layout_margin="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="20dp"
         android:text="Add new address"
         android:textAllCaps="false"
         android:textStyle="bold"
@@ -64,6 +82,6 @@
         android:background="@drawable/button_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/btnSelectAddress" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

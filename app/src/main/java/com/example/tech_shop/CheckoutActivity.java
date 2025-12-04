@@ -34,6 +34,8 @@ import retrofit2.Response;
 
 public class CheckoutActivity extends AppCompatActivity {
 
+    private TextView tvName, tvAddress;
+    private LinearLayout layoutReceiver;
     private RecyclerView rvProducts;
     private TextView tvTotalPayment, tvMerchSubtotal, tvTotal;
     private RadioButton rbCOD, rbBank;
@@ -58,14 +60,14 @@ public class CheckoutActivity extends AppCompatActivity {
         btnPlaceOrder = findViewById(R.id.btnPlaceOrder);
         tvMerchSubtotal = findViewById(R.id.tvMerchSubtotal);
         tvTotal = findViewById(R.id.tvTotal);
+        tvName = findViewById(R.id.tvName);
+        tvAddress = findViewById(R.id.tvAddress);
+        layoutReceiver = findViewById(R.id.layoutReceiver);
+
         rbCOD.setOnClickListener(v -> rbBank.setChecked(false));
         rbBank.setOnClickListener(v -> rbCOD.setChecked(false));
 
         rvProducts.setLayoutManager(new LinearLayoutManager(this));
-
-        LinearLayout layoutReceiver = findViewById(R.id.layoutReceiver);
-
-
 
         // Nhận orderId từ Intent
         orderId = getIntent().getStringExtra("ORDER_ID");
@@ -73,7 +75,27 @@ public class CheckoutActivity extends AppCompatActivity {
             fetchOrder(orderId);
         }
 
+        // Mở ChooseAddressActivity để chọn địa chỉ
+        layoutReceiver.setOnClickListener(v -> {
+            Intent intent = new Intent(CheckoutActivity.this, ChooseAddressActivity.class);
+            startActivityForResult(intent, 100); // requestCode = 100
+        });
+
         btnPlaceOrder.setOnClickListener(v -> confirmPurchase());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+            String name = data.getStringExtra("name");
+            String phone = data.getStringExtra("phone");
+            String address = data.getStringExtra("address");
+
+            tvName.setText(name + " (" + phone + ")");
+            tvAddress.setText(address);
+        }
     }
 
     private void fetchOrder(String orderId) {
