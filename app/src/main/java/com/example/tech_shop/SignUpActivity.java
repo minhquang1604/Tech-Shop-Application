@@ -54,8 +54,8 @@ public class SignUpActivity extends AppCompatActivity {
             String email = edtEmail.getText().toString();
             String password = edtPassword.getText().toString();
             String cpassword = edtCPassword.getText().toString();
-
             signupUser(username, email, password, cpassword);
+
         });
 
         tvLogin.setOnClickListener(v -> {
@@ -167,10 +167,13 @@ public class SignUpActivity extends AppCompatActivity {
                     String responseData = response.body().string();
                     Log.d("API_RESPONSE", responseData);
 
+                    // 1. Gửi email xác thực ngay sau khi đăng ký thành công
+                    sendVerificationEmail(email);
+
                     runOnUiThread(() ->
                             Toast.makeText(SignUpActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show());
 
-                    Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                    Intent intent = new Intent(SignUpActivity.this, VerifyActivity.class);
                     startActivity(intent);
                 } else {
                     runOnUiThread(() ->
@@ -180,6 +183,49 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
+    private void sendVerificationEmail(String email) {
+        String url = "http://apibackend.runasp.net/api/Authenticate/EmailVerify/Send";
+
+        // Body của request chỉ là chuỗi email, cần được bọc trong dấu ngoặc kép
+        // Nếu API mong đợi chuỗi JSON đơn giản ("email@example.com")
+        String jsonString = "\"" + email + "\"";
+
+        RequestBody body = RequestBody.create(
+                jsonString,
+                MediaType.parse("application/json; charset=utf-8")
+        );
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // Xử lý khi kết nối thất bại
+                Log.e("API_EMAIL", "Lỗi gửi email xác thực: " + e.getMessage());
+                runOnUiThread(() ->
+                        Toast.makeText(SignUpActivity.this, "Lỗi kết nối khi gửi email", Toast.LENGTH_LONG).show());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                // Xử lý kết quả trả về
+                if (response.isSuccessful()) {
+                    Log.d("API_EMAIL", "Gửi email xác thực thành công.");
+                    // Optional: Thông báo cho người dùng biết email đã được gửi
+                    runOnUiThread(() ->
+                            Toast.makeText(SignUpActivity.this, "Vui lòng kiểm tra email để xác thực!", Toast.LENGTH_LONG).show());
+                } else {
+                    String errorBody = response.body() != null ? response.body().string() : "Không có thông báo lỗi";
+                    Log.e("API_EMAIL", "Gửi email xác thực thất bại: " + response.code() + ", Body: " + errorBody);
+                    runOnUiThread(() ->
+                            Toast.makeText(SignUpActivity.this, "Không thể gửi email xác thực. Mã lỗi: " + response.code(), Toast.LENGTH_LONG).show());
+                }
+            }
+        });
+    }
 
 
 }

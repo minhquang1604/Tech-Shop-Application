@@ -156,9 +156,6 @@
                 android:background="#E0E0E0" />
 
 
-
-
-
             <!-- Language -->
             <LinearLayout
                 android:id="@+id/rowLanguage"
