@@ -42,6 +42,10 @@ import com.example.tech_shop.models.ProductDetail;
 import com.example.tech_shop.models.Review;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,6 +56,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,6 +80,9 @@ public class ProductDetailActivity extends AppCompatActivity {
     TextView tvSold;
     String productId;
 
+    private OkHttpClient sentimentClient = new OkHttpClient();
+    private static final String SENTIMENT_API_KEY = "3d3edaba-0b0b-44cc-b2d9-3973642b5c3c";
+    private TextView tvOverallSentiment; // hiển thị sentiment tổng quan
 
 
     @Override
@@ -90,6 +103,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         tvAverageRating = findViewById(R.id.tvAverageRating);
         tvSold = findViewById(R.id.tvSold);
         TextView tvDate = findViewById(R.id.tvDate);
+        tvOverallSentiment = findViewById(R.id.tvOverallSentiment);
+
 
         // Lấy ngày hiện tại
         Calendar calendar = Calendar.getInstance();
@@ -315,6 +330,13 @@ public class ProductDetailActivity extends AppCompatActivity {
                     }
 
                     reviewAdapter.notifyDataSetChanged();
+
+//                    // ✅ Gửi từng review lên API sentiment
+//                    for (Review r : allReviews) {
+//                        analyzeReviewSentiment(r.getComment());
+//                    }
+
+
                 } else {
                     Log.e("API", "Response not successful: " + response.code());
                 }
@@ -326,6 +348,96 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
     }
+
+//    private void analyzeReviewSentiment(String comment) {
+//        String url = "https://api.apiverve.com/v1/sentimentanalysis";
+//
+//        JSONObject json = new JSONObject();
+//        try {
+//            json.put("text", comment);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        RequestBody body = RequestBody.create(
+//                json.toString(),
+//                MediaType.parse("application/json; charset=utf-8")
+//        );
+//
+//        Request request = new Request.Builder()
+//                .url(url)
+//                .post(body)
+//                .addHeader("Content-Type", "application/json")
+//                .addHeader("x-api-key", SENTIMENT_API_KEY)
+//                .build();
+//
+//        sentimentClient.newCall(request).enqueue(new okhttp3.Callback() {
+//            @Override
+//            public void onFailure(okhttp3.Call call, IOException e) {
+//                Log.e("SentimentAPI", "Failed: " + e.getMessage());
+//            }
+//
+//            @Override
+//            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    String responseData = response.body().string();
+//                    try {
+//                        JSONObject jsonObject = new JSONObject(responseData);
+//                        JSONObject data = jsonObject.getJSONObject("data");
+//
+//                        String sentimentText = data.getString("sentimentText");
+//                        double comparative = data.getDouble("comparative");
+//
+//                        runOnUiThread(() -> updateOverallSentimentFromApi(sentimentText, comparative));
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                } else {
+//                    Log.e("SentimentAPI", "Error: " + response.code());
+//                }
+//            }
+//        });
+//    }
+//
+//    private void updateOverallSentimentFromApi(String sentimentText, double comparative) {
+//        String sentence1, sentence2;
+//
+//        // Câu 1: tổng quan dựa vào sentimentText
+//        switch (sentimentText.toLowerCase()) {
+//            case "very positive":
+//                sentence1 = "The product is highly praised by users.";
+//                break;
+//            case "positive":
+//                sentence1 = "The product is positively reviewed by users.";
+//                break;
+//            case "very negative":
+//                sentence1 = "The product is strongly criticized by users.";
+//                break;
+//            case "negative":
+//                sentence1 = "The product is negatively reviewed by users.";
+//                break;
+//            default:
+//                sentence1 = "The product has mixed reviews.";
+//                break;
+//        }
+//
+//
+//        // Câu 2: mô tả mức độ chi tiết dựa vào comparative
+//        if (comparative >= 0.6) {
+//            sentence2 = "Users are extremely satisfied with this product.";
+//        } else if (comparative >= 0.2) {
+//            sentence2 = "Users are generally happy with this product.";
+//        } else if (comparative > -0.2) {
+//            sentence2 = "Users have mixed feelings about this product.";
+//        } else if (comparative > -0.6) {
+//            sentence2 = "Users are somewhat dissatisfied with this product.";
+//        } else {
+//            sentence2 = "Users are very unhappy with this product.";
+//        }
+//
+//        tvOverallSentiment.setText(sentence1 + "\n" + sentence2);
+//    }
 
 
     private void loadProductDetails(String id) {

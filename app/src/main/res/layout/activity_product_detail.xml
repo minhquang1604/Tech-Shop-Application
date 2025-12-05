@@ -358,6 +358,41 @@
                         android:textSize="13sp" />
                 </LinearLayout>
 
+
+                <LinearLayout
+                    android:id="@+id/layoutAISummary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_ai_summary">
+
+                    <TextView
+                        android:id="@+id/tvAI"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="AI Review Summary"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/black"
+                        android:layout_marginBottom="8dp"
+                        android:drawableStart="@drawable/favicon_ai"
+                        android:drawablePadding="8dp" />
+
+
+                    <TextView
+                        android:id="@+id/tvOverallSentiment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Loading..."
+                        android:textSize="16sp"
+                        android:textColor="@android:color/black"/>
+
+                </LinearLayout>
+
+
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerReviews"
                     android:layout_width="match_parent"

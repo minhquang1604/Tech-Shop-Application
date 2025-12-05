@@ -47,6 +47,16 @@
             android:textColor="@android:color/black"
             android:textSize="16sp" />
 
+        <!--  Nút camera (search bằng hình ảnh)  -->
+        <ImageButton
+            android:id="@+id/btnImageSearch"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/camera_black"
+            android:contentDescription="Search by Image" />
+
+        <!--  Nút search  -->
         <ImageButton
             android:id="@+id/btnSearch"
             android:layout_width="55dp"
@@ -54,7 +64,9 @@
             android:background="@drawable/bg_search_circle"
             android:src="@drawable/search"
             android:contentDescription="Search" />
+
     </LinearLayout>
+
 
     <!-- Recently Searched title -->
     <TextView
