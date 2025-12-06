@@ -9,6 +9,11 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
+import com.example.tech_shop.api.ApiService;
+import com.example.tech_shop.api.RetrofitClient;
+import com.example.tech_shop.MainActivity;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -17,91 +22,12 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-//public class MyFirebaseMessagingService extends FirebaseMessagingService {
-//    private static final String TAG = "FCMService";
-//    private static final String CHANNEL_ID = "default_channel";
-//    private static final String CHANNEL_NAME = "Default Channel";
-//    private static final int NOTIFICATION_ID = 0;
-//    @Override
-//    public void onMessageReceived(RemoteMessage remoteMessage) {
-//        // Handle notification payloads
-//        if (remoteMessage.getNotification() != null) {
-//            String title = remoteMessage.getNotification().getTitle();
-//            String body = remoteMessage.getNotification().getBody();
-//            showNotification(title, body);
-//        }
-//    }
-//
-//    @Override
-//    public void onNewToken(String token) {
-//        super.onNewToken(token);
-//        Log.d(TAG, "New token: " + token);
-//        sendTokenToServer(token);  // Send updated token to backend
-//    }
-//
-//    @Override
-//    public void onCreate() {
-//        super.onCreate();
-//        fetchAndSendToken();
-//    }
-//
-//    // Method to fetch the FCM token and send it to the server
-//    private void fetchAndSendToken() {
-//        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
-//            if (!task.isSuccessful()) {
-//                Log.w(TAG, "Fetching FCM token failed", task.getException());
-//                return;
-//            }
-//            String token = task.getResult();
-//            Log.d(TAG, "Fetched Token: " + token);
-//            sendTokenToServer(token);
-//        });
-//    }
-//
-//    // Send the FCM token to the backend server
-//    private void sendTokenToServer(String token) {
-//        // TODO: Implement the actual server communication
-//        // Use Retrofit, OkHttp, or any other HTTP client
-//        Log.d(TAG, "Sending token to server: " + token);
-//    }
-//
-//    // Display a notification with the received message
-//    private void showNotification(String title, String messageBody) {
-//        Intent intent = new Intent(this, LogInActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//
-//        PendingIntent pendingIntent = PendingIntent.getActivity(
-//                this, 0, intent, PendingIntent.FLAG_IMMUTABLE
-//        );
-//
-//        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
-//                .setSmallIcon(R.drawable.notifications)
-//                .setContentTitle(title)
-//                .setContentText(messageBody)
-//                .setAutoCancel(true)
-//                .setSound(defaultSoundUri)
-//                .setContentIntent(pendingIntent);
-//
-//        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            createNotificationChannel(notificationManager);
-//        }
-//
-//        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
-//    }
-//
-//    // Create a notification channel for Android O and above
-//    private void createNotificationChannel(NotificationManager notificationManager) {
-//        NotificationChannel channel = new NotificationChannel(
-//                CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT
-//        );
-//        notificationManager.createNotificationChannel(channel);
-//    }
-//}
+import java.util.HashMap;
+import java.util.Map;
 
-
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -149,10 +75,65 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // TODO: send this token to your server if needed
         sendTokenToServer(token);
     }
+    private void registerFcmTokenAfterLogin() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("Login", "Fetching FCM token failed", task.getException());
+                        return;
+                    }
+
+                    String token = task.getResult();
+                    Log.d("Login", "Login FCM Token: " + token);
+
+                    // Gửi lên server
+                    sendTokenToServer(token);
+                });
+    }
+
+    public  void sendTokenToServerIfExists(Context context) {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.e("FCM", "Failed to get token: ", task.getException());
+                        return;
+                    }
+
+                    String token = task.getResult();
+                    Log.d("FCM", "Sending token after login: " + token);
+                    sendTokenToServer(token);
+                });
+    }
+
 
     private void sendTokenToServer(String token) {
-        
+
+        ApiService apiService = RetrofitClient.getClient(getApplicationContext())
+                .create(ApiService.class);
+
+        Map<String, String> body = new HashMap<>();
+        body.put("Token", token);
+
+        Call<Map<String, Object>> call = apiService.registerFcmToken(body);
+
+        call.enqueue(new Callback<Map<String, Object>>() {
+            @Override
+            public void onResponse(Call<Map<String, Object>> call, Response<Map<String, Object>> response) {
+                if (response.isSuccessful()) {
+                    Log.d("FCM", "🔥 Token registered successfully");
+                } else {
+                    Log.e("FCM", "❌ Error: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Map<String, Object>> call, Throwable t) {
+                Log.e("FCM", "🚫 Failed: " + t.getMessage());
+            }
+        });
     }
+
+
 
 
     private void showNotification(String title, String messageBody) {

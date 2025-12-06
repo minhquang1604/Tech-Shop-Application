@@ -58,6 +58,13 @@ public interface ApiService {
     @GET("api/Wishlist")
     Call<List<WishlistItem>> getWishlist();
 
+    //LOGIN
+    @POST("api/Authenticate/login")
+    Call<Map<String, Object>> login(@Body Map<String, String> body);
+
+    //FCM
+    @POST("api/Authenticate/fcm/register")
+    Call<Map<String, Object>> registerFcmToken(@Body Map<String, String> body);
 
 
 

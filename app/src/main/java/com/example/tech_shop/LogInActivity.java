@@ -13,18 +13,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.util.Log;
 
+import com.example.tech_shop.api.ApiService;
+import com.example.tech_shop.api.RetrofitClient;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import androidx.annotation.Nullable;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -119,14 +124,17 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void loginUser(String username, String password) {
+
         String url = "http://apibackend.runasp.net/api/Authenticate/login";
 
+        // Tạo JSON body
         JSONObject json = new JSONObject();
         try {
             json.put("username", username);
             json.put("password", password);
-        } catch (Exception e) {
+        } catch (JSONException e) {
             e.printStackTrace();
+            return;
         }
 
         RequestBody body = RequestBody.create(
@@ -148,36 +156,39 @@ public class LogInActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String responseData = response.body().string();
-                    Log.d("API_RESPONSE", responseData);
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(responseData);
-                        String token = jsonObject.getString("token"); // ✅ Lấy token từ API
-
-                        // ✅ Lưu token và trạng thái đăng nhập
-                        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("token", token);
-                        editor.putString("username", username);
-                        editor.putBoolean("isLoggedIn", true);
-                        editor.apply();
-
-                        runOnUiThread(() -> {
-                            Toast.makeText(LogInActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
-                            startActivity(intent);
-                            finish();
-                        });
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                } else {
+                if (!response.isSuccessful()) {
                     runOnUiThread(() ->
                             Toast.makeText(LogInActivity.this, "Sai tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT).show());
+                    return;
+                }
+
+                String responseData = response.body().string();
+                Log.d("API_RESPONSE", responseData);
+
+                try {
+                    JSONObject jsonRes = new JSONObject(responseData);
+                    String token = jsonRes.getString("token");
+
+                    // Lưu session
+                    SharedPreferences shared = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                    shared.edit()
+                            .putString("token", token)
+                            .putString("username", username)
+                            .putBoolean("isLoggedIn", true)
+                            .apply();
+
+                    // Gửi FCM token lên server (nếu đã có)
+                    FcmTokenHelper.sendTokenToServer(LogInActivity.this);
+
+                    // Chuyển trang
+                    runOnUiThread(() -> {
+                        Toast.makeText(LogInActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(LogInActivity.this, HomeActivity.class));
+                        finish();
+                    });
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -276,6 +287,8 @@ public class LogInActivity extends AppCompatActivity {
 
 
     }
+
+
 
 
 
