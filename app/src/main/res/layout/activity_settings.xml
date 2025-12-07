@@ -67,6 +67,7 @@
 
             <!-- User Row -->
             <LinearLayout
+                android:id="@+id/rowUser"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
                 android:orientation="horizontal"

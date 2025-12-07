@@ -149,9 +149,9 @@ public class HomeActivity extends AppCompatActivity {
         notifyContainer.setOnClickListener(v -> {
             resetIcons();
             notifyIcon.setImageResource(R.drawable.notifications);
-
-            //Intent intent = new Intent(this, NotificationsActivity.class);
-            //startActivity(intent);
+            Intent intent = new Intent(this, NotificationActivity.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
         });
 
         profileContainer.setOnClickListener(v -> {

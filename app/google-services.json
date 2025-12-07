@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "936243486011",
+    "project_id": "webdev-project-22467",
+    "storage_bucket": "webdev-project-22467.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936243486011:android:c12683237de98174972b1e",
+        "android_client_info": {
+          "package_name": "com.example.tech_shop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "936243486011-f1fsepqouvds2o04jt54dvb5flobdpec.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDk5M3nMq_HSUIkL4yldAratjx75fTLPr8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "936243486011-f1fsepqouvds2o04jt54dvb5flobdpec.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

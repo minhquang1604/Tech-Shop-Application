@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <application
         android:allowBackup="true"
@@ -15,8 +18,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tech_Shop">
         <activity
-            android:name=".SearchImageActivity"
+            android:name=".InformationActivity"
             android:exported="false" />
+        <!-- 🔥 FCM SERVICE BẠN ĐANG THIẾU -->
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".NotificationActivity"
+            android:exported="true" /> <!-- Các activity còn lại giữ nguyên -->
         <activity
             android:name=".VerifyActivity"
             android:exported="false" />
@@ -31,9 +46,6 @@
             android:exported="false" />
         <activity
             android:name=".RateProductActivity"
-            android:exported="true" />
-        <activity
-            android:name=".NotificationActivity"
             android:exported="true" />
         <activity
             android:name=".NewPasswordActivity"

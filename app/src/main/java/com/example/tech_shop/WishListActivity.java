@@ -177,13 +177,17 @@ public class WishListActivity extends AppCompatActivity {
         heartContainer.setOnClickListener(v -> {
             resetIcons();
             heartIcon.setImageResource(R.drawable.heart);
-            // Không cần chuyển trang vì đang ở wishlist
+            Intent intent = new Intent(this, WishListActivity.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
         });
 
         notifyContainer.setOnClickListener(v -> {
             resetIcons();
             notifyIcon.setImageResource(R.drawable.notifications);
-            // Mở trang thông báo nếu có
+            Intent intent = new Intent(this, NotificationActivity.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
         });
 
         profileContainer.setOnClickListener(v -> {

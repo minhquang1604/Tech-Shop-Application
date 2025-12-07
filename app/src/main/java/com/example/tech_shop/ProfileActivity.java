@@ -23,6 +23,7 @@ import com.example.tech_shop.adapter.ProductAdapter;
 import com.example.tech_shop.api.ApiService;
 import com.example.tech_shop.api.RetrofitClient;
 import com.example.tech_shop.models.CartCountResponse;
+import com.example.tech_shop.models.PersonalInfoSimpleRequest;
 import com.example.tech_shop.models.Product;
 import com.google.android.material.imageview.ShapeableImageView;
 
@@ -47,6 +48,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     private ImageButton btnCart;
     private TextView tvCartBadge;
+    TextView tv_username;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +67,6 @@ public class ProfileActivity extends AppCompatActivity {
         notifyContainer = findViewById(R.id.notifyContainer);
         profileContainer = findViewById(R.id.profileContainer);
 
-
-
         // Khi ấn vào từng mục — mở MyPurchasesActivity và chuyển đúng tab
         LinearLayout payContainer = findViewById(R.id.payContainer);
         LinearLayout shipContainer = findViewById(R.id.shipContainer);
@@ -81,6 +82,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         btnSettings = findViewById(R.id.btnSettings);
         tvCartBadge = findViewById(R.id.tvCartBadge);
+        tv_username = findViewById(R.id.tv_username);
+
 
         btnCart = findViewById(R.id.btnCart);
 
@@ -94,6 +97,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Gọi API đếm số lượng sản phẩm
         loadCartCount(tvCartBadge);
+
+        loadUserProfile();
+
 
         homeContainer.setOnClickListener(v -> {
             resetIcons(); // reset icon khác về outline
@@ -116,8 +122,9 @@ public class ProfileActivity extends AppCompatActivity {
             resetIcons();
             notifyIcon.setImageResource(R.drawable.notifications);
 
-            //Intent intent = new Intent(this, NotificationsActivity.class);
-            //startActivity(intent);
+            Intent intent = new Intent(this, NotificationActivity.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
         });
 
         profileContainer.setOnClickListener(v -> {
@@ -171,6 +178,29 @@ public class ProfileActivity extends AppCompatActivity {
         startActivity(intent);
         overridePendingTransition(0, 0);
     }
+
+    private void loadUserProfile() {
+        ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);
+
+        apiService.getProfileSimple().enqueue(new Callback<PersonalInfoSimpleRequest>() {
+            @Override
+            public void onResponse(Call<PersonalInfoSimpleRequest> call, Response<PersonalInfoSimpleRequest> response) {
+                if (response.isSuccessful() && response.body() != null) {
+
+                    PersonalInfoSimpleRequest user = response.body();
+
+                    // ⚡ Set username lên TextView
+                    tv_username.setText(user.getUsername());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PersonalInfoSimpleRequest> call, Throwable t) {
+                Log.e("API_ERROR", t.getMessage());
+            }
+        });
+    }
+
 
 
     private void resetIcons() {

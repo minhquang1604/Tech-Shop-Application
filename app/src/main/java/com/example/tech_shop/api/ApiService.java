@@ -5,8 +5,11 @@ import com.example.tech_shop.models.AddToWishlistRequest;
 import com.example.tech_shop.models.CartCountResponse;
 import com.example.tech_shop.models.CartItem;
 import com.example.tech_shop.models.ConfirmPurchaseRequest;
+import com.example.tech_shop.models.NotificationItem;
 import com.example.tech_shop.models.Order;
 import com.example.tech_shop.models.PaymentQRResponse;
+import com.example.tech_shop.models.PersonalInfoRequest;
+import com.example.tech_shop.models.PersonalInfoSimpleRequest;
 import com.example.tech_shop.models.PrepareRequest;
 import com.example.tech_shop.models.PrepareResponse;
 import com.example.tech_shop.models.Product;
@@ -121,5 +124,25 @@ public interface ApiService {
 
     @POST("/api/User/Info/Profile/Add-receive-info")
     Call<Void> addReceiveInfo(@Body ReceiveInfo body);
+
+
+    @POST("api/Authenticate/fcm/register")
+    Call<Map<String, Object>> registerFcmToken(@Body Map<String, String> body);
+
+    @POST("api/Authenticate/login")
+    Call<Map<String, Object>> login(@Body Map<String, String> body);
+
+    @GET("/api/User/Info/Profile")
+    Call<PersonalInfoRequest> getProfile();
+
+    @GET("/api/User/Info/me")
+    Call<PersonalInfoSimpleRequest> getProfileSimple();
+
+    @PUT("/api/User/Info/Profile/add-personal-info")
+    Call<Void> addPersonalInfo(@Body PersonalInfoRequest request);
+
+    //noti
+    @GET("/api/Notification/all/{username}")
+    Call<List<NotificationItem>> getNotifications(@Path("username") String username);
 
 }
