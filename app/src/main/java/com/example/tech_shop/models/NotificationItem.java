@@ -1,22 +1,18 @@
 package com.example.tech_shop.models;
 
-import com.google.gson.annotations.SerializedName;
 import java.util.Map;
 
 public class NotificationItem {
-
-    @SerializedName("title")
+    private String id;
     private String title;
-
-    @SerializedName("body")
-    private Map<String, String> body;
-
-    @SerializedName("createdAt")
     private String createdAt;
+    private Map<String, Object> body;  // body = Map
 
-    public NotificationItem() {}
-
+    public String getId() { return id; }
     public String getTitle() { return title; }
-    public Map<String, String> getBody() { return body; }
     public String getCreatedAt() { return createdAt; }
+
+    public Map<String, Object> getBody() {
+        return body;
+    }
 }

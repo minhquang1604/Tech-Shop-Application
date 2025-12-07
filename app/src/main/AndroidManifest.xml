@@ -18,9 +18,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tech_Shop">
         <activity
-            android:name=".InformationActivity"
+            android:name=".ChangePasswordActivity"
             android:exported="false" />
-        <!-- 🔥 FCM SERVICE BẠN ĐANG THIẾU -->
+        <activity
+            android:name=".InformationActivity"
+            android:exported="false" /> <!-- 🔥 FCM SERVICE BẠN ĐANG THIẾU -->
         <service
             android:name=".MyFirebaseMessagingService"
             android:exported="false">

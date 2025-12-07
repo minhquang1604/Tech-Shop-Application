@@ -16,8 +16,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
 
@@ -38,46 +36,62 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
         NotificationItem item = list.get(position);
 
-        // Title
         holder.tvTitle.setText(item.getTitle());
 
-        // Convert body map → text
-        StringBuilder bodyText = new StringBuilder();
-        Map<String, String> bodyMap = item.getBody();
+        StringBuilder sb = new StringBuilder();
 
-        if (bodyMap != null) {
-            for (String key : bodyMap.keySet()) {
-                bodyText.append(key).append(": ").append(bodyMap.get(key)).append("\n");
+        // 🔥 BODY LÀ MAP → CHỈ LẤY VALUE HỢP LỆ
+        if (item.getBody() != null) {
+            for (Object value : item.getBody().values()) {
+
+                if (value == null) continue;
+
+                String text = value.toString().trim();
+
+                if (text.isEmpty()) continue;
+                if (text.equalsIgnoreCase("string")) continue;
+
+                sb.append(text).append("\n");
             }
         }
-        holder.tvMessage.setText(bodyText.toString().trim());
 
-        // Format createdAt
-        holder.tvTime.setText(formatTime(item.getCreatedAt()));
+        // Ẩn nếu không có nội dung
+        String finalText = sb.toString().trim();
+        if (finalText.isEmpty()) {
+            holder.tvMessage.setVisibility(View.GONE);
+        } else {
+            holder.tvMessage.setVisibility(View.VISIBLE);
+            holder.tvMessage.setText(finalText);
+        }
+
+        // 🔥 FORMAT NGÀY GIỜ
+        holder.tvTime.setText(formatDate(item.getCreatedAt()));
     }
 
-    // Sử dụng SimpleDateFormat để hỗ trợ minSdk=24
-    private String formatTime(String isoDate) {
-        try {
-            SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
-            Date date = input.parse(isoDate);
 
-            SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.US);
-            return output.format(date);
+    private String formatDate(String isoString) {
+        // ISO: 2025-12-07T14:59:21.089Z
+        SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        SimpleDateFormat outFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+        try {
+            Date date = isoFormat.parse(isoString);
+            return outFormat.format(date);
         } catch (ParseException e) {
-            return isoDate;
+            return isoString; // fallback
         }
     }
+
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return (list != null ? list.size() : 0);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
         TextView tvTitle, tvMessage, tvTime;
 
         public ViewHolder(@NonNull View itemView) {

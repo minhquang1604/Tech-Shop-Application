@@ -1,7 +1,9 @@
 package com.example.tech_shop;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +22,7 @@ import com.example.tech_shop.adapter.CheckoutAdapter;
 import com.example.tech_shop.api.ApiService;
 import com.example.tech_shop.api.RetrofitClient;
 import com.example.tech_shop.models.CartItem;
+import com.example.tech_shop.models.NotificationSendRequest;
 import com.example.tech_shop.models.Order;
 import com.example.tech_shop.models.ConfirmPurchaseRequest;
 import com.example.tech_shop.models.OrderItem;
@@ -143,9 +146,16 @@ public class CheckoutActivity extends AppCompatActivity {
     private void confirmCOD() {
         String paymentMethod = "COD";
 
+        // Lấy name + phone từ tvName: "Nguyễn Văn A (0909123456)"
+        String raw = tvName.getText().toString();
+        String name = raw.substring(0, raw.indexOf("(")).trim();
+        String phone = raw.substring(raw.indexOf("(") + 1, raw.indexOf(")")).trim();
+
+        // Lấy address
+        String address = tvAddress.getText().toString();
+
         ConfirmPurchaseRequest body = new ConfirmPurchaseRequest(
-                new ReceiveInfo("Cao Minh Quang", "0776292440",
-                        "Chung Cư Phúc Đạt, Dĩ An, Bình Dương"),
+                new ReceiveInfo(name, phone, address),   // ⬅️ DÙNG DỮ LIỆU NGƯỜI DÙNG
                 paymentMethod
         );
 
@@ -154,8 +164,11 @@ public class CheckoutActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
+
+                    sendOrderNotification(orderId);
                     showCustomToast("Order placed successfully!");
                     finish();
+
                 } else {
                     showCustomToast("Order failed", R.drawable.error);
                 }
@@ -168,7 +181,13 @@ public class CheckoutActivity extends AppCompatActivity {
         });
     }
 
+
     private void getPaymentQR() {
+        String raw = tvName.getText().toString();
+        String name = raw.substring(0, raw.indexOf("(")).trim();
+        String phone = raw.substring(raw.indexOf("(") + 1, raw.indexOf(")")).trim();
+        String address = tvAddress.getText().toString();
+
 
         ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);
         apiService.getPaymentQR(orderId).enqueue(new Callback<PaymentQRResponse>() {
@@ -184,6 +203,10 @@ public class CheckoutActivity extends AppCompatActivity {
                     intent.putExtra("BANK_ID", qr.getBankId());
                     intent.putExtra("ACCOUNT", qr.getAccount());
                     intent.putExtra("ORDER_ID", orderId);
+                    intent.putExtra("NAME", name);
+                    intent.putExtra("PHONE", phone);
+                    intent.putExtra("ADDRESS", address);
+
 
                     startActivity(intent);
                 } else {
@@ -197,6 +220,67 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void sendOrderNotification(String orderId) {
+
+        // Lấy username từ SharedPreferences sau khi login
+        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String username = prefs.getString("username", null);
+
+        if (username == null) {
+            Log.e("NOTI_API", "❌ Không tìm thấy username trong SharedPreferences → không gửi thông báo");
+            return;
+        }
+
+        if (orderId == null || orderId.trim().isEmpty()) {
+            Log.e("NOTI_API", "❌ orderId NULL → không gửi thông báo");
+            return;
+        }
+
+        // Tạo các field bắt buộc
+        String id = java.util.UUID.randomUUID().toString();
+        String title = "Your order (" + orderId + ") has been placed successfully.";
+        String message = "Thank you for shopping with TechShop!";
+
+        NotificationSendRequest request =
+                new NotificationSendRequest(id, title, message, username);
+
+        ApiService apiService = RetrofitClient.getClient(this).create(ApiService.class);
+
+        // Log rõ ràng
+        Log.d("NOTI_API", "➡ GỬI THÔNG BÁO");
+        Log.d("NOTI_API", "id = " + id);
+        Log.d("NOTI_API", "title = " + title);
+        Log.d("NOTI_API", "username = " + username);
+        Log.d("NOTI_API", "message = " + message);
+
+        apiService.sendNotification(request).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+
+                if (response.isSuccessful()) {
+                    Log.d("NOTI_API", "✅ SEND OK");
+                } else {
+                    Log.e("NOTI_API", "❌ FAILED: " + response.code());
+
+                    try {
+                        if (response.errorBody() != null) {
+                            Log.e("NOTI_API", "Error = " + response.errorBody().string());
+                        }
+                    } catch (Exception e) {
+                        Log.e("NOTI_API", "❌ Không đọc được errorBody");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("NOTI_API", "🚨 API ERROR: " + t.getMessage());
+            }
+        });
+    }
+
+
 
 
     private void showCustomToast(String message, String subMessage, int iconResId) {

@@ -28,7 +28,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     Button btnLogOut;
     ImageButton btnBack;
-    LinearLayout rowAddress, rowUser;
+    LinearLayout rowAddress, rowUser, rowPassword;
     TextView tvUsername;
 
     @Override
@@ -41,6 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
         rowAddress = findViewById(R.id.rowAddress);
         rowUser = findViewById(R.id.rowUser);
+        rowPassword = findViewById(R.id.rowPassword);
         tvUsername = findViewById(R.id.tvUsername);
 
         btnBack.setOnClickListener(v -> finish());
@@ -67,6 +68,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         rowUser.setOnClickListener(v -> {
             Intent intent = new Intent(SettingsActivity.this, InformationActivity.class);
+            startActivity(intent);
+        });
+
+        rowPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, ChangePasswordActivity.class);
             startActivity(intent);
         });
 

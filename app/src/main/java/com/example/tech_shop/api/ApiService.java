@@ -6,6 +6,7 @@ import com.example.tech_shop.models.CartCountResponse;
 import com.example.tech_shop.models.CartItem;
 import com.example.tech_shop.models.ConfirmPurchaseRequest;
 import com.example.tech_shop.models.NotificationItem;
+import com.example.tech_shop.models.NotificationSendRequest;
 import com.example.tech_shop.models.Order;
 import com.example.tech_shop.models.PaymentQRResponse;
 import com.example.tech_shop.models.PersonalInfoRequest;
@@ -37,6 +38,9 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
+    @PUT("/api/Authenticate/changePassword")
+    Call<Void> changePassword(@Body Map<String, String> body);
+
     @GET("api/Product/Fetch")
     Call<List<Product>> getProducts(@Query("number") int number);
     // Lấy chi tiết sản phẩm theo ID
@@ -144,5 +148,7 @@ public interface ApiService {
     //noti
     @GET("/api/Notification/all/{username}")
     Call<List<NotificationItem>> getNotifications(@Path("username") String username);
+    @POST("/api/Notification/send")
+    Call<Void> sendNotification(@Body NotificationSendRequest request);
 
 }

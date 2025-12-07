@@ -93,9 +93,7 @@ public class ProductWishlistAdapter extends RecyclerView.Adapter<ProductWishlist
                 @Override
                 public void onResponse(Call<Map<String, Object>> call, Response<Map<String, Object>> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        Log.d("Cart", "Added: " + response.body());
-                        String message = response.body().get("message").toString();
-                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+
 
                         // Dùng vị trí hiện tại an toàn
                         int currentPosition = holder.getBindingAdapterPosition();
@@ -149,10 +147,8 @@ public class ProductWishlistAdapter extends RecyclerView.Adapter<ProductWishlist
                     productList.remove(position);
                     notifyItemRemoved(position);
                     notifyItemRangeChanged(position, productList.size());
-                    Toast.makeText(context, "Đã xóa sản phẩm khỏi Wishlist", Toast.LENGTH_SHORT).show();
                 } else {
                     Log.e("WishlistAdapter", "Failed to remove product: " + response.code());
-                    Toast.makeText(context, "Không thể xóa sản phẩm!", Toast.LENGTH_SHORT).show();
                 }
             }
 
