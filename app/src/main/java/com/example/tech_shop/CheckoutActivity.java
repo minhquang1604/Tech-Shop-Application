@@ -228,12 +228,12 @@ public class CheckoutActivity extends AppCompatActivity {
         String username = prefs.getString("username", null);
 
         if (username == null) {
-            Log.e("NOTI_API", "❌ Không tìm thấy username trong SharedPreferences → không gửi thông báo");
+            Log.e("NOTI_API", " Không tìm thấy username trong SharedPreferences → không gửi thông báo");
             return;
         }
 
         if (orderId == null || orderId.trim().isEmpty()) {
-            Log.e("NOTI_API", "❌ orderId NULL → không gửi thông báo");
+            Log.e("NOTI_API", " orderId NULL → không gửi thông báo");
             return;
         }
 

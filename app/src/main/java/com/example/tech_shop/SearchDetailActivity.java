@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -21,6 +22,7 @@ import com.example.tech_shop.api.RetrofitClient;
 import com.example.tech_shop.models.Product;
 import com.google.android.material.imageview.ShapeableImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -40,7 +42,9 @@ public class SearchDetailActivity extends AppCompatActivity {
     private FrameLayout profileContainer;
     private RecyclerView recyclerView;
     private ApiService apiService;
-    private ImageButton btnBack, btnCart;
+    private ImageButton btnBack;
+    private AppCompatButton btnFilter;
+    private List<Product> allProducts; // danh sách gốc từ API
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +64,31 @@ public class SearchDetailActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerViewProducts);
         btnBack = findViewById(R.id.btnBack);
+        btnFilter = findViewById(R.id.btnFilter);
+
+        btnFilter.setOnClickListener(v -> {
+            String[] options = {
+                    "Price: Low → High",
+                    "Price: High → Low",
+                    "Name: A → Z",
+                    "Name: Z → A",
+                    "Top Sales"
+            };
+
+            new androidx.appcompat.app.AlertDialog.Builder(SearchDetailActivity.this)
+                    .setTitle("Filter")
+                    .setItems(options, (dialog, which) -> {
+                        switch (which) {
+                            case 0: sortByPrice(true); break;   // Low → High
+                            case 1: sortByPrice(false); break;  // High → Low
+                            case 2: sortByName(true); break;    // A → Z
+                            case 3: sortByName(false); break;   // Z → A
+                            case 4: sortByTopSales(); break;    // Top Sales
+                        }
+                    })
+                    .show();
+        });
+
 
         btnBack.setOnClickListener(v -> finish());
 
@@ -116,8 +145,8 @@ public class SearchDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Product> products = response.body();
-                    recyclerView.setAdapter(new ProductAdapter(SearchDetailActivity.this, products));
+                    allProducts = response.body(); // lưu danh sách gốc
+                    recyclerView.setAdapter(new ProductAdapter(SearchDetailActivity.this, new ArrayList<>(allProducts)));
                 } else {
                     Log.e("API_ERROR", "Response code: " + response.code());
                     Toast.makeText(SearchDetailActivity.this, "Không tìm thấy sản phẩm", Toast.LENGTH_SHORT).show();
@@ -130,6 +159,28 @@ public class SearchDetailActivity extends AppCompatActivity {
                 Toast.makeText(SearchDetailActivity.this, "Lỗi kết nối server", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void sortByPrice(boolean lowToHigh) {
+        List<Product> sorted = new ArrayList<>(allProducts);
+        sorted.sort((p1, p2) -> lowToHigh
+                ? Double.compare(p1.getPrice(), p2.getPrice())
+                : Double.compare(p2.getPrice(), p1.getPrice()));
+        recyclerView.setAdapter(new ProductAdapter(this, sorted));
+    }
+
+    private void sortByName(boolean aToZ) {
+        List<Product> sorted = new ArrayList<>(allProducts);
+        sorted.sort((p1, p2) -> aToZ
+                ? p1.getName().compareToIgnoreCase(p2.getName())
+                : p2.getName().compareToIgnoreCase(p1.getName()));
+        recyclerView.setAdapter(new ProductAdapter(this, sorted));
+    }
+
+    private void sortByTopSales() {
+        List<Product> sorted = new ArrayList<>(allProducts);
+        sorted.sort((p1, p2) -> Integer.compare(p2.getQuantitySold(), p1.getQuantitySold()));
+        recyclerView.setAdapter(new ProductAdapter(this, sorted));
     }
 
     private void resetIcons() {

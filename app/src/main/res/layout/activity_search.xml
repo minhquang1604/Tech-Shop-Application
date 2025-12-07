@@ -8,6 +8,7 @@
     android:layout_height="match_parent"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
+    android:background="#FFFFFF"
     tools:context=".MainActivity">
 
     <ImageButton
@@ -46,15 +47,6 @@
             android:inputType="text"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
-
-        <!--  Nút camera (search bằng hình ảnh)  -->
-        <ImageButton
-            android:id="@+id/btnImageSearch"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/camera_black"
-            android:contentDescription="Search by Image" />
 
         <!--  Nút search  -->
         <ImageButton
@@ -95,7 +87,24 @@
             style="@style/Widget.MaterialComponents.Chip.Entry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="áo Len Nam"
+            android:text="iphone"
+            app:chipCornerRadius="6dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipRecent2"
+            style="@style/Widget.MaterialComponents.Chip.Entry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="macbook"
+            app:chipCornerRadius="6dp" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipRecent3"
+            style="@style/Widget.MaterialComponents.Chip.Entry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="drone"
             app:chipCornerRadius="6dp" />
     </LinearLayout>
 

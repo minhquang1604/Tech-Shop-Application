@@ -20,12 +20,24 @@ import java.util.Locale;
 
 public class ProductFlashSaleAdapter extends RecyclerView.Adapter<ProductFlashSaleAdapter.FlashSaleViewHolder> {
 
-    private Context context;
-    private List<Product> productList;
+    private final Context context;
+    private final List<Product> productList;
+    private OnItemClickListener listener;
 
+    // Constructor
     public ProductFlashSaleAdapter(Context context, List<Product> productList) {
         this.context = context;
         this.productList = productList;
+    }
+
+    // Interface để xử lý click item
+    public interface OnItemClickListener {
+        void onItemClick(Product product);
+    }
+
+    // Setter listener
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
@@ -39,16 +51,22 @@ public class ProductFlashSaleAdapter extends RecyclerView.Adapter<ProductFlashSa
     public void onBindViewHolder(@NonNull FlashSaleViewHolder holder, int position) {
         Product product = productList.get(position);
 
+        // Hiển thị giá theo định dạng Việt Nam
         NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
         String formattedPrice = formatter.format(product.getPrice());
         holder.textPrice.setText(formattedPrice + "₫");
-
-
 
         // Load image (nếu có link)
         if (product.getImage() != null && !product.getImage().isEmpty()) {
             Glide.with(context).load(product.getImage()).into(holder.imageProduct);
         }
+
+        // Xử lý click item
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(product);
+            }
+        });
     }
 
     @Override
@@ -56,6 +74,7 @@ public class ProductFlashSaleAdapter extends RecyclerView.Adapter<ProductFlashSa
         return productList.size();
     }
 
+    // ViewHolder
     public static class FlashSaleViewHolder extends RecyclerView.ViewHolder {
         ImageView imageProduct;
         TextView textPrice;
@@ -67,3 +86,5 @@ public class ProductFlashSaleAdapter extends RecyclerView.Adapter<ProductFlashSa
         }
     }
 }
+
+

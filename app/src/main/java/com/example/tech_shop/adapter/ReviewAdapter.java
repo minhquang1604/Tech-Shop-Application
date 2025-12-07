@@ -81,4 +81,11 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
             tvTime = itemView.findViewById(R.id.tvTime);
         }
     }
+
+    public void updateList(List<Review> newList) {
+        this.reviewList.clear();
+        this.reviewList.addAll(newList);
+        notifyDataSetChanged(); // ✅ Đây là nơi hợp lệ
+    }
+
 }

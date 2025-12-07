@@ -216,18 +216,25 @@ public class HomeActivity extends AppCompatActivity {
                         }
                     }
 
-                    // ✅ Giới hạn Flash Sale chỉ 4 sản phẩm
-                    if (flashSaleList.size() > 4) {
-                        flashSaleList = new ArrayList<>(flashSaleList.subList(0, 4));
-                    }
 
                     // ⚡ Flash Sale RecyclerView (4 cột, dùng ProductFlashSaleAdapter)
                     RecyclerView flashSaleRecycler = findViewById(R.id.recyclerFlashSale);
                     flashSaleRecycler.setHasFixedSize(true);
-                    flashSaleRecycler.setLayoutManager(
-                            new GridLayoutManager(HomeActivity.this, 4, GridLayoutManager.VERTICAL, false)
+                    LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(
+                            HomeActivity.this,
+                            LinearLayoutManager.HORIZONTAL,
+                            false
                     );
-                    flashSaleRecycler.setAdapter(new ProductFlashSaleAdapter(HomeActivity.this, flashSaleList));
+                    flashSaleRecycler.setLayoutManager(horizontalLayoutManager);
+                    ProductFlashSaleAdapter flashSaleAdapter = new ProductFlashSaleAdapter(HomeActivity.this, flashSaleList);
+                    flashSaleRecycler.setAdapter(flashSaleAdapter);
+
+                    flashSaleAdapter.setOnItemClickListener(product -> {
+                        Intent intent = new Intent(HomeActivity.this, ProductDetailActivity.class);
+                        intent.putExtra("productId", product.getProduct_zipId()); // hoặc trường ID phù hợp
+                        startActivity(intent);
+                    });
+
 
                     // 🛍 Sản phẩm thường RecyclerView (2 cột, dùng ProductAdapter)
                     RecyclerView productRecycler = findViewById(R.id.recyclerViewProducts);
@@ -342,4 +349,3 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 }
-

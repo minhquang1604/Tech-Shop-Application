@@ -69,7 +69,7 @@ import retrofit2.Response;
 public class ProductDetailActivity extends AppCompatActivity {
 
     private ViewPager2 viewPagerImages;
-    private TextView tvPrice, tvProductName, tvImageCount;
+    private TextView tvPrice, tvProductName, tvImageCount, tvSeeMoreReviews;
     private ImageAdapter imageAdapter;
     private TableLayout tableSpecs;
     private ImageButton btnBack, btnCart, btnTopCart;
@@ -77,7 +77,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     ReviewAdapter reviewAdapter;
     List<Review> reviewList = new ArrayList<>();
     private TextView tvAverageRating;
-    TextView tvSold;
+    TextView tvSold, tvOldPrice, tvDiscount;
     String productId;
 
     private OkHttpClient sentimentClient = new OkHttpClient();
@@ -102,6 +102,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         btnTopCart = findViewById(R.id.btnTopCart);
         tvAverageRating = findViewById(R.id.tvAverageRating);
         tvSold = findViewById(R.id.tvSold);
+        tvOldPrice = findViewById(R.id.tvOldPrice);
+        tvDiscount = findViewById(R.id.tvDiscount);
+        tvSeeMoreReviews = findViewById(R.id.tvSeeMoreReviews);
         TextView tvDate = findViewById(R.id.tvDate);
         tvOverallSentiment = findViewById(R.id.tvOverallSentiment);
 
@@ -133,12 +136,18 @@ public class ProductDetailActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
 
         btnTopCart.setOnClickListener(v -> {
-
             Intent intent = new Intent(ProductDetailActivity.this, CartActivity.class);
             startActivity(intent);
             overridePendingTransition(0, 0);
-
         });
+
+        tvSeeMoreReviews.setOnClickListener(v -> {
+            Intent intent = new Intent(ProductDetailActivity.this, ReviewActivity.class);
+            intent.putExtra("productId", productId); // truyền productId
+            startActivity(intent);
+            overridePendingTransition(0, 0);
+        });
+
 
         btnCart.setOnClickListener(v -> {
             if (productId == null || productId.isEmpty()) {
@@ -464,17 +473,39 @@ public class ProductDetailActivity extends AppCompatActivity {
 
                     // Hiển thị thông tin cơ bản
                     NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
-                    String formattedPrice = formatter.format(product.getPrice());
-                    tvPrice.setText(formattedPrice + " ₫");
                     tvProductName.setText(product.getName());
+
+                    // Kiểm tra sale
+                    if (product.getSale() != null && product.getSale().isActive()) {
+                        double percent = product.getSale().getPercent();
+                        // Giá gốc
+                        int oldPrice = (int) Math.round(product.getPrice() / (1 - percent));
+                        tvOldPrice.setText(formatter.format(oldPrice) + " ₫");
+                        tvOldPrice.setVisibility(View.VISIBLE);
+
+                        // Giảm giá %
+                        int discountPercent = (int) Math.round(percent * 100);
+                        tvDiscount.setText("-" + discountPercent + "%");
+                        tvDiscount.setVisibility(View.VISIBLE);
+
+                        // Giá hiện tại
+                        String formattedPrice = formatter.format(product.getPrice());
+                        tvPrice.setText(formattedPrice + " ₫");
+                    } else {
+                        // Không sale
+                        String formattedPrice = formatter.format(product.getPrice());
+                        tvPrice.setText(formattedPrice + " ₫");
+                        tvOldPrice.setVisibility(View.GONE);
+                        tvDiscount.setVisibility(View.GONE);
+                    }
 
                     // ✅ Hiển thị số lượng sản phẩm đã bán
                     int soldCount = product.getSold();
                     tvSold.setText(soldCount + " sold");
 
-
                     // ✅ Hiển thị bảng thông số kỹ thuật
                     populateSpecsTable(product.getDetail());
+
                 } else {
                     Log.e("API_ERROR", "Response null or failed");
                 }
@@ -486,6 +517,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void populateSpecsTable(Map<String, String> details) {
         if (details == null || details.isEmpty()) return;
