@@ -222,7 +222,7 @@ public class LogInActivity extends AppCompatActivity {
 
         } catch (ApiException e) {
             Log.e("GOOGLE_SIGN_IN", "signInResult:failed code=" + e.getStatusCode());
-            Toast.makeText(this, "Google Sign-In failed", Toast.LENGTH_SHORT).show();
+
         }
     }
 
