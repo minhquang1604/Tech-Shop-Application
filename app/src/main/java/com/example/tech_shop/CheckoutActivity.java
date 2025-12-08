@@ -54,8 +54,6 @@ public class CheckoutActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_checkout);
 
-
-
         rvProducts = findViewById(R.id.rvProducts);
         tvTotalPayment = findViewById(R.id.tvTotalPayment);
         rbCOD = findViewById(R.id.rbCOD);
@@ -72,6 +70,17 @@ public class CheckoutActivity extends AppCompatActivity {
 
         rvProducts.setLayoutManager(new LinearLayoutManager(this));
 
+        // Load địa chỉ người dùng đã chọn trước đó
+        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String savedName = prefs.getString("saved_name", null);
+        String savedPhone = prefs.getString("saved_phone", null);
+        String savedAddress = prefs.getString("saved_address", null);
+
+        if (savedName != null && savedPhone != null && savedAddress != null) {
+            tvName.setText(savedName + " (" + savedPhone + ")");
+            tvAddress.setText(savedAddress);
+        }
+
         // Nhận orderId từ Intent
         orderId = getIntent().getStringExtra("ORDER_ID");
         if (orderId != null) {
@@ -87,6 +96,7 @@ public class CheckoutActivity extends AppCompatActivity {
         btnPlaceOrder.setOnClickListener(v -> confirmPurchase());
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -98,6 +108,13 @@ public class CheckoutActivity extends AppCompatActivity {
 
             tvName.setText(name + " (" + phone + ")");
             tvAddress.setText(address);
+            // ✅ Lưu địa chỉ vừa chọn vào SharedPreferences
+            SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("saved_name", name);
+            editor.putString("saved_phone", phone);
+            editor.putString("saved_address", address);
+            editor.apply();
         }
     }
 

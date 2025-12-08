@@ -77,7 +77,7 @@
 
             <TextView
                     android:id="@+id/tvName"
-                    android:text="Cao Minh Quang (+84) 776 292 440"
+                    android:text="Choose your address"
                     android:textStyle="bold"
                     android:textSize="16sp"
                     android:layout_width="match_parent"
@@ -85,7 +85,6 @@
 
                 <TextView
                     android:id="@+id/tvAddress"
-                    android:text="Chung Cư Phúc Đạt, Số 159, Q1k, Phường Đông Hòa, Thành Phố Dĩ An, Bình Dương"
                     android:textSize="14sp"
                     android:layout_marginTop="4dp"
                     android:layout_width="match_parent"

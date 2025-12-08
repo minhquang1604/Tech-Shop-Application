@@ -1,6 +1,7 @@
 package com.example.tech_shop;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -27,10 +28,12 @@ import retrofit2.Response;
 public class ChooseAddressActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private AppCompatButton btnAddAdress, btnSelectAddress;
+    private AppCompatButton btnAddAddress, btnSelectAddress;
     private AddressAdapter adapter;
     private List<ReceiveInfo> addressList = new ArrayList<>();
     private ReceiveInfo selectedAddress;
+
+    private static final int REQUEST_ADD_ADDRESS = 101;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,7 +42,7 @@ public class ChooseAddressActivity extends AppCompatActivity {
         setContentView(R.layout.activity_choose_address);
 
         recyclerView = findViewById(R.id.recyclerView);
-        btnAddAdress = findViewById(R.id.btnAddAdress);
+        btnAddAddress = findViewById(R.id.btnAddAdress);
         btnSelectAddress = findViewById(R.id.btnSelectAddress);
 
         adapter = new AddressAdapter(addressList);
@@ -52,9 +55,9 @@ public class ChooseAddressActivity extends AppCompatActivity {
         fetchAddresses();
 
         // Thêm địa chỉ mới
-        btnAddAdress.setOnClickListener(v -> {
+        btnAddAddress.setOnClickListener(v -> {
             Intent intent = new Intent(ChooseAddressActivity.this, NewAddressActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_ADD_ADDRESS);
         });
 
         // Chọn địa chỉ đã đánh dấu
@@ -65,6 +68,15 @@ public class ChooseAddressActivity extends AppCompatActivity {
                 resultIntent.putExtra("phone", selectedAddress.getPhone());
                 resultIntent.putExtra("address", selectedAddress.getAddress());
                 setResult(RESULT_OK, resultIntent);
+
+                // Lưu vào SharedPreferences để CheckoutActivity load mặc định
+                SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("saved_name", selectedAddress.getName());
+                editor.putString("saved_phone", selectedAddress.getPhone());
+                editor.putString("saved_address", selectedAddress.getAddress());
+                editor.apply();
+
                 finish();
             } else {
                 Toast.makeText(this, "Please select an address", Toast.LENGTH_SHORT).show();
@@ -100,5 +112,30 @@ public class ChooseAddressActivity extends AppCompatActivity {
     // Lấy token lưu trong SharedPreferences
     private String getToken() {
         return getSharedPreferences("MyAppPrefs", MODE_PRIVATE).getString("token", "");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Nếu là thêm địa chỉ mới
+        if (requestCode == REQUEST_ADD_ADDRESS && resultCode == RESULT_OK) {
+            fetchAddresses(); // reload danh sách từ server
+        }
+
+        // Nếu là chọn địa chỉ cũ (CheckoutActivity)
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+            String name = data.getStringExtra("name");
+            String phone = data.getStringExtra("phone");
+            String address = data.getStringExtra("address");
+
+            // Lưu lại vào SharedPreferences
+            SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("saved_name", name);
+            editor.putString("saved_phone", phone);
+            editor.putString("saved_address", address);
+            editor.apply();
+        }
     }
 }

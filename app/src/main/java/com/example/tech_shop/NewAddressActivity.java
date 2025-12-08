@@ -1,5 +1,6 @@
 package com.example.tech_shop;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.EditText;
@@ -12,7 +13,6 @@ import androidx.appcompat.widget.AppCompatButton;
 import com.example.tech_shop.api.ApiService;
 import com.example.tech_shop.api.RetrofitClient;
 import com.example.tech_shop.models.ReceiveInfo;
-import com.google.android.material.button.MaterialButton;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -63,9 +63,12 @@ public class NewAddressActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(NewAddressActivity.this, "Địa chỉ đã được thêm", Toast.LENGTH_SHORT).show();
-                    // Trả kết quả về Activity trước nếu cần
-                    setResult(RESULT_OK);
+
+                    // ✅ Trả kết quả về ChooseAddressActivity
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("added", true);
+                    setResult(RESULT_OK, resultIntent);
+
                     finish();
                 } else {
                     Toast.makeText(NewAddressActivity.this, "Thêm địa chỉ thất bại", Toast.LENGTH_SHORT).show();

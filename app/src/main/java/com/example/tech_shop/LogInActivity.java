@@ -7,8 +7,12 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.util.Log;
@@ -149,7 +153,7 @@ public class LogInActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 runOnUiThread(() ->
-                        Toast.makeText(LogInActivity.this, "Lỗi kết nối server", Toast.LENGTH_SHORT).show());
+                        showCustomToast("Failed to contact server", null, R.drawable.error));
             }
 
             @Override
@@ -182,7 +186,7 @@ public class LogInActivity extends AppCompatActivity {
 
                 } else {
                     runOnUiThread(() ->
-                            Toast.makeText(LogInActivity.this, "Sai tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT).show());
+                            showCustomToast("Wrong username or password", null, R.drawable.error));
                 }
             }
         });
@@ -254,7 +258,7 @@ public class LogInActivity extends AppCompatActivity {
             public void onFailure(Call call, IOException e) {
                 // Show error message if the request fails
                 runOnUiThread(() ->
-                        Toast.makeText(LogInActivity.this, "Failed to contact server", Toast.LENGTH_SHORT).show());
+                        showCustomToast("Failed to contact server", null, R.drawable.error));
             }
 
             @Override
@@ -300,5 +304,43 @@ public class LogInActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    // Hàm custom Toast cho nhiều mục đích
+    private void showCustomToast(String message, String subMessage, int iconResId) {
+        // Inflate layout
+        LayoutInflater inflater = getLayoutInflater();
+        View customToastView = inflater.inflate(R.layout.custom_toast, null);  // Không cần root ViewGroup
+
+        // Cập nhật main message
+        TextView textView = customToastView.findViewById(R.id.text_message);
+        textView.setText(message);
+
+        // Cập nhật sub-message nếu có
+        TextView subTextView = customToastView.findViewById(R.id.text_sub_message);
+        if (subMessage != null && !subMessage.isEmpty()) {
+            subTextView.setText(subMessage);
+            subTextView.setVisibility(View.VISIBLE);
+        }
+
+        // Cập nhật icon
+        ImageView iconView = customToastView.findViewById(R.id.icon_toast);
+        iconView.setImageResource(iconResId);
+
+        // Tạo và show Toast
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 1000);  // Vị trí giống hình
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(customToastView);
+        toast.show();
+    }
+
+    // Overload nếu không cần subMessage và dùng icon default
+    private void showCustomToast(String message) {
+        showCustomToast(message, null, R.drawable.check);  // Default success icon
+    }
+
+    // Overload nếu không cần subMessage nhưng thay icon
+    private void showCustomToast(String message, String subMessage) {
+        showCustomToast(message, subMessage, R.drawable.check);
     }
 }
