@@ -1,4 +1,4 @@
-# 🛒 TechShop – Android E-Commerce App
+# TechShop – Android E-Commerce App
 
 TechShop is a modern E-commerce application for Android built with **Java**, **Retrofit**, **Firebase**, and **.NET Web API**.  
 It supports browsing products, VietQR banking payment, order tracking, review system with media, and real-time notifications.
@@ -75,3 +75,4 @@ To learn more about me or get in touch:
 
 **LinkedIn:** https://www.linkedin.com/in/your-profile  
 **Facebook:** https://www.facebook.com/cmq.kang
+**Gmail:** caominhquang1604@gmail.com
