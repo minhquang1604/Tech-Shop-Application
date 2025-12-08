@@ -63,49 +63,12 @@
                 android:padding="16dp">
 
                 <!-- Product Info -->
-                <LinearLayout
+                <!-- RecyclerView hiển thị sản phẩm -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvProducts"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:background="@android:color/white"
-                    android:padding="12dp"
-                    android:layout_marginBottom="16dp">
-
-                    <ImageView
-                        android:id="@+id/ivProduct"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:src="@drawable/techshop"
-                        android:scaleType="centerCrop"
-                        android:layout_marginEnd="12dp" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Apple Watch SE 2024 40mm (GPS) viền nhôm dây cao su"
-                            android:textColor="#000"
-                            android:textSize="14sp"
-                            android:maxLines="2"
-                            android:ellipsize="end" />
-
-                        <TextView
-                            android:id="@+id/tvPrice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="5.690.000đ"
-                            android:textColor="#FF6B00"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:layout_marginTop="4dp" />
-                    </LinearLayout>
-                </LinearLayout>
+                    android:nestedScrollingEnabled="false"/>
 
                 <!-- Product Quality Rating -->
 
@@ -155,10 +118,11 @@
                         android:text="Add Photo"
                         android:textColor="#666"
                         android:background="@drawable/btn_outline"
-                        android:drawableStart="@drawable/cart"
+                        android:drawableStart="@drawable/photo"
                         android:drawablePadding="8dp"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp" />
+
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btnAddVideo"
@@ -169,11 +133,13 @@
                         android:text="Add Video"
                         android:textColor="#666"
                         android:background="@drawable/btn_outline"
-                        android:drawableStart="@drawable/cart"
+                        android:drawableStart="@drawable/video"
                         android:drawablePadding="8dp"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp" />
+
                 </LinearLayout>
+
 
                 <!-- Review Text -->
                 <EditText

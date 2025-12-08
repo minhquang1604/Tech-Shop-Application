@@ -35,20 +35,25 @@ public class TabAdapter extends FragmentStateAdapter {
         List<Order> filtered = new ArrayList<>();
         for (Order order : allOrders) {
             switch (position) {
-                case 0:
+                case 0: // Pending
                     if ("Pending".equals(order.getStatus())) filtered.add(order);
                     break;
                 case 1: // To Ship -> NotConfirm
-
+                    if ("Confirmed".equals(order.getStatus())) filtered.add(order);
                     break;
                 case 2: // To Receive -> Shipped
-
+                    if ("Delivered".equals(order.getStatus())) filtered.add(order);
                     break;
                 case 3: // To Rate -> Received
-
+                    if ("To rate".equals(order.getStatus())) filtered.add(order);
+                    break;
+                default:
+                    // Nếu muốn, có thể thêm tất cả
+                    filtered.add(order);
                     break;
             }
         }
         return filtered;
     }
+
 }

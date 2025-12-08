@@ -58,20 +58,36 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         // Hiển thị tổng tiền
         holder.tvTotalAmount.setText("Total: " + String.format("%,.0f₫", order.getTotalAmount()));
 
+        // Ẩn/hiện nút theo trạng thái
+        if ("Pending".equals(order.getStatus())) { // To Pay
+            holder.btnCancelOrder.setVisibility(View.VISIBLE);
+            holder.btnReview.setVisibility(View.GONE);
+        } else if ("To rate".equals(order.getStatus())) { // To Rate
+            holder.btnCancelOrder.setVisibility(View.GONE);
+            holder.btnReview.setVisibility(View.VISIBLE);
+        } else { // Các trạng thái khác
+            holder.btnCancelOrder.setVisibility(View.GONE);
+            holder.btnReview.setVisibility(View.GONE);
+        }
+
         // Cancel order
         holder.btnCancelOrder.setOnClickListener(v -> cancelOrder(order.getOrderID(), position));
 
         // Open review
         holder.btnReview.setOnClickListener(v -> {
             if (order.getItems() != null && !order.getItems().isEmpty()) {
-                String productId = order.getItems().get(0).getProductID();
-                Log.d("OrderAdapter", "Opening review for productId: " + productId);
-                if (productId != null && !productId.isEmpty()) {
+                String productId = order.getItems().get(0).getProductID(); // sản phẩm đầu tiên của đơn
+                String orderId = order.getOrderID(); // orderId
+
+                Log.d("OrderAdapter", "Opening review for productId: " + productId + ", orderId: " + orderId);
+
+                if (productId != null && !productId.isEmpty() && orderId != null && !orderId.isEmpty()) {
                     Intent intent = new Intent(activity, RateProductActivity.class);
                     intent.putExtra("productId", productId);
+                    intent.putExtra("orderId", orderId); // thêm orderId
                     activity.startActivity(intent);
                 } else {
-                    Toast.makeText(activity, "Product ID is missing!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Product ID or Order ID is missing!", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Toast.makeText(activity, "No product to review", Toast.LENGTH_SHORT).show();
@@ -79,6 +95,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         });
 
     }
+
 
     @Override
     public int getItemCount() {
